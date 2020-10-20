@@ -3,22 +3,22 @@
  ************************************************************/
 /************************************************************
  * How to use HTML tags guide
- * 
+ *
  * Text formatting:
  * <p>This is some text</p> - defines a paragraph.
  * <b>This is some bold text</b> - Bold text
  * <i>This is some italic text</i> - Italic text
- * This is some text before the line break <br> - produces a line break in the text (carriage-return). 
+ * This is some text before the line break <br> - produces a line break in the text (carriage-return).
  * <br> is independent tag and not require adding closing tag like this </br>
  * <span style="color: red;">This is some formatted text</span> - tag is an inline container used to mark up a part of a text, or a part of a document.
  * Heading tag: It is used to define the heading of HTML document.
- * <h1>Heading 1 </h1>   
- * <h2>Heading 2 </h2> 
- * <h3>Heading 3 </h3>  
- * <h4>Heading 4 </h4>  
- * <h5>Heading 5 </h5>  
- * <h6>Heading 6 </h6> 
- * 
+ * <h1>Heading 1 </h1>
+ * <h2>Heading 2 </h2>
+ * <h3>Heading 3 </h3>
+ * <h4>Heading 4 </h4>
+ * <h5>Heading 5 </h5>
+ * <h6>Heading 6 </h6>
+ *
  * Above, I gave a list of the most common HTML tags used for formatting text.
  * There are a lot of other HTML tags more information about you can find here https://www.w3schools.com/tags/ref_byfunc.asp
  ***********************************************************/
@@ -29,8 +29,10 @@ var full_screen_mode = true;
 var open_instruct_latency = 1500;
 var close_instruct_latency = 500;
 var outcome_duration = 1000;
-var stim_duration = 6000;
-var ITI_duration = 6000;
+// var stim_duration = 6000;
+var stim_duration = 500;
+// var ITI_duration = 6000;
+var ITI_duration = 500;
 var interval_duration = 500;
 var interval_num = 60;
 var answer_latency_countdown = false;
@@ -56,8 +58,8 @@ var shake_transition = 0.05;
  * ===================== GUI COLORS =========================
  ************************************************************/
 var stim1_colour = 'rgb(0,128,0)';
-var stim2_colour = 'rgb(0,0,255)'; 
-var stim3_colour = 'rgb(255,0,0)'; 
+var stim2_colour = 'rgb(0,0,255)';
+var stim3_colour = 'rgb(255,0,0)';
 var stim4_colour = 'rgb(255,215,0)';
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -76,16 +78,16 @@ var close_instruct_text_WBF = "<p>Thank you.</p> <p>Press any key when you are r
 
 var open_instruct_inventory = true;
 var close_instruct_inventory = false;
-var open_instruct_text_inventory = 
+var open_instruct_text_inventory =
     '<p>We would like to ask about some experiences you may have had.</p><br>' +
     '<p>This is in order to help people who may be troubled by such experiences.</p><br>' +
     '<p>Your answers are anonymous and will not influence your payment.</p><br>' +
-    '<p>Press any key to continue.</p>' 
+    '<p>Press any key to continue.</p>'
 var close_instruct_text_inventory = 'Symptom inventories close';
 
 var open_instruct_demographics = false;
 var close_instruct_demographics = false;
-var open_instruct_text_demographics = 
+var open_instruct_text_demographics =
     '<p>We would like to ask some questions about you.</p><br>' +
     '<p>Your answers are anonymous and will not influence your payment.</p><br>' +
     '<p>Press any key to begin</p>';
@@ -150,7 +152,7 @@ var video_sound = false;
 var open_instruct_video = true;
 var open_instruct_text_video = '<p>You discover something new about one of the snacks. Watch and see what has changed.</p><br>' + '<p> press any key to begin.</p>';
 var close_instruct_video = true;
-var close_instruct_text_video = 
+var close_instruct_text_video =
     "<p>The vending machine is still overflowing, " +
     "and you can tip it again now.</p><br><br> " +
     "<p>You won't always see the snack fall out. All the snacks you get will be recorded.</p><br>" +
@@ -204,6 +206,10 @@ var prob_value_VVR1 = [0.2];
 var min_blocks_num_VVR1 = 2;
 var min_num_correct_VVR1 = 4;
 var max_num_incorrect_VVR1 = 10;
+
+var popup_machine_VVR1 = true;
+var popup_duration_machine_VVR1 = 5; // (seconds)
+var popup_text_machine_VVR1: 'Don’t forget, you can tip the machine any time in this stage to earn snacks.';
 /************************************************************
  * Contingency degradation [VVR_2]
  ************************************************************/
@@ -216,6 +222,10 @@ var prob_value_VVR2 = [0.2];
 var min_blocks_num_VVR2 = 2;
 var min_num_correct_VVR2 = 0;
 var max_num_incorrect_VVR2 = 0;
+
+var popup_machine_VVR2 = true;
+var popup_duration_machine_VVR2 = 10; //(seconds)
+var popup_text_machine_VVR2 = "Don’t forget, you can tip the machine any time in this stage to earn snacks.";
 /************************************************************
  * Contingency restoration [VVR_3]
  ************************************************************/
@@ -263,6 +273,10 @@ var open_instruct_text_transfer_test =  "<p>The vending machine is still overflo
 "<p>Press any key to begin. </p>";
 var close_instruct_text_transfer_test = 'Close Instruction Transfer Test'
 var block_num_transfer_test  = 2; // default 2
+
+var popup_machine_transfer1 = true;
+var popup_duration_machine_transfer1 = 15; // (seconds)
+var popup_text_machine_transfer1 = "You can tip the machine any time in this stage. Any snacks you earn will be recorded.";
 /************************************************************
  * Deval Test
  ************************************************************/
