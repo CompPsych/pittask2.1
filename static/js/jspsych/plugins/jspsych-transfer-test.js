@@ -215,7 +215,6 @@ jsPsych.plugins["transfer-test"] = (function() {
       }
     }
 
-
     if (trial.stage_name !== 'deval_test') {
       change_colors();
     } else if (trial.stage_name === 'deval_test') {
@@ -257,9 +256,7 @@ jsPsych.plugins["transfer-test"] = (function() {
     // function to handle responses by the subject
     var after_response = function(info) {
       setModalShowTimer()
-      console.log('after_response')
       if (isStoppedTest) {
-        console.log(console.log('after_response - test is paused '))
         return
       }
 
