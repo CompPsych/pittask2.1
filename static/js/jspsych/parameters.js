@@ -209,7 +209,7 @@ var max_num_incorrect_VVR1 = 10;
 
 var popup_machine_VVR1 = true;
 var popup_duration_machine_VVR1 = 5; // (seconds)
-var popup_text_machine_VVR1: 'Don’t forget, you can tip the machine any time in this stage to earn snacks.';
+var popup_text_machine_VVR1 = 'Don’t forget, you can tip the machine any time in this stage to earn snacks.';
 /************************************************************
  * Contingency degradation [VVR_2]
  ************************************************************/
@@ -289,6 +289,11 @@ var open_instruct_text_deval_test =  "<p>The vending machine is still overflowin
 "<p>Press any key to begin. </p>";
 var close_instruct_text_deval_test = 'Close Instruction Deval Test'
 var deval_test_duration = 30000; // default 120000
+
+
+var popup_machine_deval_test = true;
+var popup_duration_machine_deval_test = 5; // (seconds)
+var popup_text_machine_deval_test = 'You can tip the machine any time in this stage. Any snacks you earn will be recorded.';
 /************************************************************
  * Close HIT Questions
  ************************************************************/
