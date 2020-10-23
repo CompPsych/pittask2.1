@@ -78,11 +78,10 @@ jsPsych.plugins["transfer-test"] = (function() {
 
   plugin.trial = function (display_element, trial) {
     var html = "";
-    var popup = '';
     var timer
     var isStoppedTest = false;
     var popupConfig = {
-      isShow: false,
+      isShow: trial.popup_machine,
       duration: trial.popup_machine_duration * 1000,
       text: trial.popup_machine_text
     }
