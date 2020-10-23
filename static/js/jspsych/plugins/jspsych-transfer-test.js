@@ -1,5 +1,4 @@
 jsPsych.plugins["transfer-test"] = (function() {
-
   var plugin = {};
 
   plugin.info = {
@@ -77,9 +76,16 @@ jsPsych.plugins["transfer-test"] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
-
+  plugin.trial = function (display_element, trial) {
     var html = "";
+    var popup = '';
+    var timer
+    var isStoppedTest = false;
+    var popupConfig = {
+      isShow: trial.popup_machine,
+      duration: trial.popup_machine_duration * 1000,
+      text: trial.popup_machine_text
+    }
 
     // store response
     var response = {
@@ -87,24 +93,52 @@ jsPsych.plugins["transfer-test"] = (function() {
     };
 
     var reps_counter = 0;
-
     var timestamp_onload = jsPsych.totalTime();
 
     html += '<div id="jspsych-stimulus">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
-        '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
+      '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
+      '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
       '</svg>' +
       '<div id="transfer-test" class="outcome-container"></div>' +
       '</div>';
 
+    popup +=
+      `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+              <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                  <header class="modal__header">
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                  </header>
+                  <main class="modal__content" id="modal-1-content">
+                    <p>
+                      ${ popupConfig.text }
+                    </p>
+                  </main>
+                  <footer class="modal__footer">
+                    <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                  </footer>
+                </div>
+              </div>
+          </div>`;
 
     // draw
     display_element.innerHTML = html;
+    window.document.querySelector('.jspsych-display-element').innerHTML += popup
 
-    function change_colors (notes) {
+    $('.modal__overlay, .modal__close, .modal__btn').on('click', function() {
+      isStoppedTest = false
+    });
+
+    $('body').keypress(function(e) {
+      if (e.which === 27) {
+        isStoppedTest = false
+      }
+    });
+
+    function change_colors(notes) {
       notes = [];
-      
+
       var sequence = jsPsych.randomization.shuffle([
         {
           color: stim1_colour,
@@ -123,6 +157,7 @@ jsPsych.plugins["transfer-test"] = (function() {
           color_name: 'stim4_colour',
         },
       ]);
+
       sequence.forEach(function (element) {
         notes.push({
           color: '#000',
@@ -131,46 +166,59 @@ jsPsych.plugins["transfer-test"] = (function() {
         notes.push(element);
       });
 
-      if(reps_counter === trial.sequence_reps - 1) {
+      if (reps_counter === trial.sequence_reps - 1) {
         notes.push({
           color: '#000',
-          color_name: 'blank',
+          color_name: 'blank'
         });
-      };
+      }
 
       var i = 0;
-      update_color();
-      function update_color() {
-          if (i < notes.length) {
-              var color = notes[i].color;
-              var color_name = notes[i].color_name;
-              var duration = 0;
-              $('.vending-machine rect').css({ fill: color });
-              duration = trial.transfer_test_color_duration;
-              response.trial_events.push({
-                "event_type": "image appears",
-                "event_raw_details": color_name + " vending machine",
-                "event_converted_details": color_name + " vending machine appears",
-                "timestamp": jsPsych.totalTime(),
-                "time_elapsed": jsPsych.totalTime() - timestamp_onload
-              });
-              i++;
-              setTimeout(update_color, duration);
-          } else {
-            reps_counter++;
-            if(trial.sequence_reps !== reps_counter) {
-              change_colors();
-            } else {
-              end_trial();
-            }
-            
-          }
-      }
-    };
 
-    if(trial.stage_name !== 'deval_test') {
+      update_color();
+
+      function update_color() {
+        if (isStoppedTest) {
+          setTimeout(update_color, trial.transfer_test_color_duration);
+          return
+        }
+
+        if (i < notes.length) {
+          var color = notes[i].color;
+          var color_name = notes[i].color_name;
+          var duration = 0;
+
+          $('.vending-machine rect').css({fill: color});
+
+          duration = trial.transfer_test_color_duration;
+
+          response.trial_events.push({
+            "event_type": "image appears",
+            "event_raw_details": color_name + " vending machine",
+            "event_converted_details": color_name + " vending machine appears",
+            "timestamp": jsPsych.totalTime(),
+            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          });
+
+          i++;
+
+          setTimeout(update_color, duration);
+        } else {
+          reps_counter++;
+
+          if (trial.sequence_reps !== reps_counter) {
+            change_colors();
+          } else {
+            end_trial();
+          }
+        }
+      }
+    }
+
+
+    if (trial.stage_name !== 'deval_test') {
       change_colors();
-    } else if(trial.stage_name === 'deval_test') {
+    } else if (trial.stage_name === 'deval_test') {
       response.trial_events.push({
         "event_type": "image appears",
         "event_raw_details": "blank vending machine",
@@ -178,11 +226,12 @@ jsPsych.plugins["transfer-test"] = (function() {
         "timestamp": jsPsych.totalTime(),
         "time_elapsed": jsPsych.totalTime() - timestamp_onload
       });
-    };
+    }
+
+    setModalShowTimer()
 
     // function to end trial when it is time
     var end_trial = function() {
-
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -207,49 +256,58 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
+      setModalShowTimer()
+      console.log('after_response')
+      if (isStoppedTest) {
+        console.log(console.log('after_response - test is paused '))
+        return
+      }
 
       function machine_tilt() {
-        if(info.key === left_tilt) {
+        if (info.key === left_tilt) {
+          $(".vending-machine").css({
+            "transform": "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+
+          jsPsych.pluginAPI.setTimeout(function() {
             $(".vending-machine").css({
-                "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
-                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-            });
-  
-            jsPsych.pluginAPI.setTimeout(function(){ $(".vending-machine").css({
-              "transform":  "rotate(0deg) translateX(0%)",
-              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-            }); }, shake_return_time);
-            
-            response.trial_events.push({
-              "event_type": "left tilt",
-              "event_raw_details": shake_left_translateX + "%, " + shake_left_rotate + "deg",
-              "event_converted_details": "vending machine was tilted left " + shake_left_translateX + "%, " + shake_left_rotate + "deg",
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
-            });
-        } else if (info.key === right_tilt) {
-            $(".vending-machine").css({
-                "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-            });
-  
-            jsPsych.pluginAPI.setTimeout(function(){ $(".vending-machine").css({
               "transform": "rotate(0deg) translateX(0%)",
               "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-            }); }, shake_return_time);
-            
-            response.trial_events.push({
-              "event_type": "right tilt",
-              "event_raw_details": shake_right_translateX + "%, " + shake_right_rotate + "deg",
-              "event_converted_details": "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
             });
-        }
-    }
-  
+          }, shake_return_time);
 
-      if(info.key_release === undefined) {
+          response.trial_events.push({
+            "event_type": "left tilt",
+            "event_raw_details": shake_left_translateX + "%, " + shake_left_rotate + "deg",
+            "event_converted_details": "vending machine was tilted left " + shake_left_translateX + "%, " + shake_left_rotate + "deg",
+            "timestamp": jsPsych.totalTime(),
+            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          });
+        } else if (info.key === right_tilt) {
+          $(".vending-machine").css({
+            "transform": "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+
+          jsPsych.pluginAPI.setTimeout(function () {
+            $(".vending-machine").css({
+              "transform": "rotate(0deg) translateX(0%)",
+              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            });
+          }, shake_return_time);
+
+          response.trial_events.push({
+            "event_type": "right tilt",
+            "event_raw_details": shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            "event_converted_details": "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            "timestamp": jsPsych.totalTime(),
+            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          });
+        }
+      }
+
+      if (info.key_release === undefined) {
         response.trial_events.push({
           "event_type": "key press",
           "event_raw_details": info.key,
@@ -257,43 +315,48 @@ jsPsych.plugins["transfer-test"] = (function() {
           "timestamp": jsPsych.totalTime(),
           "time_elapsed": jsPsych.totalTime() - timestamp_onload
         });
+
         machine_tilt();
       } else {
-          response.trial_events.push({
-            "event_type": "key release",
-            "event_raw_details": info.key_release,
-            "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-            "timestamp": jsPsych.totalTime(),
-            "time_elapsed": jsPsych.totalTime() - timestamp_onload
-          });
-          if (trial.response_ends_trial) {
-            end_trial();
-          }
+        response.trial_events.push({
+          "event_type": "key release",
+          "event_raw_details": info.key_release,
+          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+
+        if (trial.response_ends_trial) {
+          end_trial();
+        }
       }
     };
 
     // start the response listener
-    if (trial.choices != jsPsych.NO_KEYS) {
-        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'performance',
-          persist: true,
-          allow_held_key: false
-        });
-        var clickListener = jsPsych.pluginAPI.getMouseResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'date',
-          persist: true,
-          allow_held_key: false
-        });
+    if (trial.choices !== jsPsych.NO_KEYS) {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'performance',
+        persist: true,
+        allow_held_key: false
+      });
+
+      var clickListener = jsPsych.pluginAPI.getMouseResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: false
+      });
     }
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility = 'hidden';
+        display_element
+          .querySelector('#jspsych-html-keyboard-response-stimulus')
+          .style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -311,6 +374,22 @@ jsPsych.plugins["transfer-test"] = (function() {
       }, trial.trial_latency);
     }
 
+    /**
+     * Set timer to show modal window.
+     * The modal should appear if the user hasn't clicked anything.
+     */
+    function setModalShowTimer() {
+      if (popupConfig.isShow === false) {
+        return
+      }
+
+      clearTimeout(timer)
+
+      timer = setTimeout(() => {
+        isStoppedTest = true
+        MicroModal.show('modal-1');
+      }, popupConfig.duration);
+    }
   };
 
   return plugin;

@@ -1073,8 +1073,11 @@ var TRANSFER1 = {
             stimulus: 'vending machine',
             transfer_test_color_duration: stim_duration,
             transfer_test_white_duration: ITI_duration,
-            sequence_reps: block_num_transfer_test
-        }, 
+            sequence_reps: block_num_transfer_test,
+            popup_machine: popup_machine_transfer1,
+            popup_machine_duration: popup_duration_machine_transfer1,
+            popup_machine_text: popup_text_machine_transfer1
+        },
         {
             timeline: [{
                 stage_name: 'transfer1_close',
@@ -1251,7 +1254,10 @@ var DEVAL_TEST_MAIN = {
     type: 'transfer-test',
     stimulus: 'vending machine',
     trial_duration: deval_test_duration,
-    sequence_reps: 1
+    sequence_reps: 1,
+    popup_machine: popup_machine_deval_test,
+    popup_machine_duration: popup_duration_machine_deval_test,
+    popup_machine_text: popup_text_machine_deval_test
 };
 
 var DEVAL_TEST_INSTRUCT_OPEN = {
