@@ -82,7 +82,7 @@ jsPsych.plugins["transfer-test"] = (function() {
     var timer
     var isStoppedTest = false;
     var popupConfig = {
-      isShow: trial.popup_machine,
+      isShow: false,
       duration: trial.popup_machine_duration * 1000,
       text: trial.popup_machine_text
     }
@@ -103,7 +103,7 @@ jsPsych.plugins["transfer-test"] = (function() {
       '<div id="transfer-test" class="outcome-container"></div>' +
       '</div>';
 
-    popup +=
+    html +=
       `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
               <div class="modal__overlay" tabindex="-1" data-micromodal-close>
                 <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
@@ -124,17 +124,10 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // draw
     display_element.innerHTML = html;
-    window.document.querySelector('.jspsych-display-element').innerHTML += popup
 
-    $('.modal__overlay, .modal__close, .modal__btn').on('click', function() {
-      isStoppedTest = false
-    });
-
-    $('body').keypress(function(e) {
-      if (e.which === 27) {
-        isStoppedTest = false
-      }
-    });
+    if (popupConfig.isShow) {
+      setPopupCloseListeners()
+    }
 
     function change_colors(notes) {
       notes = [];
@@ -231,6 +224,8 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // function to end trial when it is time
     var end_trial = function() {
+      // clear popup timer
+      clearTimeout(timer)
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -256,6 +251,7 @@ jsPsych.plugins["transfer-test"] = (function() {
     // function to handle responses by the subject
     var after_response = function(info) {
       setModalShowTimer()
+
       if (isStoppedTest) {
         return
       }
@@ -386,6 +382,18 @@ jsPsych.plugins["transfer-test"] = (function() {
         isStoppedTest = true
         MicroModal.show('modal-1');
       }, popupConfig.duration);
+    }
+
+    function setPopupCloseListeners() {
+      $('.modal__overlay, .modal__close, .modal__btn').on('click', function() {
+        isStoppedTest = false
+      });
+
+      $('body').keypress(function(e) {
+        if (e.which === 27) {
+          isStoppedTest = false
+        }
+      });
     }
   };
 
