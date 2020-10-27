@@ -71,11 +71,10 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
           }
         }
       }
-
     }
   }
 
-  plugin.trial = function(display_element, trial){
+  plugin.trial = function(display_element, trial) {
     var outcome_collection = {
       MM:'/static/images/MM.png',
       TT:'/static/images/TT.png',
@@ -87,29 +86,29 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
 
     var new_html =
       `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-left'>
-                <div class='vvr-question-a'>
-                    <p>${trial.vars.VVR_q_text_a1}</p>
-                    <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
-                    <p class="answer_latency" style='padding:2rem 0'>${trial.vars.VVR_q_text_a2}</p>
-                    <svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="27" y="20" width="203" height="359" fill="#000"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>
-                    </svg>
-                </div>
-                <div class='vvr-question-b' style='display: none'>
-                    <p>${trial.vars.VVR_q_text_b1}</p>
-                    <div class="votes-container">
-                        <div id="slider">
-                            <div class="description">
-                                <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
-                                <div class="description--center"></div>
-                                <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
-                            </div>
-                        </div>
-                        <ul>${trial.vars.VVR_q_text_b4}</ul>
-                    </div>
-                </div>
-            </div>`;
+        <div class='vvr-question-a'>
+            <p>${trial.vars.VVR_q_text_a1}</p>
+            <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
+            <p class="answer_latency" style='padding:2rem 0'>${trial.vars.VVR_q_text_a2}</p>
+            <svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="27" y="20" width="203" height="359" fill="#000"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>
+            </svg>
+        </div>
+        <div class='vvr-question-b' style='display: none'>
+          <p>${trial.vars.VVR_q_text_b1}</p>
+          <div class="votes-container">
+            <div id="slider">
+              <div class="description">
+                <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
+                <div class="description--center"></div>
+                <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
+              </div>
+            </div>
+            <ul>${trial.vars.VVR_q_text_b4}</ul>
+        </div>
+      </div>
+    </div>`;
 
     // store response
     var response = {

@@ -155,7 +155,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
           jsPsych.pluginAPI.clearAllTimeouts();
         }
 
-        if(interval_number_holder < VVR_INTERVAL_NUM) {
+        if (interval_number_holder < VVR_INTERVAL_NUM) {
           interval_number_holder += 1;
         }
 
@@ -174,10 +174,12 @@ jsPsych.plugins['survey-vvr'] = (function() {
               "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
 
-          jsPsych.pluginAPI.setTimeout(function(){ $(".vending-machine").css({
-            "transform":  "rotate(0deg) translateX(0%)",
-            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-          }); }, shake_return_time);
+          jsPsych.pluginAPI.setTimeout(function() {
+            $(".vending-machine").css({
+              "transform":  "rotate(0deg) translateX(0%)",
+              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            });
+          }, shake_return_time);
 
           response.trial_events.push({
             "event_type": "left tilt",
@@ -214,7 +216,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
           condition_outcome = 'A2';
           condition_outcome_handler = true;
           } else {
-            if(!condition_outcome_handler) {
+            if (!condition_outcome_handler) {
               condition_outcome = 'A0';
             }
           }
@@ -247,67 +249,68 @@ jsPsych.plugins['survey-vvr'] = (function() {
     // function to end trial when it is time
     var end_trial = function() {
 
-        // increase counter
-        loop_node_counter_vvr++;
-        loop_node_counter_vvr_determination++;
+      // increase counter
+      loop_node_counter_vvr++;
+      loop_node_counter_vvr_determination++;
 
-        if((VVR_DEGRAD_PATTERN.length - 1) === degrad_pattern_loop_counter) {
-            degrad_pattern_loop_counter = 0;
-        } else {
-            degrad_pattern_loop_counter++;
-        };
-
-        if((VVR_PROB_VALUE.length - 1) === prob_value_loop_counter) {
-          prob_value_loop_counter = 0;
-        } else {
-          prob_value_loop_counter++;
-        };
-
-        // kill any remaining setTimeout handlers
-        jsPsych.pluginAPI.clearAllTimeouts();
-        // hack to kill all remaining setTimeouts
-        while (timerId--) {
-          window.clearTimeout(timerId); // will do nothing if no timeout with id is present
-        }
-
-        // kill keyboard listeners
-        if (typeof keyboardListener !== 'undefined') {
-            jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-            jsPsych.pluginAPI.cancelClickResponse(clickListener);
-        }
-
-        // gather the data to store for the trial
-        var trial_data = {
-            "stage_name": trial.stage_name,
-            "stimulus": trial.stimulus,
-            "block_number": loop_node_counter_vvr,
-            "events": JSON.stringify(response.trial_events)
-        };
-
-        // clear the display
-        display_element.innerHTML = '';
-
-        // move on to the next trial
-        jsPsych.finishTrial(trial_data);
-    };
-      // start the response listener
-      if (trial.choices !== jsPsych.NO_KEYS) {
-          var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-            callback_function: after_response,
-            valid_responses: trial.choices,
-            rt_method: 'performance',
-            persist: true,
-            allow_held_key: false
-          });
-
-          var clickListener = jsPsych.pluginAPI.getMouseResponse({
-            callback_function: after_response,
-            valid_responses: trial.choices,
-            rt_method: 'date',
-            persist: false,
-            allow_held_key: false
-          });
+      if ((VVR_DEGRAD_PATTERN.length - 1) === degrad_pattern_loop_counter) {
+          degrad_pattern_loop_counter = 0;
+      } else {
+          degrad_pattern_loop_counter++;
       }
+
+      if ((VVR_PROB_VALUE.length - 1) === prob_value_loop_counter) {
+        prob_value_loop_counter = 0;
+      } else {
+        prob_value_loop_counter++;
+      }
+
+      // kill any remaining setTimeout handlers
+      jsPsych.pluginAPI.clearAllTimeouts();
+      // hack to kill all remaining setTimeouts
+      while (timerId--) {
+        window.clearTimeout(timerId); // will do nothing if no timeout with id is present
+      }
+
+      // kill keyboard listeners
+      if (typeof keyboardListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+          jsPsych.pluginAPI.cancelClickResponse(clickListener);
+      }
+
+      // gather the data to store for the trial
+      var trial_data = {
+        "stage_name": trial.stage_name,
+        "stimulus": trial.stimulus,
+        "block_number": loop_node_counter_vvr,
+        "events": JSON.stringify(response.trial_events)
+      };
+
+      // clear the display
+      display_element.innerHTML = '';
+
+      // move on to the next trial
+      jsPsych.finishTrial(trial_data);
+    };
+
+    // start the response listener
+    if (trial.choices !== jsPsych.NO_KEYS) {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'performance',
+        persist: true,
+        allow_held_key: false
+      });
+
+      var clickListener = jsPsych.pluginAPI.getMouseResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: false,
+        allow_held_key: false
+      });
+    }
 
        // end trial if trial_duration is set
       if (trial.trial_duration !== null) {

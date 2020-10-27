@@ -74,7 +74,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial){
+  plugin.trial = function(display_element, trial) {
     var outcome_collection = {
       MM:'/static/images/MM.png',
       TT:'/static/images/TT.png',
@@ -114,6 +114,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
     var response = {
       trial_events: []
     };
+
     var timestamp_onload = vvr_timer;
 
     response.trial_events.push({
