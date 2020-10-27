@@ -238,6 +238,10 @@ var prob_value_VVR3 = [0.2];
 var min_blocks_num_VVR3 = 2;
 var min_num_correct_VVR3 = 2;
 var max_num_incorrect_VVR3 = 4;
+
+var popup_machine_VVR3 = true;
+var popup_duration_machine_VVR3 = 10; //(seconds)
+var popup_text_machine_VVR3 = "Don’t forget, you can tip the machine any time in this stage to earn snacks.";
 /************************************************************
  * Pavlovian Conditioning
  ************************************************************/

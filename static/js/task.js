@@ -508,7 +508,10 @@ var vvr_1_vars = {
     min_num_correct: min_num_correct_VVR1,
     max_num_incorrect: max_num_incorrect_VVR1,
     prob_value: prob_value_VVR1,
-    degrad_pattern: degrad_pattern_VVR1
+    degrad_pattern: degrad_pattern_VVR1,
+    popup_machine: popup_machine_VVR1,
+    popup_machine_duration: popup_duration_machine_VVR1,
+    popup_machine_text: popup_text_machine_VVR1
 };
 
 var vvr_2_vars = {
@@ -517,7 +520,10 @@ var vvr_2_vars = {
     min_num_correct: min_num_correct_VVR2,
     max_num_incorrect: max_num_incorrect_VVR2,
     prob_value: prob_value_VVR2,
-    degrad_pattern: degrad_pattern_VVR2
+    degrad_pattern: degrad_pattern_VVR2,
+    popup_machine: popup_machine_VVR2,
+    popup_machine_duration: popup_duration_machine_VVR2,
+    popup_machine_text: popup_text_machine_VVR2
 };
 
 var vvr_3_vars = {
@@ -526,7 +532,10 @@ var vvr_3_vars = {
     min_num_correct: min_num_correct_VVR3,
     max_num_incorrect: max_num_incorrect_VVR3,
     prob_value: prob_value_VVR3,
-    degrad_pattern: degrad_pattern_VVR3
+    degrad_pattern: degrad_pattern_VVR3,
+    popup_machine: popup_machine_VVR3,
+    popup_machine_duration: popup_duration_machine_VVR3,
+    popup_machine_text: popup_text_machine_VVR3
 };
 
 var VVR = function(data) {
@@ -544,7 +553,10 @@ var VVR = function(data) {
             VVR_OUTCOME_DURATION: outcome_duration,
             VVR_PROB_VALUE: data.prob_value,
             VVR_DEGRAD_PATTERN : data.degrad_pattern,
-        }
+        },
+        popup_machine: data.popup_machine,
+        popup_machine_duration: data.popup_machine_duration,
+        popup_machine_text: data.popup_machine_text
     };
 
     var questions_a = {
@@ -573,7 +585,10 @@ var VVR = function(data) {
                     VVR_q_text_b3: VVR_q_text_b3,
                     VVR_q_text_b4: VVR_q_text_b4,
                     max_num_correct_consecutive_questions: min_num_correct
-                }
+                },
+                popup_machine: data.popup_machine,
+                popup_machine_duration: data.popup_machine_duration,
+                popup_machine_text: data.popup_machine_text
             },
             {
                 stage_name: stage_name,
@@ -621,7 +636,10 @@ var VVR = function(data) {
                     VVR_q_text_b3: VVR_q_text_b3,
                     VVR_q_text_b4: VVR_q_text_b4,
                     max_num_correct_consecutive_questions: min_num_correct
-                }
+                },
+                popup_machine: data.popup_machine,
+                popup_machine_duration: data.popup_machine_duration,
+                popup_machine_text: data.popup_machine_text
             },
             {
                 stage_name: stage_name,
@@ -1121,8 +1139,11 @@ var TRANSFER2 = {
             stimulus: 'vending machine',
             transfer_test_color_duration: stim_duration,
             transfer_test_white_duration: ITI_duration,
-            sequence_reps: block_num_transfer_test
-        }, 
+            sequence_reps: block_num_transfer_test,
+            popup_machine: popup_machine_transfer1,
+            popup_machine_duration: popup_duration_machine_transfer1,
+            popup_machine_text: popup_text_machine_transfer1
+        },
         {
             timeline: [{
                 stage_name: 'transfer2_close',
@@ -1166,8 +1187,11 @@ var TRANSFER3 = {
             stimulus: 'vending machine',
             transfer_test_color_duration: stim_duration,
             transfer_test_white_duration: ITI_duration,
-            sequence_reps: block_num_transfer_test
-        }, 
+            sequence_reps: block_num_transfer_test,
+            popup_machine: popup_machine_transfer1,
+            popup_machine_duration: popup_duration_machine_transfer1,
+            popup_machine_text: popup_text_machine_transfer1
+        },
         {
             timeline: [{
                 stage_name: 'transfer3_close',
