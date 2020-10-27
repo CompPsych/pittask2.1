@@ -84,6 +84,13 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     var isMachineTilted = false;
     var vas_holder = 0;
 
+    var timer
+    var popupConfig = {
+      isShow: trial.popup_machine,
+      duration: trial.popup_machine_duration * 1000,
+      text: trial.popup_machine_text
+    }
+
     var new_html =
       `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-left'>
         <div class='vvr-question-a'>
@@ -109,6 +116,25 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
         </div>
       </div>
     </div>`;
+
+    new_html +=
+      `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+          <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <header class="modal__header">
+              <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+            </header>
+            <main class="modal__content" id="modal-1-content">
+              <p>
+                ${ popupConfig.text }
+              </p>
+            </main>
+            <footer class="modal__footer">
+              <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+            </footer>
+          </div>
+        </div>
+      </div>`;
 
     // store response
     var response = {
@@ -168,8 +194,12 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
       });
     }
 
+    setModalShowTimer()
+
     // function to handle responses by the subject
     var after_response = function(info) {
+      setModalShowTimer()
+
       if (info.key_release === undefined) {
         response.trial_events.push({
           "event_type": "key press",
@@ -215,6 +245,8 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
 
     // function to end trial when it is time
     var end_trial = function() {
+      // clear popup timer
+      clearTimeout(timer);
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -282,6 +314,22 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);
+    }
+
+    /**
+     * Set timer to show modal window.
+     * The modal should appear if the user hasn't clicked anything.
+     */
+    function setModalShowTimer() {
+      if (popupConfig.isShow === false) {
+        return
+      }
+
+      clearTimeout(timer)
+
+      timer = setTimeout(() => {
+        MicroModal.show('modal-2');
+      }, popupConfig.duration);
     }
   }
 

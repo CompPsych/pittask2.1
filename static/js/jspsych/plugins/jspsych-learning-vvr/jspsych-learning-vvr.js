@@ -54,6 +54,13 @@ jsPsych.plugins['survey-vvr'] = (function() {
     var timerId;
     var condition_outcome = 'A0';
     var condition_outcome_handler = false;
+    var timer
+    var isStoppedTest = false;
+    var popupConfig = {
+      isShow: trial.popup_machine,
+      duration: trial.popup_machine_duration * 1000,
+      text: trial.popup_machine_text
+    }
 
     // store response
     var response = {
@@ -74,7 +81,30 @@ jsPsych.plugins['survey-vvr'] = (function() {
       '<div class="outcome-container"></div>' +
       '</div>';
 
+    new_html +=
+      `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+          <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <header class="modal__header">
+              <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+            </header>
+            <main class="modal__content" id="modal-1-content">
+              <p>
+                ${ popupConfig.text }
+              </p>
+            </main>
+            <footer class="modal__footer">
+              <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+            </footer>
+          </div>
+        </div>
+      </div>`;
+
     display_element.innerHTML = new_html;
+
+    if (popupConfig.isShow) {
+      setPopupCloseListeners()
+    }
 
     response.trial_events.push({
       "event_type": 'image appears',
@@ -93,6 +123,12 @@ jsPsych.plugins['survey-vvr'] = (function() {
       var duration = VVR_INTERVAL_DURATION;
 
       timerId = jsPsych.pluginAPI.setTimeout(function request() {
+        if (isStoppedTest) {
+          clearTimeout(timerId);
+          timerId = jsPsych.pluginAPI.setTimeout(request, duration);
+          return
+        }
+
         if (x !== 0) {
           random_boolean = Math.random() < probability_value;
           outcome_present = DEGRAD_PATTERN[condition_outcome][degradation_pattern_condition];
@@ -130,6 +166,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
             }
 
           }, VVR_OUTCOME_DURATION);
+
           duration = VVR_OUTCOME_DURATION + VVR_INTERVAL_DURATION;
         } else {
           response.trial_events.push({
@@ -165,8 +202,16 @@ jsPsych.plugins['survey-vvr'] = (function() {
       }, VVR_INTERVAL_DURATION);
     }());
 
+    setModalShowTimer()
+
     // function to handle responses by the subject
     var after_response = function(info) {
+      setModalShowTimer()
+
+      if (isStoppedTest) {
+        return
+      }
+
       function machine_tilt() {
         if (info.key === left_tilt) {
           $(".vending-machine").css({
@@ -248,6 +293,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
     // function to end trial when it is time
     var end_trial = function() {
+      // clear popup timer
+      clearTimeout(timer)
 
       // increase counter
       loop_node_counter_vvr++;
@@ -312,12 +359,42 @@ jsPsych.plugins['survey-vvr'] = (function() {
       });
     }
 
-       // end trial if trial_duration is set
-      if (trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function() {
-          end_trial();
-        }, trial.trial_duration);
+     // end trial if trial_duration is set
+    if (trial.trial_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        end_trial();
+      }, trial.trial_duration);
+    }
+
+    /**
+     * Set timer to show modal window.
+     * The modal should appear if the user hasn't clicked anything.
+     */
+    function setModalShowTimer() {
+      if (popupConfig.isShow === false) {
+        return
       }
+
+      clearTimeout(timer)
+
+      timer = setTimeout(() => {
+        isStoppedTest = true
+        MicroModal.show('modal-1');
+      }, popupConfig.duration);
+    }
+
+    function setPopupCloseListeners() {
+      $('.modal__overlay, .modal__close, .modal__btn').on('click', function() {
+        isStoppedTest = false
+      });
+
+      document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        if (evt.keyCode === 27 && isStoppedTest) {
+          isStoppedTest = false
+        }
+      };
+    }
   }
 
   return plugin;
