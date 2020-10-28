@@ -384,8 +384,14 @@ jsPsych.plugins["transfer-test"] = (function() {
     }
 
     function setPopupCloseListeners() {
-      $('.modal__overlay, .modal__close, .modal__btn').on('click', function() {
+      $('.modal__close, .modal__btn').on('click', function() {
         isStoppedTest = false
+      });
+
+      $('.modal__overlay').on('click', function(event) {
+        if ($(event.target).hasClass('modal__overlay')) {
+          isStoppedTest = false
+        }
       });
 
       document.onkeydown = function(evt) {
