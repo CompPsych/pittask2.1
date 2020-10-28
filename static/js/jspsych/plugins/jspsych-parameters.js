@@ -1,7 +1,7 @@
 jsPsych.plugins['parameters'] = (function(){
 
     var plugin = {};
-  
+
     plugin.info = {
         name: 'Parameters',
         stage_name: {
@@ -19,7 +19,7 @@ jsPsych.plugins['parameters'] = (function(){
             }
         }
     }
-  
+
     plugin.trial = function(display_element, trial){
         var parameters = {
             "re_captcha": re_captcha,
@@ -72,15 +72,15 @@ jsPsych.plugins['parameters'] = (function(){
             "open_instruct_text_inventory": open_instruct_text_inventory,
             "close_instruct_text_inventory": close_instruct_text_inventory,
 
-            "open_instruct_SDS": open_instruct_SDS, 
-            "close_instruct_SDS": close_instruct_SDS, 
-            "open_instruct_text_SDS": open_instruct_text_SDS, 
+            "open_instruct_SDS": open_instruct_SDS,
+            "close_instruct_SDS": close_instruct_SDS,
+            "open_instruct_text_SDS": open_instruct_text_SDS,
             "close_instruct_text_SDS": close_instruct_text_SDS,
 
             "open_instruct_ICAR": open_instruct_ICAR,
             "close_instruct_ICAR": close_instruct_ICAR,
-            "open_instruct_text_ICAR": open_instruct_text_ICAR, 
-            "close_instruct_text_ICAR": close_instruct_text_ICAR, 
+            "open_instruct_text_ICAR": open_instruct_text_ICAR,
+            "close_instruct_text_ICAR": close_instruct_text_ICAR,
 
             "inventory_rand": inventory_rand,
             "symptom_inventory": "",
@@ -168,10 +168,30 @@ jsPsych.plugins['parameters'] = (function(){
             "open_instruct_deval_test": open_instruct_deval_test,
             "close_instruct_deval_test": close_instruct_deval_test,
             "open_instruct_text_deval_test": open_instruct_text_deval_test,
-            "close_instruct_text_deval_test": close_instruct_text_deval_test, 
+            "close_instruct_text_deval_test": close_instruct_text_deval_test,
             "deval_test_duration": deval_test_duration,
 
-            "close_instruct_text_close_HIT_q": close_instruct_text_close_HIT_q
+            "close_instruct_text_close_HIT_q": close_instruct_text_close_HIT_q,
+            // popups
+            "popup_machine_VVR1": popup_machine_VVR1,
+            "popup_duration_machine_VVR1": popup_duration_machine_VVR1,
+            "popup_text_machine_VVR1": popup_text_machine_VVR1,
+
+            "popup_machine_VVR2": popup_machine_VVR2,
+            "popup_duration_machine_VVR2": popup_duration_machine_VVR2,
+            "popup_text_machine_VVR2": popup_text_machine_VVR2,
+
+            "popup_machine_VVR3": popup_machine_VVR3,
+            "popup_duration_machine_VVR3": popup_duration_machine_VVR3,
+            "popup_text_machine_VVR3": popup_text_machine_VVR3,
+
+            "popup_machine_transfer1": popup_machine_transfer1,
+            "popup_duration_machine_transfer1": popup_duration_machine_transfer1,
+            "popup_text_machine_transfer1": popup_text_machine_transfer1,
+
+            "popup_machine_deval_test": popup_machine_deval_test,
+            "popup_duration_machine_deval_test": popup_duration_machine_deval_test,
+            "popup_text_machine_deval_test": popup_text_machine_deval_test,
         };
 
         symptom_inventory.forEach(function(element, index) {
@@ -196,14 +216,14 @@ jsPsych.plugins['parameters'] = (function(){
         array_extraction(prob_value_VVR2, 'prob_value_VVR2');
         array_extraction(prob_value_VVR3, 'prob_value_VVR3');
 
-        // browser, screen, OS info for specs.csv 
+        // browser, screen, OS info for specs.csv
         var version = platform.os.version === null ? '' : ' (' + platform.os.version + ')';
         var specs = {
             "platform": platform.os.family + ' ' + platform.os.architecture + version,
             "browser": platform.name + ' (' + platform.version + ')',
             "device": device.type,
             "screen_resolution":  window.screen.availHeight + 'x' + window.screen.availWidth,
-            "viewport_size":  $(window).height() + 'x' + $(window).width() 
+            "viewport_size":  $(window).height() + 'x' + $(window).width()
         };
 
         var trial_data = {
@@ -218,7 +238,7 @@ jsPsych.plugins['parameters'] = (function(){
 
         jsPsych.finishTrial(trial_data);
     }
-  
+
     return plugin;
-  
+
 })();
