@@ -249,10 +249,8 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
-      setModalShowTimer()
-
-      if (isStoppedTest) {
-        return
+      if (!isStoppedTest) {
+        setModalShowTimer();
       }
 
       function machine_tilt() {
@@ -385,19 +383,22 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     function setPopupCloseListeners() {
       $('.modal__close, .modal__btn').on('click', function() {
-        isStoppedTest = false
+        isStoppedTest = false;
+        setModalShowTimer();
       });
 
       $('.modal__overlay').on('click', function(event) {
         if ($(event.target).hasClass('modal__overlay')) {
-          isStoppedTest = false
+          isStoppedTest = false;
+          setModalShowTimer();
         }
       });
 
       document.onkeydown = function(evt) {
         evt = evt || window.event;
         if (evt.keyCode === 27 && isStoppedTest) {
-          isStoppedTest = false
+          isStoppedTest = false;
+          setModalShowTimer();
         }
       };
     }
