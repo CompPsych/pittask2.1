@@ -124,10 +124,6 @@ jsPsych.plugins["transfer-test"] = (function() {
     // draw
     display_element.innerHTML = html;
 
-    if (popupConfig.isShow) {
-      setPopupCloseListeners()
-    }
-
     function change_colors(notes) {
       notes = [];
 
@@ -364,9 +360,33 @@ jsPsych.plugins["transfer-test"] = (function() {
       }, trial.trial_latency);
     }
 
+    var microModalConfig = {
+      onShow: function() {
+        response.trial_events.push({
+          "event_type": 'error message',
+          "event_raw_details": 'Error message',
+          "event_converted": 'popup triggered popup_duration_machine',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+      },
+      onClose: function() {
+        response.trial_events.push({
+          "event_type": 'popup closed',
+          "event_raw_details": 'Close',
+          "event_converted_details": trial.event_converted_details,
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+
+        isStoppedTest = false;
+        setModalShowTimer();
+      },
+    };
+
     /**
-     * Set timer to show modal window.
-     * The modal should appear if the user hasn't clicked anything.
+     * Set timer to show popup.
+     * The popup should appear if the user hasn't clicked anything.
      */
     function setModalShowTimer() {
       if (popupConfig.isShow === false) {
@@ -377,30 +397,8 @@ jsPsych.plugins["transfer-test"] = (function() {
 
       timer = setTimeout(() => {
         isStoppedTest = true
-        MicroModal.show('modal-1');
+        MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);
-    }
-
-    function setPopupCloseListeners() {
-      $('.modal__close, .modal__btn').on('click', function() {
-        isStoppedTest = false;
-        setModalShowTimer();
-      });
-
-      $('.modal__overlay').on('click', function(event) {
-        if ($(event.target).hasClass('modal__overlay')) {
-          isStoppedTest = false;
-          setModalShowTimer();
-        }
-      });
-
-      document.onkeydown = function(evt) {
-        evt = evt || window.event;
-        if (evt.keyCode === 27 && isStoppedTest) {
-          isStoppedTest = false;
-          setModalShowTimer();
-        }
-      };
     }
   };
 
