@@ -318,6 +318,29 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       }, trial.trial_duration);
     }
 
+    var microModalConfig = {
+      onShow: function() {
+        response.trial_events.push({
+          "event_type": 'error message',
+          "event_raw_details": 'Error message',
+          "event_converted": 'popup triggered popup_duration_machine',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+      },
+      onClose: function() {
+        response.trial_events.push({
+          "event_type": 'popup closed',
+          "event_raw_details": 'Close',
+          "event_converted_details": trial.event_converted_details,
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+
+        setModalShowTimer();
+      },
+    };
+
     /**
      * Set timer to show modal window.
      * The modal should appear if the user hasn't clicked anything.
@@ -330,7 +353,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       clearTimeout(timer)
 
       timer = setTimeout(() => {
-        MicroModal.show('modal-3');
+        MicroModal.show('modal-3', microModalConfig);
       }, popupConfig.duration);
     }
   }

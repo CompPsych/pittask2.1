@@ -102,10 +102,6 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
     display_element.innerHTML = new_html;
 
-    if (popupConfig.isShow) {
-      setPopupCloseListeners()
-    }
-
     response.trial_events.push({
       "event_type": 'image appears',
       "event_raw_details": 'blank vending machine',
@@ -206,25 +202,25 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
-      setModalShowTimer()
-
-      if (isStoppedTest) {
-        return
+      if (!isStoppedTest) {
+        setModalShowTimer();
       }
 
       function machine_tilt() {
         if (info.key === left_tilt) {
-          $(".vending-machine").css({
+          if (!isStoppedTest) {
+            $(".vending-machine").css({
               "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
               "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-          });
-
-          jsPsych.pluginAPI.setTimeout(function() {
-            $(".vending-machine").css({
-              "transform":  "rotate(0deg) translateX(0%)",
-              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
             });
-          }, shake_return_time);
+
+            jsPsych.pluginAPI.setTimeout(function() {
+              $(".vending-machine").css({
+                "transform":  "rotate(0deg) translateX(0%)",
+                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+              });
+            }, shake_return_time);
+          }
 
           response.trial_events.push({
             "event_type": "left tilt",
@@ -237,17 +233,19 @@ jsPsych.plugins['survey-vvr'] = (function() {
           condition_outcome = 'A1';
           condition_outcome_handler = true;
         } else if (info.key === right_tilt) {
-          $(".vending-machine").css({
-            "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-          });
-
-          jsPsych.pluginAPI.setTimeout(function() {
+          if (!isStoppedTest) {
             $(".vending-machine").css({
-              "transform": "rotate(0deg) translateX(0%)",
+              "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
               "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
             });
-          }, shake_return_time);
+
+            jsPsych.pluginAPI.setTimeout(function() {
+              $(".vending-machine").css({
+                "transform": "rotate(0deg) translateX(0%)",
+                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+              });
+            }, shake_return_time);
+          }
 
           response.trial_events.push({
             "event_type": "right tilt",
@@ -366,6 +364,30 @@ jsPsych.plugins['survey-vvr'] = (function() {
       }, trial.trial_duration);
     }
 
+    var microModalConfig = {
+      onShow: function() {
+        response.trial_events.push({
+          "event_type": 'error message',
+          "event_raw_details": 'Error message',
+          "event_converted": 'popup triggered popup_duration_machine',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+      },
+      onClose: function() {
+        response.trial_events.push({
+          "event_type": 'popup closed',
+          "event_raw_details": 'Close',
+          "event_converted_details": trial.event_converted_details,
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+
+        isStoppedTest = false;
+        setModalShowTimer();
+      },
+    };
+
     /**
      * Set timer to show modal window.
      * The modal should appear if the user hasn't clicked anything.
@@ -379,27 +401,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
       timer = setTimeout(() => {
         isStoppedTest = true
-        MicroModal.show('modal-1');
+        MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);
-    }
-
-    function setPopupCloseListeners() {
-      $('.modal__close, .modal__btn').on('click', function() {
-        isStoppedTest = false
-      });
-
-      $('.modal__overlay').on('click', function(event) {
-        if ($(event.target).hasClass('modal__overlay')) {
-          isStoppedTest = false
-        }
-      });
-
-      document.onkeydown = function(evt) {
-        evt = evt || window.event;
-        if (evt.keyCode === 27 && isStoppedTest) {
-          isStoppedTest = false
-        }
-      };
     }
   }
 
