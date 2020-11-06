@@ -208,19 +208,20 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
       function machine_tilt() {
         if (info.key === left_tilt) {
-          if (!isStoppedTest) {
+          $(".vending-machine").css({
+            "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+
+          jsPsych.pluginAPI.setTimeout(function() {
             $(".vending-machine").css({
-              "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+              "transform":  "rotate(0deg) translateX(0%)",
               "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
             });
+          }, shake_return_time);
 
-            jsPsych.pluginAPI.setTimeout(function() {
-              $(".vending-machine").css({
-                "transform":  "rotate(0deg) translateX(0%)",
-                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              });
-            }, shake_return_time);
-          }
+          condition_outcome = 'A1';
+          condition_outcome_handler = true;
 
           response.trial_events.push({
             "event_type": "left tilt",
@@ -230,22 +231,19 @@ jsPsych.plugins['survey-vvr'] = (function() {
             "timestamp": jsPsych.totalTime(),
             "time_elapsed": jsPsych.totalTime() - timestamp_onload
           });
-          condition_outcome = 'A1';
-          condition_outcome_handler = true;
-        } else if (info.key === right_tilt) {
-          if (!isStoppedTest) {
-            $(".vending-machine").css({
-              "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-            });
 
-            jsPsych.pluginAPI.setTimeout(function() {
+        } else if (info.key === right_tilt) {
+          $(".vending-machine").css({
+            "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+
+          jsPsych.pluginAPI.setTimeout(function() {
               $(".vending-machine").css({
                 "transform": "rotate(0deg) translateX(0%)",
                 "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
               });
             }, shake_return_time);
-          }
 
           response.trial_events.push({
             "event_type": "right tilt",
@@ -276,7 +274,9 @@ jsPsych.plugins['survey-vvr'] = (function() {
           "time_elapsed": jsPsych.totalTime() - timestamp_onload
         });
 
-        machine_tilt();
+        if (!isStoppedTest) {
+          machine_tilt();
+        }
       } else {
         response.trial_events.push({
           "event_type": "key release",

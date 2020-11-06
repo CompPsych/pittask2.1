@@ -85,6 +85,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     var vas_holder = 0;
 
     var timer
+    var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,
       duration: trial.popup_machine_duration * 1000,
@@ -218,28 +219,30 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
         });
       }
 
-      if (info.key === left_tilt && !isMachineTilted) {
-        $(".vending-machine").css({
-          "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
-          "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-        });
-        vvrIsCorrect = true;
-        isMachineTilted = true;
-        ++loop_node_counter_max_num_correct;
-        showNextQuestion();
-      } else if (info.key === right_tilt && !isMachineTilted) {
-        $(".vending-machine").css({
-          "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-          "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-        });
-        vvrIsCorrect = false;
-        isMachineTilted = true;
-        ++loop_node_counter_max_num_incorrect;
-        if(loop_node_counter_max_num_correct !== trial.vars.max_num_correct_consecutive_questions || loop_node_counter_max_num_correct < trial.vars.max_num_correct_consecutive_questions) {
-          loop_node_counter_max_num_correct = 0;
-        }
+      if (!isStoppedTest) {
+        if (info.key === left_tilt && !isMachineTilted) {
+          $(".vending-machine").css({
+            "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+          vvrIsCorrect = true;
+          isMachineTilted = true;
+          ++loop_node_counter_max_num_correct;
+          showNextQuestion();
+        } else if (info.key === right_tilt && !isMachineTilted) {
+          $(".vending-machine").css({
+            "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+          vvrIsCorrect = false;
+          isMachineTilted = true;
+          ++loop_node_counter_max_num_incorrect;
+          if(loop_node_counter_max_num_correct !== trial.vars.max_num_correct_consecutive_questions || loop_node_counter_max_num_correct < trial.vars.max_num_correct_consecutive_questions) {
+            loop_node_counter_max_num_correct = 0;
+          }
 
-        showNextQuestion();
+          showNextQuestion();
+        }
       }
     }
 
@@ -335,6 +338,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
           "time_elapsed": jsPsych.totalTime() - timestamp_onload
         });
 
+        isStoppedTest = false
         setModalShowTimer();
       },
     };
@@ -351,6 +355,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
       clearTimeout(timer)
 
       timer = setTimeout(() => {
+        isStoppedTest = true
         MicroModal.show('modal-2', microModalConfig);
       }, popupConfig.duration);
     }
