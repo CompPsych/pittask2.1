@@ -85,6 +85,8 @@ jsPsych.plugins["transfer-test"] = (function() {
       duration: trial.popup_machine_duration * 1000,
       text: trial.popup_machine_text
     }
+    var devalTestDuration = 0
+    var devalTestLoop
 
     // store response
     var response = {
@@ -210,6 +212,7 @@ jsPsych.plugins["transfer-test"] = (function() {
     if (trial.stage_name !== 'deval_test') {
       change_colors();
     } else if (trial.stage_name === 'deval_test') {
+      devalTestDuration = trial.trial_duration
       response.trial_events.push({
         "event_type": "image appears",
         "event_raw_details": "blank vending machine",
@@ -354,9 +357,20 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
+      devalTestLoop = setInterval(function() {
+        if (!isStoppedTest) {
+          devalTestDuration -= 1000
+
+          if (devalTestDuration <= 0) {
+            clearInterval(devalTestLoop)
+            end_trial()
+          }
+        }
+      }, 1000)
+
+      // jsPsych.pluginAPI.setTimeout(function() {
+      //   end_trial();
+      // }, trial.trial_duration);
     }
 
     // end trial if trial_duration is set
