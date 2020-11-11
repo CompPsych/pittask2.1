@@ -26,7 +26,8 @@ var DEGRAD_PATTERN = {
         d2: 'right',
     }
 }
-
+// Each game launching has 
+// a randomly chosen game version
 var counter_balancing_input = [
     a = {
         game_version: 'A',
@@ -114,6 +115,7 @@ var counter_balancing_input = [
     }
 ];
 
+// randomly choose game version
 var counter_balancing = jsPsych.randomization.sampleWithoutReplacement(counter_balancing_input, 1);
 
 // Reconnection to the Database
@@ -152,6 +154,7 @@ resubmit = function() {
 
 var images = ['/static/images/BBQ.png', '/static/images/TT.png', '/static/images/MM.png', '/static/images/EMPTY.png', '/static/images/audit_image.jpg'];
 
+// demographics instructions before the stage
 var DEMOGRAPHICS_INSTRUCT_OPEN = {
     timeline: [{
         stage_name: 'demographics_open',
@@ -167,7 +170,9 @@ var DEMOGRAPHICS_INSTRUCT_OPEN = {
     conditional_function: function() {
         return open_instruct_demographics;
     }
-}
+};
+
+// demographics instructions after the stage
 var DEMOGRAPHICS_INSTRUCT_CLOSE = {
     timeline: [{
         stage_name: 'demographics_close',
@@ -183,14 +188,16 @@ var DEMOGRAPHICS_INSTRUCT_CLOSE = {
     conditional_function: function() {
         return close_instruct_demographics;
     }
-}
+};
 
+// stage with instructions
 var DEMOGRAPHICS = {
     timeline: [
         DEMOGRAPHICS_INSTRUCT_OPEN, DEMOGRAPHICS_STAGE, DEMOGRAPHICS_INSTRUCT_CLOSE
     ]
 };
 
+// SDS instructions before the stage
 var SDS_INSTRUCT_OPEN = {
     timeline: [{
         stage_name: 'SDS open instructions page',
@@ -206,7 +213,9 @@ var SDS_INSTRUCT_OPEN = {
     conditional_function: function() {
         return open_instruct_SDS;
     }
-}
+};
+
+// SDS instructions after the stage
 var SDS_INSTRUCT_CLOSE = {
     timeline: [{
         stage_name: 'SDS close instructions page',
@@ -224,12 +233,14 @@ var SDS_INSTRUCT_CLOSE = {
     }
 };
 
+// stage with instructions
 var SDS = {
     timeline: [
        SDS_INSTRUCT_OPEN, SDS_STAGE, SDS_INSTRUCT_CLOSE
     ]
 };
 
+// ICAR instructions before the stage
 var ICAR_INSTRUCT_OPEN = {
     timeline: [{
         stage_name: 'ICAR open instructions page',
@@ -247,6 +258,7 @@ var ICAR_INSTRUCT_OPEN = {
     }
 };
 
+// ICAR instructions after the stage
 var ICAR_INSTRUCT_CLOSE = {
     timeline: [{
         stage_name: 'ICAR close instructions page',
@@ -264,48 +276,54 @@ var ICAR_INSTRUCT_CLOSE = {
     }
 };
 
+// stage with instructions
 var ICAR = {
     timeline: [
         ICAR_INSTRUCT_OPEN, ICAR_STAGE, ICAR_INSTRUCT_CLOSE
     ]
 };
 
-var KEY_TESTING_OPEN = {
-    stage_name: 'key_testing_open',
-    type: 'html-keyboard-response',
-    stimulus: open_instruct_text_key_testing,
-    trial_latency: open_instruct_latency,
-    trial_duration: null,
-    response_ends_trial: false,
-    event_type: 'text appears',
-    event_raw_details: 'open_instruct_text_key_testing',
-    event_converted_details: 'key_testing_open text appears'
-}
-
+// key testing stage with instructions before/after
 var KEY_TESTING = {
-    stage_name: 'key_testing',
-    type: 'key-testing',
-    stimulus: '',
-    trial_duration: null,
-    response_ends_trial: false,
-    event_type: 'text image appears',
-    event_raw_details: 'blank vending machine, text',
-    event_converted_details: 'blank vending machine appears'
-}
+    timeline: [
+        {
+            stage_name: 'key_testing_open',
+            type: 'html-keyboard-response',
+            stimulus: open_instruct_text_key_testing,
+            trial_latency: open_instruct_latency,
+            trial_duration: null,
+            response_ends_trial: false,
+            event_type: 'text appears',
+            event_raw_details: 'open_instruct_text_key_testing',
+            event_converted_details: 'key_testing_open text appears'
+        },
+        {
+            stage_name: 'key_testing',
+            type: 'key-testing',
+            stimulus: '',
+            trial_duration: null,
+            response_ends_trial: false,
+            event_type: 'text image appears',
+            event_raw_details: 'blank vending machine',
+            event_converted_details: 'blank vending machine appears'
+        },
+        {
+            stage_name: 'key_testing_close',
+            type: 'html-keyboard-response',
+            stimulus: close_instruct_text_key_testing,
+            trial_latency: close_instruct_latency,
+            trial_duration: null,
+            response_ends_trial: false,
+            event_type: 'text appears',
+            event_raw_details: 'close_instruct_text_key_testing',
+            event_converted_details: 'key_testing_close text appears'
+        }
+    ]
+};
 
-var KEY_TESTING_CLOSE = {
-    stage_name: 'key_testing_close',
-    type: 'html-keyboard-response',
-    stimulus: close_instruct_text_key_testing,
-    trial_latency: close_instruct_latency,
-    trial_duration: null,
-    response_ends_trial: false,
-    event_type: 'text appears',
-    event_raw_details: 'close_instruct_text_key_testing',
-    event_converted_details: 'key_testing_close text appears'
-}
-
-var FHR_timestamp = 0;
+// FHR_timestamp helps pass timestamp parameter trough
+// the all stages FHQ for simulating uniformity.
+var FHR_timestamp = 0; 
 var FHQ1_1 = {
     stage_name: "FHQ1",
     type: 'food-and-hunger-questions',
@@ -502,6 +520,7 @@ var vvrIsCorrect = false;
 var item_id = 0;
 var vvr_timer = 0;
 
+// pass variables from parameters.js through vvr_*_vars objects
 var vvr_1_vars = {
     stage_name: 'VVR1',
     min_blocks_num: min_blocks_num_VVR1,
@@ -538,6 +557,7 @@ var vvr_3_vars = {
     popup_machine_text: popup_text_machine_VVR3
 };
 
+// main function used for all VVR stages
 var VVR = function(data) {
     var min_blocks_num = data.min_blocks_num;
     var min_num_correct = data.min_num_correct;
@@ -940,9 +960,7 @@ var PAV_CONDITIONING_MAIN = {
             stage_name: 'pav_con',
             type: 'animation',
             frame_isi: ITI_duration,
-            frame_time: stim_duration,
-            stimuli: [],
-            stimulus: jsPsych.randomization.shuffle(pav_stimuli),
+            frame_time: stim_duration
         },
         {
             stage_name: 'pav_con',
@@ -1013,7 +1031,6 @@ var PAV_CONDITIONING_MAIN = {
         if(pav_correct_holder >= min_num_correct_pav || pav_incorrect_holder >= max_num_incorrect_pav) {
             pav_correct_holder = 0;
             pav_incorrect_holder = 0;
-            pav_is_correct = false;
             pav_multi_choice_counter = 0;
             pav_con_timer = 0;
             pav_multi_choice_array = jsPsych.randomization.shuffle(pav_stimuli);
@@ -1112,7 +1129,10 @@ var TRANSFER1 = {
                 return close_instruct_transfer_test;
             }
         }
-    ]
+    ],
+    conditional_function: function() {
+        return transfer_test1;
+    }
 };
 
 var TRANSFER2 = {
@@ -1160,7 +1180,10 @@ var TRANSFER2 = {
                 return close_instruct_transfer_test;
             }
         }
-    ]
+    ],
+    conditional_function: function() {
+        return transfer_test2;
+    }
 };
 
 var TRANSFER3 = {
@@ -1208,7 +1231,10 @@ var TRANSFER3 = {
                 return close_instruct_transfer_test;
             }
         }
-    ]
+    ],
+    conditional_function: function() {
+        return transfer_test3;
+    }
 };
 
 var DEVAL_VIDEO = {
@@ -1325,6 +1351,7 @@ var CLOSE_HIT = {
     event_converted_details: "close_HIT_q text appears"
 };
 
+// final stage
 var THANKS = {
     stage_name: 'thanks',
     type: 'html-keyboard-response',
@@ -1337,6 +1364,7 @@ var THANKS = {
     event_converted_details: "thanks text appears"
 };
 
+// timeline array holds all stages in a sequence
 var timeline = [];
 var symptom_inventories_random = jsPsych.randomization.shuffle(symptom_inventory);
 var symptom_inventories_ordered = symptom_inventory;
@@ -1344,6 +1372,8 @@ var symptom_inventory_arr = inventory_rand ?  symptom_inventories_random : sympt
 
 /************************************************************
  * Stages sequence configuration
+ * stages can be disabled by commented out
+ * stages can be reordered
  ***********************************************************/
 // Init parameters
 timeline.push({
@@ -1352,13 +1382,13 @@ timeline.push({
 });
 
 // Key-testing
-timeline.push(KEY_TESTING_OPEN, KEY_TESTING, KEY_TESTING_CLOSE);
+timeline.push(KEY_TESTING);
 // Food & Hunger Questions pre-rating
 timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
 //  Instrumental Conditioning (VVR1)
 timeline.push(VVR1);
 // Transfer Test
-// timeline.push(TRANSFER1);
+timeline.push(TRANSFER1);
 // Instrumental Degradation (VVR2)
 timeline.push(VVR2);
 // Pavlovian Condition
@@ -1400,7 +1430,7 @@ function startExperiment(){
     jsPsych.init({
             timeline: timeline,
             preload_images: images,
-            // on_finish: function(){ jsPsych.data.displayData(); }, // Debug
+            // on_finish: function(){ jsPsych.data.displayData(); }, // Debug mode, on_finish and on_data_update must be commented out in debug mode
             on_finish: function() {
                 psiTurk.saveData({
                     success: function() { 

@@ -89,11 +89,11 @@ jsPsych.plugins['PRIME-R'] = (function () {
     }
   }
   plugin.trial = function (display_element, trial) {
-    var plugin_id_name = "jspsych-survey-multi-choice-PRIME";
 
+    var plugin_id_name = "jspsych-survey-multi-choice-PRIME";
     var html = "";
 
-    // store response
+    // store responses, events
     var response = {
       trial_events: []
     };
@@ -106,19 +106,6 @@ jsPsych.plugins['PRIME-R'] = (function () {
       "timestamp": jsPsych.totalTime(),
       "time_elapsed": jsPsych.totalTime() - timestamp_onload
     });
-
-    $('body').prepend(
-      `<header>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container-fluid">
-            <div class="navbar-header">
-            <p class="navbar-text">
-                <b>${plugin.info.name}</b>
-            </p>
-            </div>
-          </div>
-        </nav>
-      </header>`);
 
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
@@ -156,17 +143,28 @@ jsPsych.plugins['PRIME-R'] = (function () {
       "}";
     html += '</style>';
 
+    // fixed heder
+    html += 
+      '<header>' +
+      '<nav class="navbar navbar-inverse navbar-fixed-top">' +
+      '<div class="container-fluid">' +
+      '<div class="navbar-header">' +
+      '<p class="navbar-text"><b>' + plugin.info.name + '</b></p>' +
+      '</div>' +
+      '</div>' +
+      '</nav>' +
+      '</header>';
+
     // show preamble text
     if (trial.preamble !== null) {
       html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
     }
 
-
     // form element
     html += '<div id="' + plugin_id_name + '">';
     html += '<form id="jspsych-survey-multi-choice-form" class="jspsych-survey-multi-choice-form">';
 
-
+    // column titles
     html +=
       `<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-instructions">
           <div class="jspsych-survey-multi-choice-option-left"></div>
@@ -179,8 +177,7 @@ jsPsych.plugins['PRIME-R'] = (function () {
             <li><div>Somewhat agree</div></li>
             <li><div>Definitely agree</div></li>
           </ul>
-      </div>`
-
+      </div>`;
 
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -234,11 +231,10 @@ jsPsych.plugins['PRIME-R'] = (function () {
 
     // add submit button
     html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input>';
-
-
     html += '</form>';
     html += '</div>';
 
+    // add modal
     html +=
       `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
             <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -259,7 +255,7 @@ jsPsych.plugins['PRIME-R'] = (function () {
     // render
     display_element.innerHTML = html;
 
-    // function to handle key press responses
+    // function to handle responses by the subject
     var after_response = function (info) {
 
       if (info.key_release === undefined) {
@@ -296,11 +292,13 @@ jsPsych.plugins['PRIME-R'] = (function () {
       }
     }
 
+    // highlight input
     $('.jspsych-survey-highlight').click(function () {
       $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
       $(this).addClass('bg-primary');
     });
 
+    // forced click event fix for some laptops touchpad
     $("label").on("click",function(){
       var labelID = $(this).attr('for');
       if('labelID') {
@@ -308,6 +306,7 @@ jsPsych.plugins['PRIME-R'] = (function () {
       };
     });
 
+    // save timestamp on input click
     $("input[type=radio]").on("click change touchstart",function(){
       var time_stamp_key = $(this).data('time-stamp'); 
       if(time_stamp_key) {
@@ -315,22 +314,9 @@ jsPsych.plugins['PRIME-R'] = (function () {
       };
     });
 
-    $(".modal__btn, .modal__close").on("click touchstart",function(){
-      response.trial_events.push({
-        "event_type": "popup closed",
-        "event_raw_details": 'Close',
-        "event_converted_details": trial.event_converted_details,
-        "timestamp": jsPsych.totalTime(),
-        "time_elapsed": jsPsych.totalTime() - timestamp_onload
-      });
-    });
-
+    // form functionality
     document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
-      // measure response time
-      var endTime = performance.now();
-      var response_time = endTime - startTime;
-
       response.trial_events.push({
         "event_type": "button clicked",
         "event_raw_details": 'Submit',
@@ -381,25 +367,36 @@ jsPsych.plugins['PRIME-R'] = (function () {
           "events": JSON.stringify(response.trial_events)
         };
 
+        // clear the display
         display_element.innerHTML = '';
-        $('.navbar').remove();
 
         // next trial
         jsPsych.finishTrial(trial_data);
       } else {
-        MicroModal.show('modal-1');
-        response.trial_events.push({
-          "event_type": "error message",
-          "event_raw_details": 'Error message',
-          "event_converted_details": popup_text_WBF,
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        // show modal, register events
+        MicroModal.show('modal-1', {
+          onShow() {
+            response.trial_events.push({
+              "event_type": "error message",
+              "event_raw_details": 'Error message',
+              "event_converted_details": 'popup triggered by incomplete WBF question',
+              "timestamp": jsPsych.totalTime(),
+              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            });
+          },
+          onClose() {
+            response.trial_events.push({
+              "event_type": "popup closed",
+              "event_raw_details": 'Close',
+              "event_converted_details": trial.event_converted_details,
+              "timestamp": jsPsych.totalTime(),
+              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            });
+          }
         });
       }
 
     });
-
-    var startTime = performance.now();
 
     // start the response listener
     var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({

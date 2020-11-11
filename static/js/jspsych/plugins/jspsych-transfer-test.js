@@ -76,7 +76,9 @@ jsPsych.plugins["transfer-test"] = (function() {
     }
   }
 
-  plugin.trial = function (display_element, trial) {
+  plugin.trial = function(display_element, trial) {
+
+    // plugin used for transfer_test and deva_test stages
     var html = "";
     var timer;
     var isStoppedTest = false;
@@ -88,15 +90,17 @@ jsPsych.plugins["transfer-test"] = (function() {
     var devalTestDuration = 0;
     var devalTestLoop;
 
-    // store response
+    // store responses, events
     var response = {
       trial_events: []
     };
 
+    // number of repeats
     var reps_counter = 0;
     var timestamp_onload = jsPsych.totalTime();
     var latestSavedColor = 'blank'
 
+    // render blank vending machine 
     html += '<div id="jspsych-stimulus">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
       '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
@@ -124,12 +128,13 @@ jsPsych.plugins["transfer-test"] = (function() {
               </div>
           </div>`;
 
-    // draw
+    // render
     display_element.innerHTML = html;
 
     function change_colors(notes) {
       notes = [];
-
+      
+      // creating an array with random colors sequence
       var sequence = jsPsych.randomization.shuffle([
         {
           color: stim1_colour,
@@ -149,6 +154,7 @@ jsPsych.plugins["transfer-test"] = (function() {
         },
       ]);
 
+      // each color should be separated with blank vending machine
       sequence.forEach(function (element) {
         notes.push({
           color: '#000',
@@ -158,7 +164,8 @@ jsPsych.plugins["transfer-test"] = (function() {
         notes.push(element);
       });
 
-      if (reps_counter === trial.sequence_reps - 1) {
+      // add to the end of array blank vending machine
+      if(reps_counter === trial.sequence_reps - 1) {
         notes.push({
           color: '#000',
           color_name: 'blank'
@@ -209,7 +216,8 @@ jsPsych.plugins["transfer-test"] = (function() {
       }
     }
 
-    if (trial.stage_name !== 'deval_test') {
+    // used to determine relevantly stage
+    if(trial.stage_name !== 'deval_test') {
       change_colors();
     } else if (trial.stage_name === 'deval_test') {
       devalTestDuration = trial.trial_duration
@@ -222,7 +230,7 @@ jsPsych.plugins["transfer-test"] = (function() {
       });
     }
 
-    setModalShowTimer()
+    setModalShowTimer();
 
     // function to end trial when it is time
     var end_trial = function() {
@@ -256,6 +264,7 @@ jsPsych.plugins["transfer-test"] = (function() {
         setModalShowTimer();
       }
 
+      // function to handle vending machine animation (tilting left/right)
       function machine_tilt() {
         if (info.key === left_tilt) {
           $(".vending-machine").css({

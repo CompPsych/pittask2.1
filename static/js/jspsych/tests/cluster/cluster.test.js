@@ -2,11 +2,11 @@
 const { Cluster } = require('puppeteer-cluster');
 
 // const timeout = 750000;
-const timeout = 3e+6;
+const timeout = 3e+8;
 
 // sets number of concurrency working process
-const concurrency_number = 30;
-const headless_browser = true;
+const concurrency_number = 1;
+const headless_browser = false;
  
 function delay(time) {
   return new Promise(function(resolve) { 
@@ -127,8 +127,8 @@ describe('DDG', () => {
         const block_num_transfer_test = await page.evaluate(() => block_num_transfer_test);
         const video_duration = await page.evaluate(() => video_duration);
         const open_instruct_video = await page.evaluate(() => open_instruct_video);
-        const open_instruct_text_video = await page.evaluate(() => open_instruct_text_video);
         const close_instruct_video = await page.evaluate(() => close_instruct_video);
+        const open_instruct_text_video = await page.evaluate(() => open_instruct_text_video);
         const close_instruct_text_video = await page.evaluate(() => close_instruct_text_video);
         const open_instruct_deval_test = await page.evaluate(() => open_instruct_deval_test);
         const close_instruct_deval_test = await page.evaluate(() => close_instruct_deval_test);
@@ -423,24 +423,24 @@ describe('DDG', () => {
               await delay((stim_duration * 4) );
             };
 
-            const machine_color = await raceSelectors(page, ['.red', '.yellow', '.green', '.blue']);
+            const machine_color = await raceSelectors(page, ['.stim1_colour', '.stim2_colour', '.stim3_colour', '.stim4_colour']);
             switch (machine_color) {
-              case '.green':
+              case '.stim1_colour':
                 await page.evaluate(() => {
                   document.querySelector('#jspsych-survey-multi-choice-response-0-0').click();
                 });
                 break;
-              case '.blue':
+              case '.stim2_colour':
                 await page.evaluate(() => {
                   document.querySelector('#jspsych-survey-multi-choice-response-0-1').click();
                 });
                 break;
-              case '.red':
+              case '.stim3_colour':
                 await page.evaluate(() => {
                   document.querySelector('#jspsych-survey-multi-choice-response-0-2').click();
                 });
                 break;
-              case '.yellow':
+              case '.stim4_colour':
                 await page.evaluate(() => {
                   document.querySelector('#jspsych-survey-multi-choice-response-0-3').click();
                 });
@@ -563,6 +563,12 @@ describe('DDG', () => {
           await page.click("#jspsych-html-keyboard-response-stimulus");
         };
 
+        if(open_instruct_video) {
+          await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
+          await delay(open_instruct_latency);
+          await page.click("#jspsych-html-keyboard-response-stimulus");
+        };
+
         // Deval Video
         let deval_video = await raceSelectors(page, ['video']);
         await page.waitForSelector('video');
@@ -573,6 +579,12 @@ describe('DDG', () => {
             break;
           }
         };
+
+        if(close_instruct_video) {
+          await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
+          await delay(close_instruct_latency);
+          await page.click("#jspsych-html-keyboard-response-stimulus");
+        }
 
         // Deval Test
         if(open_instruct_deval_test) {
@@ -1111,6 +1123,7 @@ describe('DDG', () => {
         await delay(close_instruct_latency);
         await page.click("#jspsych-html-keyboard-response-stimulus");
         
+        // Finish HIT page
         await page.waitForSelector("#container-not-an-ad");
         await delay(600);
     });

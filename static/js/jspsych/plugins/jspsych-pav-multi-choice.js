@@ -65,7 +65,7 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
   }
   plugin.trial = function(display_element, trial) {
 
-    // store response
+    // store responses, events
     var response = {
         trial_events: []
     };
@@ -103,17 +103,20 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
       html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">'+trial.preamble+'</div>';
     }
 
+    // if 4 answers has been made, get next 4 questions in random order
     if(pav_multi_choice_counter === 4) {
       pav_multi_choice_counter = 0;
       pav_multi_choice_array = jsPsych.randomization.shuffle(pav_multi_choice_array);
     }
 
-    html += '<div id="jspsych-survey-multi-choice-img" class="jspsych-survey-multi-choice-preamble">' +
-      '<svg class="vending-machine" viewBox="0 0 253 459" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
-      '</svg>' +
-    '</div>';
+    // add vending machine
+    html +=
+        '<div id="jspsych-survey-multi-choice-img" class="jspsych-survey-multi-choice-preamble">' +
+        '<svg class="vending-machine" viewBox="0 0 253 459" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
+        '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
+        "</svg>" +
+        "</div>";
 
     // form element
     html += '<form id="jspsych-survey-multi-choice-form" class="pavlovian-conditioning-form">';
@@ -142,13 +145,12 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
       }
 
       // add question text
-      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt 
+      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt + '</p>';
       html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
 
       if(question.required){
         html += "<span class='required'>*</span>";
       }
-      html += '</p>';
 
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
@@ -161,10 +163,10 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
 
         // add radio button container
         html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
-        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" class="form-radio" value="'+question.options[j].value+'" '+required_attr+'></input>';
+        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" class="form-radio" value="'+question.options[j].value+'" '+required_attr+' data-response="'+question.options[j].response+'"></input>';
         html += '<label class="jspsych-survey-multi-choice-text" for="'+input_id+'">';
         if (question.options[j].img) {
-          html += '<img class="select-img" src="' + question.options[j].img + '" alt="' + question.options[j].name + '">'
+          html += '<img class="select-img" src="' + question.options[j].img + '" alt="' + question.options[j].name + '" data-response="'+question.options[j].response+'">'
         }
         html += '</label>';
         html += '</div>';
@@ -186,13 +188,14 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
     $('.vending-machine').addClass(color_name);
 
     response.trial_events.push({
-      "event_type": 'vending machine appears',
-      "event_raw_details": color_name + ' vending machine ',
-      "event_converted_details": color_name + ' vending machine appears',
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        event_type: "question appears",
+        event_raw_details: color_name + " vending machine question",
+        event_converted_details: "question with " + color_name + " vending machine appears",
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp_onload,
     });
 
+    // function to handle responses by the subject
     var after_response = function (info) {
 
         if(info.key_release === undefined) {
@@ -203,6 +206,25 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
               "timestamp": jsPsych.totalTime(),
               "time_elapsed": jsPsych.totalTime() - timestamp_onload
             });
+            if(info.el) {
+              if(info.el.dataset.response) {
+                response.trial_events.push({
+                  "event_type": "answer made",
+                  "event_raw_details": info.el.dataset.response,
+                  "event_converted_details": 'answer ' + info.el.dataset.response + ' has been made',
+                  "timestamp": jsPsych.totalTime(),
+                  "time_elapsed": jsPsych.totalTime() - timestamp_onload
+                });
+              } else if (info.el.type === 'submit') {
+                response.trial_events.push({
+                  "event_type": "button clicked",
+                  "event_raw_details": 'Submit',
+                  "event_converted_details": '"Submit" selected',
+                  "timestamp": jsPsych.totalTime(),
+                  "time_elapsed": jsPsych.totalTime() - timestamp_onload
+                });
+              }
+            }
           } else {
               response.trial_events.push({
                 "event_type": "key release",
@@ -214,11 +236,9 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
           };
     };
 
+    // form functionality
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      // measure response time
-      var endTime = performance.now();
-      var response_time = endTime - startTime;
 
       var color_value = pav_multi_choice_array[pav_multi_choice_counter].value;
       var color_response_submitted = pav_multi_choice_array[pav_multi_choice_counter].response;
@@ -254,17 +274,18 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
 
       // save data
       var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "stage_type": JSON.stringify(trial.stage_type),
-        "response": JSON.stringify(color_value),
-        "response_submitted": JSON.stringify(color_response_submitted),
-        "timestamp": JSON.stringify(jsPsych.totalTime()),
-        "responses": JSON.stringify(question_data),
-        "question_order": JSON.stringify(question_order),
-        "event_raw_details": pav_is_correct ? 'y' : 'n',
-        "events": JSON.stringify(response.trial_events)
+        stage_name: JSON.stringify(trial.stage_name),
+        stage_type: JSON.stringify(trial.stage_type),
+        response: JSON.stringify(color_value),
+        response_submitted: JSON.stringify(color_response_submitted),
+        timestamp: JSON.stringify(jsPsych.totalTime()),
+        responses: JSON.stringify(question_data),
+        question_order: JSON.stringify(question_order),
+        event_raw_details: pav_is_correct ? "y" : "n",
+        events: JSON.stringify(response.trial_events),
       };
       
+      // clear the display
       display_element.innerHTML = '';
 
       // kill keyboard listeners
@@ -277,8 +298,7 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
       jsPsych.finishTrial(trial_data);
     });
 
-    var startTime = performance.now();
-
+    // start the response listener
     var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,

@@ -1,0 +1,318 @@
+event_type,event_raw,event_converted
+text appears,open_instruct_text_key_testing,key_testing_open text appears
+text appears,close_instruct_text_key_testing,key_testing_close text appears
+text image appears,blank vending machine,blank vending machine appears
+image appears,blank vending machine,blank vending machine appears
+image appears,outcome image appears,/static/images/MM.png image appears
+image appears,outcome image appears,/static/images/BBQ.png image appears
+image appears,outcome image appears,/static/images/TT.png image appears
+image appears,outcome image appears,/static/images/EMPTY.png image appears
+image appears,stim1_colour vending machine,stim1_colour vending machine appears
+image appears,stim2_colour vending machine,stim2_colour vending machine appears
+image appears,stim3_colour vending machine,stim3_colour vending machine appears
+image appears,stim4_colour vending machine,stim4_colour vending machine appears
+question appears,stim1_colour vending machine question,question with stim1_colour vending machine appears
+question appears,stim2_colour vending machine question,question with stim2_colour vending machine appears
+question appears,stim3_colour vending machine question,question with stim3_colour vending machine appears
+question appears,stim4_colour vending machine question,question with stim4_colour vending machine appears
+right tilt,"5%, 15deg","vending machine was tilted right 15%, 15deg"
+left tilt,"-5%, -15deg","vending machine was tilted left -5%, -15deg"
+no outcome,no outcome,no outcome
+no action,no action,no action
+VAS answer has been made,#.##,#.## answer has been made
+FHQ1 scale appears,"FHQ_1, FHQ_1_bottom_text",TT scale
+FHQ1 scale appears,"FHQ_2, FHQ_2_bottom_text",MM scale
+FHQ1 scale appears,"FHQ_3, FHQ_3_bottom_text",BBQ scale
+FHQ1 scale appears,FHQ_4,Hunger scale
+text appears,open_instruct_text_FHQ_pre_rating,FHQ1_open text appears
+text appears,close_instruct_text_FHQ_pre_rating,FHQ1_close text appears
+FHQ2 scale appears,"FHQ_1, FHQ_1_bottom_text",TT scale
+FHQ2 scale appears,"FHQ_2, FHQ_2_bottom_text",MM scale
+FHQ2 scale appears,"FHQ_3, FHQ_3_bottom_text",BBQ scale
+FHQ2 scale appears,FHQ_4,Hunger scale
+text appears,open_instruct_text_FHQ_post_rating,FHQ2_open text appears
+text appears,close_instruct_text_FHQ_post_rating,FHQ2_close text appears
+question appears,question 1(a) appears,VVR1 text appears; BBQ image appears
+question appears,question 1(b) appears,VVR1 text appears; BBQ image appears
+question appears,question 1(a) appears,VVR1 text appears; TT image appears
+question appears,question 1(b) appears,VVR1 text appears; TT image appears
+question appears,question 1(a) appears,VVR1 text appears; MM image appears
+question appears,question 1(b) appears,VVR1 text appears; MM image appears
+question appears,question 2(a) appears,VVR1 text appears; BBQ image appears
+question appears,question 2(b) appears,VVR1 text appears; BBQ image appears
+question appears,question 2(a) appears,VVR1 text appears; TT image appears
+question appears,question 2(b) appears,VVR1 text appears; TT image appears
+question appears,question 2(a) appears,VVR1 text appears; MM image appears
+question appears,question 2(b) appears,VVR1 text appears; MM image appears
+question appears,question 1(a) appears,VVR2 text appears; BBQ image appears
+question appears,question 1(b) appears,VVR2 text appears; BBQ image appears
+question appears,question 1(a) appears,VVR2 text appears; TT image appears
+question appears,question 1(b) appears,VVR2 text appears; TT image appears
+question appears,question 1(a) appears,VVR2 text appears; MM image appears
+question appears,question 1(b) appears,VVR2 text appears; MM image appears
+question appears,question 2(a) appears,VVR2 text appears; BBQ image appears
+question appears,question 2(b) appears,VVR2 text appears; BBQ image appears
+question appears,question 2(a) appears,VVR2 text appears; TT image appears
+question appears,question 2(b) appears,VVR2 text appears; TT image appears
+question appears,question 2(a) appears,VVR2 text appears; MM image appears
+question appears,question 2(b) appears,VVR2 text appears; MM image appears
+question appears,question 1(a) appears,VVR3 text appears; BBQ image appears
+question appears,question 1(b) appears,VVR3 text appears; BBQ image appears
+question appears,question 1(a) appears,VVR3 text appears; TT image appears
+question appears,question 1(b) appears,VVR3 text appears; TT image appears
+question appears,question 1(a) appears,VVR3 text appears; MM image appears
+question appears,question 1(b) appears,VVR3 text appears; MM image appears
+question appears,question 2(a) appears,VVR3 text appears; BBQ image appears
+question appears,question 2(b) appears,VVR3 text appears; BBQ image appears
+question appears,question 2(a) appears,VVR3 text appears; TT image appears
+question appears,question 2(b) appears,VVR3 text appears; TT image appears
+question appears,question 2(a) appears,VVR3 text appears; MM image appears
+question appears,question 2(b) appears,VVR3 text appears; MM image appears
+text appears,open_instruct_text_VVR1,VVR1_open text appears
+text appears,close_instruct_text_VVR1,VVR1_close text appears
+text appears,open_instruct_text_VVR2,VVR2_open text appears
+text appears,close_instruct_text_VVR2,VVR2_close text appears
+text appears,open_instruct_text_VVR3,VVR3_open text appears
+text appears,close_instruct_text_VVR3,VVR3_close text appears
+text appears,open_instruct_text_WBF,WBF_open text appears
+text appears,close_instruct_text_WBF,WBF_close text appears
+text appears,open_instruct_text_inventory,inventory_open text appears
+text appears,close_instruct_text_inventory,inventory_close text appears
+text appears,correct_text,correct_text text appears
+text appears,incorrect_text,incorrect_text text appears
+text appears,open_instruct_text_pav,pav_con_open text appears
+text appears,close_instruct_text_pav,pav_con_close text appears
+text appears,open_instruct_text_transfer_test,transfer1_open text appears
+text appears,close_instruct_text_transfer_test,transfer1_close text appears
+text appears,open_instruct_text_transfer_test,transfer2_open text appears
+text appears,close_instruct_text_transfer_test,transfer2_close text appears
+text appears,open_instruct_text_transfer_test,transfer3_open text appears
+text appears,close_instruct_text_transfer_test,transfer3_close text appears
+text appears,open_instruct_text_video,open_instruct_text_video text appears
+text appears,close_instruct_text_video,close_instruct_text_video text appears
+video appears,/static/video/MM,/static/video/MM.mp4 video started playing
+video appears,/static/video/BBQ,/static/video/BBQ.mp4 video started playing
+video appears,/static/video/TT,/static/video/TT.mp4 video started playing
+text appears,open_instruct_text_deval_test,open_instruct_text_deval_test text appears
+text appears,close_instruct_text_deval_test,close_instruct_text_deval_test text appears
+questions appears,close_HIT_q,close_HIT_q text appears
+text appears,close_instruct_text_thanks,thanks text appears
+button clicked,Submit,"""Submit"" selected"
+answer displayed,##,## answer displayed
+error message,Error message,popup triggered by incomplete WBF question
+error message,Error message,popup triggered by incomplete behavioural stage question
+error message,Error message,popup triggered by popup_duration_machine
+error message,Error message,popup triggered by answer_latency_floor
+error message,Error message,popup triggered by answer_latency_ceiling
+questions appears,"Demographics, options",Demographics questions appears
+questions appears,"OCI-R, options",OCI-R questions appears
+questions appears,"ASRM, options",ASRM questions appears
+questions appears,"GAD-7, options",GAD-7 questions appears
+questions appears,"ISI, options",ISI questions appears
+questions appears,"EAT-26, options",EAT-26 questions appears
+questions appears,"PC-PTSD-5, options",PC-PTSD-5 questions appears
+questions appears,"PHQ-9, options",PHQ-9 questions appears
+questions appears,"PTSD, options",PTSD questions appears
+questions appears,"RAADS-14, options",RAADS-14 questions appears
+questions appears,"PRIME-R, options",PRIME-R questions appears
+questions appears,"LSAS, options",LSAS questions appears
+questions appears,"MOVES, options",MOVES questions appears
+questions appears,"ASRS-5, options",ASRS-5 questions appears
+questions appears,"YIAT, options",YIAT questions appears
+questions appears,"DASS-21, options",DASS-21 questions appears
+questions appears,"AUDIT, options",AUDIT questions appears
+questions appears,"SS, options",SS questions appears
+questions appears,"FTND, options",FTND questions appears
+questions appears,"PGSI, options",PGSI questions appears
+questions appears,"SDS, options",SDS questions appears
+questions appears,"ICAR, options",ICAR questions appears
+key press,1,left_mouse key pressed
+key press,3,right_mouse key pressed
+key press,2,middle_mouse key pressed
+key press,8,backspace key pressed
+key press,9,tab key pressed
+key press,13,enter key pressed
+key press,16,shift key pressed
+key press,17,ctrl key pressed
+key press,18,alt key pressed
+key press,19,pause key pressed
+key press,20,capslock key pressed
+key press,27,esc key pressed
+key press,32,space key pressed
+key press,32,spacebar key pressed
+key press,33,pageup key pressed
+key press,34,pagedown key pressed
+key press,35,end key pressed
+key press,36,home key pressed
+key press,37,leftarrow key pressed
+key press,38,uparrow key pressed
+key press,39,rightarrow key pressed
+key press,40,downarrow key pressed
+key press,45,insert key pressed
+key press,46,delete key pressed
+key press,48,0 key pressed
+key press,49,1 key pressed
+key press,50,2 key pressed
+key press,51,3 key pressed
+key press,52,4 key pressed
+key press,53,5 key pressed
+key press,54,6 key pressed
+key press,55,7 key pressed
+key press,56,8 key pressed
+key press,57,9 key pressed
+key press,65,a key pressed
+key press,66,b key pressed
+key press,67,c key pressed
+key press,68,d key pressed
+key press,69,e key pressed
+key press,70,f key pressed
+key press,71,g key pressed
+key press,72,h key pressed
+key press,73,i key pressed
+key press,74,j key pressed
+key press,75,k key pressed
+key press,76,l key pressed
+key press,77,m key pressed
+key press,78,n key pressed
+key press,79,o key pressed
+key press,80,p key pressed
+key press,81,q key pressed
+key press,82,r key pressed
+key press,83,s key pressed
+key press,84,t key pressed
+key press,85,u key pressed
+key press,86,v key pressed
+key press,87,w key pressed
+key press,88,x key pressed
+key press,89,y key pressed
+key press,90,z key pressed
+key press,96,0numpad key pressed
+key press,97,1numpad key pressed
+key press,98,2numpad key pressed
+key press,99,3numpad key pressed
+key press,100,4numpad key pressed
+key press,101,5numpad key pressed
+key press,102,6numpad key pressed
+key press,103,7numpad key pressed
+key press,104,8numpad key pressed
+key press,105,9numpad key pressed
+key press,106,multiply key pressed
+key press,107,plus key pressed
+key press,109,minus key pressed
+key press,110,decimal key pressed
+key press,111,divide key pressed
+key press,112,f1 key pressed
+key press,113,f2 key pressed
+key press,114,f3 key pressed
+key press,115,f4 key pressed
+key press,116,f5 key pressed
+key press,117,f6 key pressed
+key press,118,f7 key pressed
+key press,119,f8 key pressed
+key press,120,f9 key pressed
+key press,121,f10 key pressed
+key press,122,f11 key pressed
+key press,123,f12 key pressed
+key press,187,= key pressed
+key press,188,", key pressed"
+key press,190,. key pressed
+key press,191,/ key pressed
+key press,192,` key pressed
+key press,219,[ key pressed
+key press,220,\\ key pressed
+key press,221,] key pressed
+key rlease,1,left_mouse key released
+key rlease,3,right_mouse key released
+key rlease,2,middle_mouse key released
+key rlease,8,backspace key released
+key rlease,9,tab key released
+key rlease,13,enter key released
+key rlease,16,shift key released
+key rlease,17,ctrl key released
+key rlease,18,alt key released
+key rlease,19,pause key released
+key rlease,20,capslock key released
+key rlease,27,esc key released
+key rlease,32,space key released
+key rlease,32,spacebar key released
+key rlease,33,pageup key released
+key rlease,34,pagedown key released
+key rlease,35,end key released
+key rlease,36,home key released
+key rlease,37,leftarrow key released
+key rlease,38,uparrow key released
+key rlease,39,rightarrow key released
+key rlease,40,downarrow key released
+key rlease,45,insert key released
+key rlease,46,delete key released
+key rlease,48,0 key released
+key rlease,49,1 key released
+key rlease,50,2 key released
+key rlease,51,3 key released
+key rlease,52,4 key released
+key rlease,53,5 key released
+key rlease,54,6 key released
+key rlease,55,7 key released
+key rlease,56,8 key released
+key rlease,57,9 key released
+key rlease,65,a key released
+key rlease,66,b key released
+key rlease,67,c key released
+key rlease,68,d key released
+key rlease,69,e key released
+key rlease,70,f key released
+key rlease,71,g key released
+key rlease,72,h key released
+key rlease,73,i key released
+key rlease,74,j key released
+key rlease,75,k key released
+key rlease,76,l key released
+key rlease,77,m key released
+key rlease,78,n key released
+key rlease,79,o key released
+key rlease,80,p key released
+key rlease,81,q key released
+key rlease,82,r key released
+key rlease,83,s key released
+key rlease,84,t key released
+key rlease,85,u key released
+key rlease,86,v key released
+key rlease,87,w key released
+key rlease,88,x key released
+key rlease,89,y key released
+key rlease,90,z key released
+key rlease,96,0numpad key released
+key rlease,97,1numpad key released
+key rlease,98,2numpad key released
+key rlease,99,3numpad key released
+key rlease,100,4numpad key released
+key rlease,101,5numpad key released
+key rlease,102,6numpad key released
+key rlease,103,7numpad key released
+key rlease,104,8numpad key released
+key rlease,105,9numpad key released
+key rlease,106,multiply key released
+key rlease,107,plus key released
+key rlease,109,minus key released
+key rlease,110,decimal key released
+key rlease,111,divide key released
+key rlease,112,f1 key released
+key rlease,113,f2 key released
+key rlease,114,f3 key released
+key rlease,115,f4 key released
+key rlease,116,f5 key released
+key rlease,117,f6 key released
+key rlease,118,f7 key released
+key rlease,119,f8 key released
+key rlease,120,f9 key released
+key rlease,121,f10 key released
+key rlease,122,f11 key released
+key rlease,123,f12 key released
+key rlease,187,= key released
+key rlease,188,", key released"
+key rlease,190,. key released
+key rlease,191,/ key released
+key rlease,192,` key released
+key rlease,219,[ key released
+key rlease,220,\\ key released
+key rlease,221,] key released

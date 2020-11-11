@@ -91,8 +91,26 @@ Safari - 12 (VMware Workstation 15 PRO, macOS Mojave)
 | mouse button releases + 1000 keyboard presses + 1000 keyboard releases =
 | 4000 total events. All (4000/4000) were recorded correctly.
 ---------------------------------------------------------------------------------------------
+| Symptom inventory randomisation: Confirmed by...(I need to find information on Upwork messages)
+---------------------------------------------------------------------------------------------
+22/10/2020 was performed on manual tests with the next operating systems (OS) and browsers. 
+Each test in each browser was completely tested from the beginning of the experiment to the end. 
 
+| (OS) Windows 10
+    Firefox 79.0
+    Opera 71.0.3770.284
+    Chrome 86.0.4240.75
 
+| (OS) Linux/Ubuntu 20.04.1 LTS 
+    Chrome 86.0.4240.75
+    Firefox 81.0.2
+---------------------------------------------------------------------------------------------
+                                    Events activity
+---------------------------------------------------------------------------------------------
+complete.csv records all keyboard and mouse activity in addition to all GUI display. 
+These events are recorded in a stereotyped method, that is, an event is recorded in 
+the same way whether it occurs in transfer or deval_test. All possible events are 
+listed in event_template.csv.
 ---------------------------------------------------------------------------------------------
                                 Version control rules
 ---------------------------------------------------------------------------------------------

@@ -9,4 +9,4 @@ describe('pav-multi-choice', function(){
     test('plugin loads correctly', () => {
         expect(typeof window.jsPsych.plugins['survey-pav-multi-choice']).not.toBe('undefined');
     });
-})
+});

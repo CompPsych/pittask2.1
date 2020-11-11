@@ -69,11 +69,16 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         },
       }
     }
+
     plugin.trial = function(display_element, trial) {
 
+      var html = "";
+
+       // store responses, events
       var response = {
         trial_events: []
       };
+
       var timestamp_onload = jsPsych.totalTime();
 
       response.trial_events.push({
@@ -86,8 +91,6 @@ jsPsych.plugins['close-hit-questions'] = (function() {
 
 
       var plugin_id_name = "jspsych-survey-multi-choice";
-  
-      var html = "";
   
       // inject CSS for trial
       html += '<style id="jspsych-survey-multi-choice-css">';
@@ -171,7 +174,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
       // render
       display_element.innerHTML = html;
 
-       // function to handle key press responses
+       // function to handle responses by the subject
        var after_response = function (info) {
   
         if (info.key_release === undefined) {
@@ -183,10 +186,12 @@ jsPsych.plugins['close-hit-questions'] = (function() {
             "time_elapsed": jsPsych.totalTime() - timestamp_onload
           });
 
+          // hold event when input, submit button was clicked
           if(info.el) {
             if(info.el.dataset.timeStamp) {
               trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
             }
+
             if(info.el.dataset.questionNumber) {
               response.trial_events.push({
                 "event_type": "answer displayed",
@@ -196,6 +201,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
                 "time_elapsed": jsPsych.totalTime() - timestamp_onload
               });
             }
+
             if(info.el.type === 'submit') {
               response.trial_events.push({
                 "event_type": "button clicked",
@@ -217,6 +223,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         }
       };
 
+      // forced click event fix for some laptops touchpad
       $("label").on("click",function(){
         var labelID = $(this).attr('for');
         if('labelID') {
@@ -224,6 +231,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         };
       });
   
+      // save timestamp on input click
       $("input[type=radio]").on("click change touchstart",function(){
         var time_stamp_key = $(this).data('time-stamp');
         if(time_stamp_key) {
@@ -231,12 +239,9 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         };
       });
   
+      // form functionality
       document.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
-        // measure response time
-        var endTime = performance.now();
-        var response_time = endTime - startTime;
-  
         // create object to hold responses
         var question_data = {};
         var timestamp_data = {};
@@ -274,6 +279,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
+
         // save data
         var trial_data = {
             "stage_name": JSON.stringify(trial.stage_name),
@@ -281,13 +287,14 @@ jsPsych.plugins['close-hit-questions'] = (function() {
             "timestamp": JSON.stringify(timestamp_data),
             "events": JSON.stringify(response.trial_events)
         };
+        
+        // clear the display
         display_element.innerHTML = '';
   
         // next trial
         jsPsych.finishTrial(trial_data);
       });
-  
-      var startTime = performance.now();
+
 
       // start the response listener
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
@@ -297,6 +304,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         persist: true,
         allow_held_key: false
       });
+
       var clickListener = jsPsych.pluginAPI.getMouseResponse({
         callback_function: after_response,
         valid_responses: jsPsych.ALL_KEYS,

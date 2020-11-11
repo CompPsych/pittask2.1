@@ -79,16 +79,15 @@ jsPsych.plugins["survey-feedback"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // store response
+    // store responses, events
     var response = {
       trial_events: []
     };
-    var timestamp_onload = jsPsych.totalTime();
-
-    if(trial.pav_con_timer) {
-      timestamp_onload = pav_con_timer;
-    };
     
+    var timestamp_onload = jsPsych.totalTime();
+    
+    // used for VVR stages in correct/incorrect response
+    // for simulating continuous timer
     if(trial.vvr_timer) {
       timestamp_onload = vvr_timer;
     };
@@ -101,14 +100,14 @@ jsPsych.plugins["survey-feedback"] = (function() {
 
 
     response.trial_events.push({
-      "event_type": trial.event_type,
-      "event_raw_details": trial.event_raw_details,
-      "event_converted_details": trial.event_converted_details,
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        event_type: trial.event_type,
+        event_raw_details: trial.event_raw_details,
+        event_converted_details: trial.event_converted_details,
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp_onload,
     });
 
-    // draw
+    // render
     display_element.innerHTML = new_html;
 
     // function to end trial when it is time
@@ -125,8 +124,8 @@ jsPsych.plugins["survey-feedback"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "events": JSON.stringify(response.trial_events)
+          stage_name: JSON.stringify(trial.stage_name),
+          events: JSON.stringify(response.trial_events),
       };
 
       // clear the display
@@ -140,19 +139,24 @@ jsPsych.plugins["survey-feedback"] = (function() {
     var after_response = function(info) {
       if(info.key_release === undefined) {
         response.trial_events.push({
-          "event_type": "key press",
-          "event_raw_details": info.key,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "key press",
+            event_raw_details: info.key,
+            event_converted_details:
+                jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
+                " key pressed",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       } else {
           response.trial_events.push({
-            "event_type": "key release",
-            "event_raw_details": info.key_release,
-            "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-            "timestamp": jsPsych.totalTime(),
-            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              event_type: "key release",
+              event_raw_details: info.key_release,
+              event_converted_details:
+                  jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
+                      info.key_release
+                  ) + " key released",
+              timestamp: jsPsych.totalTime(),
+              time_elapsed: jsPsych.totalTime() - timestamp_onload,
           });
           if (trial.response_ends_trial) {
             end_trial();

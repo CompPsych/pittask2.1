@@ -94,7 +94,7 @@ jsPsych.plugins['SDS'] = (function () {
       var html = "";
       var timestamp_onload = jsPsych.totalTime();
   
-      // store response
+      // store responses, events
       var response = {
         trial_events: []
       };
@@ -106,17 +106,6 @@ jsPsych.plugins['SDS'] = (function () {
         "timestamp": jsPsych.totalTime(),
         "time_elapsed": jsPsych.totalTime() - timestamp_onload
       });
-  
-      $('body').prepend(
-        `<header>
-          <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
-              <div class="navbar-header">
-              <p class="navbar-text">${plugin.info.name}</p>
-              </div>
-            </div>
-          </nav>
-        </header>`);
   
       // inject CSS for trial
       html += '<style id="jspsych-survey-multi-choice-css">';
@@ -146,7 +135,18 @@ jsPsych.plugins['SDS'] = (function () {
         ".bg-primary { border: 2px solid #428bca; box-shadow: 0 0 2px 0px #428bca inset, 0 0 2px 0px #428bca; background-color: #428bca; }" +
         "p { margin: 0 0 0px;}"
       html += '</style>';
-  
+
+      // fixed heder
+      html += 
+        '<header>' +
+        '<nav class="navbar navbar-inverse navbar-fixed-top">' +
+        '<div class="container-fluid">' +
+        '<div class="navbar-header">' +
+        '<p class="navbar-text"><b>' + plugin.info.name + '</b></p>' +
+        '</div>' +
+        '</div>' +
+        '</nav>' +
+        '</header>';
   
       // form element
       html += '<div id="' + plugin_id_name + '">';
@@ -185,8 +185,11 @@ jsPsych.plugins['SDS'] = (function () {
   
         // add question text
         html += '<div>' + question.prompt
+        
         // question.required
         html += '</div>';
+
+        // titles
         html += `
           <div>
             <ul style="display: flex; position: relative; justify-content: center; padding-inline-start: 0;">
@@ -294,6 +297,7 @@ jsPsych.plugins['SDS'] = (function () {
       html += '<p><input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input></p>';
       html += '</form>';
   
+      // add modal
       html +=
         `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
               <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -316,7 +320,7 @@ jsPsych.plugins['SDS'] = (function () {
       // render
       display_element.innerHTML = html;
   
-      // function to handle key press responses
+      // function to handle responses by the subject
       var after_response = function (info) {
         if (info.key_release === undefined) {
           response.trial_events.push({
@@ -352,12 +356,14 @@ jsPsych.plugins['SDS'] = (function () {
         }
       };
   
+      // highlight input
       $('.jspsych-survey-highlight').click(function () {
         $(this).parent().parent().find(".jspsych-survey-highlight").removeClass('bg-primary'); // remove previous bg-primary items 
         $(this).addClass('bg-primary');
         $(this).next('input').prop("checked", true);
       })
 
+      // handle select inputs
       $("select").change(function() {
         var questionNumber = $(this)[0].selectedOptions[0].getAttribute('data-question-number');
         var questionTimestamp = $(this)[0].selectedOptions[0].getAttribute('data-time-stamp');
@@ -371,13 +377,15 @@ jsPsych.plugins['SDS'] = (function () {
         });
       });
 
+      // forced click event fix for some laptops touchpad
       $("label").on("click",function(){
         var labelID = $(this).attr('for');
         if('labelID') {
           $("#" + labelID).prop('checked', true).trigger('click').trigger('change');
         };
       });
-  
+
+      // save timestamp on input click
       $("input[type=radio]").on("click change touchstart",function(){
         var time_stamp_key = $(this).data('time-stamp'); 
         if(time_stamp_key) {
@@ -385,22 +393,9 @@ jsPsych.plugins['SDS'] = (function () {
         };
       });
       
-      $(".modal__btn, .modal__close").on("click touchstart",function(){
-        response.trial_events.push({
-          "event_type": "popup closed",
-          "event_raw_details": 'Close',
-          "event_converted_details": trial.event_converted_details,
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
-        });
-      });
-
+      // from functionality
       document.querySelector('form').addEventListener('submit', function (event) {
         event.preventDefault();
-        // measure response time
-        var endTime = performance.now();
-        var response_time = endTime - startTime;
-        
         response.trial_events.push({
           "event_type": "button clicked",
           "event_raw_details": 'Submit',
@@ -494,25 +489,36 @@ jsPsych.plugins['SDS'] = (function () {
             "events": JSON.stringify(response.trial_events)
           };
   
+          // clear the display
           display_element.innerHTML = '';
-          $('.navbar').remove();
   
           // next trial
           jsPsych.finishTrial(trial_data);
         } else {
-          MicroModal.show('modal-1');
-          response.trial_events.push({
-            "event_type": "error message",
-            "event_raw_details": 'Error message',
-            "event_converted_details": popup_text_WBF,
-            "timestamp": jsPsych.totalTime(),
-            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          // show modal, register events
+          MicroModal.show('modal-1', {
+            onShow() {
+              response.trial_events.push({
+                "event_type": "error message",
+                "event_raw_details": 'Error message',
+                "event_converted_details": 'popup triggered by incomplete WBF question',
+                "timestamp": jsPsych.totalTime(),
+                "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              });
+            },
+            onClose() {
+              response.trial_events.push({
+                "event_type": "popup closed",
+                "event_raw_details": 'Close',
+                "event_converted_details": trial.event_converted_details,
+                "timestamp": jsPsych.totalTime(),
+                "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              });
+            }
           });
         }
   
       });
-  
-      var startTime = performance.now();
   
       // start the response listener
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({

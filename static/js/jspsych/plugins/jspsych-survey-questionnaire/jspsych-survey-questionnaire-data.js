@@ -729,8 +729,8 @@ var RAADS = {
     ],
     button_label: 'submit answers',
     event_type: 'questions appears',
-    event_raw_details: "The RAADS-14 Screen, options",
-    event_converted_details: 'The RAADS-14 Screen questions appears'
+    event_raw_details: "RAADS-14, options",
+    event_converted_details: 'RAADS-14 questions appears'
 }
 
 var PRIME_R = {
