@@ -54,7 +54,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
     var timerId;
     var condition_outcome = 'A0';
     var condition_outcome_handler = false;
-    var timer
+    var timer;
     var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,

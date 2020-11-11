@@ -84,7 +84,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     var isMachineTilted = false;
     var vas_holder = 0;
 
-    var timer
+    var timer;
     var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,
@@ -322,23 +322,23 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     var microModalConfig = {
       onShow: function() {
         response.trial_events.push({
-          "event_type": 'error message',
-          "event_raw_details": 'Error message',
-          "event_converted": 'popup triggered popup_duration_machine',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "error message",
+            event_raw_details: "Error message",
+            event_converted: "popup triggered popup_duration_machine",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       },
       onClose: function() {
         response.trial_events.push({
-          "event_type": 'popup closed',
-          "event_raw_details": 'Close',
-          "event_converted_details": trial.details.a.event_converted_details,
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "popup closed",
+            event_raw_details: "Close",
+            event_converted_details: trial.details.a.event_converted_details,
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
-        isStoppedTest = false
+        isStoppedTest = false;
         setModalShowTimer();
       },
     };
@@ -349,13 +349,13 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
      */
     function setModalShowTimer() {
       if (popupConfig.isShow === false) {
-        return
+          return;
       }
 
-      clearTimeout(timer)
+      clearTimeout(timer);
 
       timer = setTimeout(() => {
-        isStoppedTest = true
+        isStoppedTest = true;
         MicroModal.show('modal-2', microModalConfig);
       }, popupConfig.duration);
     }

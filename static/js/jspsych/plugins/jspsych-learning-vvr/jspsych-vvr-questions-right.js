@@ -84,8 +84,8 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
     var isMachineTilted = false;
     var vas_holder = 0;
 
-    var timer
-    var isStoppedTest = false
+    var timer;
+    var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,
       duration: trial.popup_machine_duration * 1000,
