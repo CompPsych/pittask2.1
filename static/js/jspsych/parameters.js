@@ -28,9 +28,9 @@ var re_captcha_duration = 15
 var full_screen_mode = true;
 var open_instruct_latency = 1500;
 var close_instruct_latency = 500;
+var outcome_duration = 1000;
 var stim_duration = 6000;
 var ITI_duration = 6000;
-var ITI_duration = 500;
 var interval_duration = 500;
 var interval_num = 60;
 var answer_latency_countdown = false;
@@ -279,13 +279,14 @@ var open_instruct_text_transfer_test =  "<p>The vending machine is still overflo
 "<p>Press any key to begin. </p>";
 var close_instruct_text_transfer_test = 'Close Instruction Transfer Test'
 var block_num_transfer_test  = 2; // default 2
+
 var popup_machine_transfer1 = true;
 var popup_duration_machine_transfer1 = 15; // (seconds)
 var popup_text_machine_transfer1 = "You can tip the machine any time in this stage. Any snacks you earn will be recorded.";
+
 var transfer_test1 = false;
 var transfer_test2 = true;
 var transfer_test3 = true;
-
 /************************************************************
  * Deval Test
  ************************************************************/

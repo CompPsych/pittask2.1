@@ -75,23 +75,29 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
+
+    // outcome src
     var outcome_collection = {
       MM:'/static/images/MM.png',
       TT:'/static/images/TT.png',
       BBQ:'/static/images/BBQ.png',
     };
+
+    // assign right outcome
     var OUTCOME = outcome_collection[counter_balancing[0].right];
     var isMachineTilted = false;
     var vas_holder = 0;
 
+    // modal
     var timer;
     var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,
       duration: trial.popup_machine_duration * 1000,
       text: trial.popup_machine_text
-    }
+    };
 
+    // add question
     var new_html =
       `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-right'>
         <div class='vvr-question-a'>
@@ -104,20 +110,22 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
           </svg>
         </div>
         <div class='vvr-question-b' style='display: none'>
-          <p>${trial.vars.VVR_q_text_b1}</p>
+          <p style="padding-bottom: 5rem;">${trial.vars.VVR_q_text_b1}</p>
             <div class="votes-container">
+              <div class="description">
+                <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
+                <div class="description--center"></div>
+                <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
+              </div>
               <div id="slider">
-                <div class="description">
-                  <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
-                  <div class="description--center"></div>
-                  <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
-                </div>
+                <span class="line"></span>
               </div>
               <ul>${trial.vars.VVR_q_text_b4}</ul>
             </div>
         </div>
       </div>`;
 
+    // add modal
     new_html +=
       `<div class="modal micromodal-slide" id="modal-3" aria-hidden="true">
         <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -145,15 +153,17 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
     var timestamp_onload = vvr_timer;
 
     response.trial_events.push({
-      "event_type": trial.details.a.event_type,
-      "event_raw_details": trial.details.a.event_raw_details,
-      "event_converted_details": trial.details.a.event_converted_details,
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        event_type: trial.details.a.event_type,
+        event_raw_details: trial.details.a.event_raw_details,
+        event_converted_details: trial.details.a.event_converted_details,
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp_onload,
     });
 
+    // render
     display_element.innerHTML = new_html;
 
+    // init VAS slider
     $("#slider").slider({
       value: 5,
       min: 0,
@@ -164,11 +174,12 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
         $("#slider").slider("disable");
         vas_holder = ui.value.toFixed(2);
         response.trial_events.push({
-          "event_type": 'VAS answer has been made',
-          "event_raw_details": ui.value.toFixed(2),
-          "event_converted_details": ui.value.toFixed(2) + ' answer has been made',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "VAS answer has been made",
+            event_raw_details: ui.value.toFixed(2),
+            event_converted_details:
+                ui.value.toFixed(2) + " answer has been made",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
         setTimeout(function() {
           end_trial();
@@ -176,6 +187,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       }
     });
 
+    // countdown instruction for preventing random response
     if (item_id === 0 && answer_latency_countdown) {
       $('.answer_latency').text(answer_latency_text);
       setTimeout(function() {
@@ -183,14 +195,15 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       }, answer_latency);
     }
 
+    // show a second part of the question with VAS
     function showNextQuestion() {
       $('.vvr-question-b').fadeIn('slow');
       response.trial_events.push({
-        "event_type": trial.details.b.event_type,
-        "event_raw_details": trial.details.b.event_raw_details,
-        "event_converted_details": trial.details.b.event_converted_details,
-        "timestamp": jsPsych.totalTime(),
-        "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          event_type: trial.details.b.event_type,
+          event_raw_details: trial.details.b.event_raw_details,
+          event_converted_details: trial.details.b.event_converted_details,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
       });
     }
 
@@ -202,27 +215,32 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
 
       if (info.key_release === undefined) {
         response.trial_events.push({
-          "event_type": "key press",
-          "event_raw_details": info.key,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "key press",
+            event_raw_details: info.key,
+            event_converted_details:
+                jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
+                " key pressed",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       } else {
         response.trial_events.push({
-          "event_type": "key release",
-          "event_raw_details": info.key_release,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "key release",
+            event_raw_details: info.key_release,
+            event_converted_details:
+                jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
+                    info.key_release
+                ) + " key released",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       }
 
       if (!isStoppedTest) {
         if (info.key === left_tilt && !isMachineTilted) {
           $(".vending-machine").css({
-            "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
-            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            transform:  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
           vvrIsCorrect = false;
           isMachineTilted = true;
@@ -235,8 +253,8 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
           showNextQuestion();
         } else if (info.key === right_tilt && !isMachineTilted) {
           $(".vending-machine").css({
-            "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            transform:  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
           vvrIsCorrect = true;
           isMachineTilted = true;
@@ -248,6 +266,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
 
     // function to end trial when it is time
     var end_trial = function() {
+      
       // clear popup timer
       clearTimeout(timer);
 
@@ -262,16 +281,16 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "vvr_stage": JSON.stringify(trial.vvr_stage),
-        "stimulus": trial.stimulus,
-        "timestamp": jsPsych.totalTime(),
-        "block_number": loop_node_counter_vvr,
-        "item_id": ++item_id,
-        "food_item": OUTCOME.slice(15),
-        "correct": vvrIsCorrect ? 'y':'n',
-        "strength_of_belief": vas_holder,
-        "events": JSON.stringify(response.trial_events)
+          stage_name: JSON.stringify(trial.stage_name),
+          vvr_stage: JSON.stringify(trial.vvr_stage),
+          stimulus: trial.stimulus,
+          timestamp: jsPsych.totalTime(),
+          block_number: loop_node_counter_vvr,
+          item_id: ++item_id,
+          food_item: OUTCOME.slice(15),
+          correct: vvrIsCorrect ? "y" : "n",
+          strength_of_belief: vas_holder,
+          events: JSON.stringify(response.trial_events),
       };
 
       // clear the display
@@ -324,20 +343,20 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
     var microModalConfig = {
       onShow: function() {
         response.trial_events.push({
-          "event_type": 'error message',
-          "event_raw_details": 'Error message',
-          "event_converted": 'popup triggered popup_duration_machine',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "error message",
+            event_raw_details: "Error message",
+            event_converted: "popup triggered popup_duration_machine",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       },
       onClose: function() {
         response.trial_events.push({
-          "event_type": 'popup closed',
-          "event_raw_details": 'Close',
-          "event_converted_details": trial.details.b.event_converted_details,
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            event_type: "popup closed",
+            event_raw_details: "Close",
+            event_converted_details: trial.details.b.event_converted_details,
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
         isStoppedTest = false;
@@ -350,16 +369,16 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
      * The modal should appear if the user hasn't clicked anything.
      */
     function setModalShowTimer() {
-      if (popupConfig.isShow === false) {
-        return
-      }
+        if (popupConfig.isShow === false) {
+            return;
+        }
 
-      clearTimeout(timer)
+        clearTimeout(timer);
 
-      timer = setTimeout(() => {
-        isStoppedTest = true;
-        MicroModal.show('modal-3', microModalConfig);
-      }, popupConfig.duration);
+        timer = setTimeout(() => {
+            isStoppedTest = true;
+            MicroModal.show("modal-3", microModalConfig);
+        }, popupConfig.duration);
     }
   }
 
