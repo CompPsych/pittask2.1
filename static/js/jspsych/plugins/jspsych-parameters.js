@@ -1,7 +1,7 @@
 jsPsych.plugins['parameters'] = (function(){
 
     var plugin = {};
-  
+
     plugin.info = {
         name: 'Parameters',
         stage_name: {
@@ -176,6 +176,26 @@ jsPsych.plugins['parameters'] = (function(){
             deval_test_duration: deval_test_duration,
 
             close_instruct_text_close_HIT_q: close_instruct_text_close_HIT_q,
+            
+            popup_machine_VVR1: popup_machine_VVR1,
+            popup_duration_machine_VVR1: popup_duration_machine_VVR1,
+            popup_text_machine_VVR1: popup_text_machine_VVR1,
+
+            popup_machine_VVR2: popup_machine_VVR2,
+            popup_duration_machine_VVR2: popup_duration_machine_VVR2,
+            popup_text_machine_VVR2: popup_text_machine_VVR2,
+
+            popup_machine_VVR3: popup_machine_VVR3,
+            popup_duration_machine_VVR3: popup_duration_machine_VVR3,
+            popup_text_machine_VVR3: popup_text_machine_VVR3,
+
+            popup_machine_transfer1: popup_machine_transfer1,
+            popup_duration_machine_transfer1: popup_duration_machine_transfer1,
+            popup_text_machine_transfer1: popup_text_machine_transfer1,
+
+            popup_machine_deval_test: popup_machine_deval_test,
+            popup_duration_machine_deval_test: popup_duration_machine_deval_test,
+            popup_text_machine_deval_test: popup_text_machine_deval_test,
         };
 
         // copy symptom inventory array
@@ -226,7 +246,7 @@ jsPsych.plugins['parameters'] = (function(){
 
         jsPsych.finishTrial(trial_data);
     }
-  
+
     return plugin;
-  
+
 })();
