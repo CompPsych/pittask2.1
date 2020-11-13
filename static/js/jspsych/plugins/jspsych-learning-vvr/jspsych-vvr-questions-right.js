@@ -282,7 +282,6 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       // gather the data to store for the trial
       var trial_data = {
           stage_name: JSON.stringify(trial.stage_name),
-          vvr_stage: JSON.stringify(trial.vvr_stage),
           stimulus: trial.stimulus,
           timestamp: jsPsych.totalTime(),
           block_number: loop_node_counter_vvr,
@@ -292,6 +291,15 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
           strength_of_belief: vas_holder,
           events: JSON.stringify(response.trial_events),
       };
+
+      // add VVR stage name if plugin was called by VVR stage
+      // make exception for Recall stage
+      if(trial.vvr_stage !== null) {
+        trial_data.vvr_stage = trial.vvr_stage;
+      } else {
+         // required for Recall stage
+         trial_data.block_number = trial.stage_type;
+      }
 
       // clear the display
       display_element.innerHTML = '';
