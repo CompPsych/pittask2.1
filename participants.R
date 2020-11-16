@@ -1228,7 +1228,6 @@ if(isClass(query))
     
     if(length(hunger_rating_indices) != 0){
       hunger_ratings <- trialdata[hunger_rating_indices,]
-      time <- as.character(as.ITime(dateTime[hunger_rating_indices]))
       
       for(hr in 1:dim(hunger_ratings)[1]) {
         HungerRating <- rbindlist(list(HungerRating, list(
