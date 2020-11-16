@@ -1212,7 +1212,8 @@ if(isClass(query))
         FoodRatings <- rbindlist(list(FoodRatings, list(
           PIN, complete,
           format(as.IDate(dateTime[food_ratings_indices[fr]]), "%d-%m-%Y"),
-          time, food_ratings$timestamp[fr], country, commit,
+          format(as.ITime(dateTime[food_ratings_indices[fr]])),
+          food_ratings$timestamp[fr], country, commit,
           version, fromJSON(food_ratings$food_item[fr]),
           ifelse(fromJSON(food_ratings$rating_status[fr]) == "pre-rating", fromJSON(food_ratings$rating[fr]), ""),
           ifelse(fromJSON(food_ratings$rating_status[fr]) == "post-rating", fromJSON(food_ratings$rating[fr]), "")
@@ -1233,7 +1234,8 @@ if(isClass(query))
         HungerRating <- rbindlist(list(HungerRating, list(
           PIN, complete,
           format(as.IDate(dateTime[hunger_rating_indices[hr]]), "%d-%m-%Y"),
-          time, hunger_ratings$timestamp[hr], country, commit, version,
+          format(as.ITime(dateTime[hunger_rating_indices[hr]])),
+          hunger_ratings$timestamp[hr], country, commit, version,
           ifelse(fromJSON(hunger_ratings$rating_status[hr]) == "pre-rating", fromJSON(hunger_ratings$rating[hr]), ""),
           ifelse(fromJSON(hunger_ratings$rating_status[hr]) == "post-rating", fromJSON(hunger_ratings$rating[hr]), "")
         )))
