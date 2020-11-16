@@ -281,9 +281,13 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
         timestamp: JSON.stringify(jsPsych.totalTime()),
         responses: JSON.stringify(question_data),
         question_order: JSON.stringify(question_order),
-        event_raw_details: pav_is_correct ? "y" : "n",
+        correct: pav_is_correct ? "y" : "n",
         events: JSON.stringify(response.trial_events),
       };
+
+      if(trial.stage_name === "recall"){
+        trial_data.block_number = trial.stage_type
+      }
       
       // clear the display
       display_element.innerHTML = '';

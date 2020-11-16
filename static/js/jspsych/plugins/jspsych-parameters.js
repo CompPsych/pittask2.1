@@ -175,6 +175,11 @@ jsPsych.plugins['parameters'] = (function(){
             close_instruct_text_deval_test: close_instruct_text_deval_test,
             deval_test_duration: deval_test_duration,
 
+            open_instruct_recall: open_instruct_recall,
+            close_instruct_recall: close_instruct_recall,
+            open_instruct_text_recall: open_instruct_text_recall,
+            close_instruct_text_recall: close_instruct_text_recall,
+
             close_instruct_text_close_HIT_q: close_instruct_text_close_HIT_q,
             
             popup_machine_VVR1: popup_machine_VVR1,

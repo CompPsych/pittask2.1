@@ -3,3 +3,4 @@ node_modules
 .psiturk_history
 server.log
 __pycache__
+git_commits.txt
