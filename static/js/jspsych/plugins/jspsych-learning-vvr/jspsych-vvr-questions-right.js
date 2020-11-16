@@ -295,7 +295,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       // add VVR stage name if plugin was called by VVR stage
       // make exception for Recall stage
       if(trial.vvr_stage !== null) {
-        trial_data.vvr_stage = trial.vvr_stage;
+        trial_data.vvr_stage = JSON.stringify(trial.vvr_stage);
       } else {
          // required for Recall stage
          trial_data.block_number = trial.stage_type;
