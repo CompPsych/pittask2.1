@@ -304,6 +304,16 @@ var popup_machine_deval_test = true;
 var popup_duration_machine_deval_test = 5; // (seconds)
 var popup_text_machine_deval_test = 'You can tip the machine any time in this stage. Any snacks you earn will be recorded.';
 /************************************************************
+ * Recall(memory test)
+ ************************************************************/
+var open_instruct_recall = false;
+var close_instruct_recall = false;
+var open_instruct_text_recall =
+    "<p>Open instruction Recall</p>";
+var close_instruct_text_recall =
+    "<p>Close instruction Recall</p>";
+
+/************************************************************
  * Close HIT Questions
  ************************************************************/
 var close_instruct_text_close_HIT_q = 'Thank you for your participation!'
