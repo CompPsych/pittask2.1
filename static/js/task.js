@@ -1488,6 +1488,143 @@ var RECALL = {
     ]
 };
 
+// transfer_q
+var TRANSFER_Q = {
+    timeline: [
+        {
+            timeline: [{
+                stage_name: 'transfer_q_open',
+                type: 'html-keyboard-response',
+                stimulus: open_instruct_text_transfer_q,
+                trial_latency: open_instruct_latency,
+                trial_duration: null,
+                response_ends_trial: false,
+                event_type: 'text appears',
+                event_raw_details: 'open_instruct_text_transfer_q',
+                event_converted_details: "open_instruct_text_transfer_q text appears",
+            }],
+            conditional_function: function() {
+                return open_instruct_transfer_q;
+            }
+        },
+        {
+            timeline: [{
+                stage_name: 'transfer_q_close',
+                type: 'html-keyboard-response',
+                stimulus: close_instruct_text_transfer_q,
+                trial_latency: close_instruct_latency,
+                trial_duration: null,
+                response_ends_trial: false,
+                event_type: 'text appears',
+                event_raw_details: 'close_instruct_text_transfer_q',
+                event_converted_details: "close_instruct_text_transfer_q text appears",
+            }],
+            conditional_function: function() {
+                return close_instruct_transfer_q;
+            }
+        }
+    ]
+};
+
+// hold array of transfer stages for shuffling
+var transfer_q_holder = [];
+var transfer_q_stages = [];
+
+// contains specific variables for 12 creating transfer_q stages
+var transfer_vars = [
+    {
+        color: stim1_colour,
+        question_text1: transfer_q_1a_questiontext,
+        question_text2: transfer_q_1b_questiontext,
+        left_text: transfer_q_1a_lvas,
+        right_text: transfer_q_1a_rvas,
+        conditional: [
+            transfer_q_q1_green,
+            transfer_q_q2_green,
+            transfer_q_q3_green
+        ]
+    },
+    {
+        color: stim2_colour,
+        question_text1: transfer_q_1a_questiontext,
+        question_text2: transfer_q_1b_questiontext,
+        left_text: transfer_q_1a_lvas,
+        right_text: transfer_q_1a_rvas,
+        conditional: [
+            transfer_q_q1_red,
+            transfer_q_q2_red,
+            transfer_q_q3_red
+        ]
+    },
+    {
+        color: stim3_colour,
+        question_text1: transfer_q_1a_questiontext,
+        question_text2: transfer_q_1b_questiontext,
+        left_text: transfer_q_1a_lvas,
+        right_text: transfer_q_1a_rvas,
+        conditional: [
+            transfer_q_q1_blue,
+            transfer_q_q2_blue,
+            transfer_q_q3_blue
+        ]
+    },
+    {
+        color: stim4_colour,
+        question_text1: transfer_q_1a_questiontext,
+        question_text2: transfer_q_1b_questiontext,
+        left_text: transfer_q_1a_lvas,
+        right_text: transfer_q_1a_rvas,
+        conditional: [
+            transfer_q_q1_yellow,
+            transfer_q_q2_yellow,
+            transfer_q_q3_yellow
+        ]
+    },
+];
+
+// create 12 transfer_q stages
+for (var i = 0; i < 4; i++) {
+    var transfer_stages_holder = [];
+    var $transfer = transfer_vars[i];
+    var transfer_machine_color = $transfer.color;
+    var transfer_q_text1 = $transfer.question_text1;
+    var transfer_q_text2 = $transfer.question_text2;
+    var transfer_q_lvas = $transfer.transfer_q_1a_lvas;
+    var transfer_q_rvas = $transfer.transfer_q_1a_rvas;
+    
+    for (var j = 0; j < 3; j++) {
+        transfer_stages_holder.push({
+            timeline: [
+                {
+                    stage_name: "transfer_q",
+                    type: "transfer-q",
+                    color: transfer_machine_color,
+                    mode: 'Q' + (i+1),
+                    question_text1: transfer_q_text1,
+                    question_text2: transfer_q_text2,
+                    left_text: transfer_q_lvas,
+                    right_text: transfer_q_rvas,
+                }
+            ],
+            conditional_function: function() {
+                return $transfer.conditional[j];
+            }
+        })
+    }
+
+    transfer_q_holder.push(transfer_stages_holder);
+}
+
+// shuffle transfer_q array
+transfer_q_holder = jsPsych.randomization.shuffle(transfer_q_holder);
+
+// push transfer_q stages to the main TRANSFER_Q function
+transfer_q_holder.forEach(function(item) {
+    item.forEach(function(obj) {
+        TRANSFER_Q.timeline.splice(1, 0, obj);
+    });
+});
+
 var CLOSE_HIT = {
     stage_name: 'close_HIT_q',
     type: 'close-hit-questions',
@@ -1575,6 +1712,8 @@ timeline.push(ICAR);
 // timeline.push(WBF_CLOSE);
 // Recall
 timeline.push(RECALL)
+// transfer_q
+timeline.push(TRANSFER_Q)
 //  Close HIT Questions
 timeline.push(CLOSE_HIT);
 // Thanks
