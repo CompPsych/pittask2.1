@@ -24,6 +24,7 @@ jsPsych.plugins['transfer-q'] = (function() {
     var response = {
       trial_events: [],
       vas_response: 0,
+      transfer_a_timestamp: 0
     };
 
     var timestamp_onload = jsPsych.totalTime();
@@ -150,10 +151,15 @@ jsPsych.plugins['transfer-q'] = (function() {
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
+
         // hide div left side of the transfer-a
         $(".hide-left ").css("display", "none");
+
         // show transfer-b question
         $(".transfer-q-right-side ").fadeIn("slow");
+
+        // record when transfer-a response was made  
+        response.transfer_a_timestamp = jsPsych.totalTime();
 
         response.trial_events.push({
           event_type: 'question appears',
@@ -213,12 +219,13 @@ jsPsych.plugins['transfer-q'] = (function() {
 
         // save data
         var trial_data = {
-          stage_name: JSON.stringify(plugin.info.stage_name),
+          stage_name: JSON.stringify(trial.stage_name),
           stimulus: JSON.stringify(machine_color_name),
+          timestamp: response.transfer_a_timestamp,
           events: JSON.stringify(response.trial_events),
-          item_id: item_id,
-          strength_of_belief: response.vas_response,
-          text: form_text_value,
+          item_id: JSON.stringify(item_id),
+          strength_of_belief: JSON.stringify(response.vas_response),
+          text: JSON.stringify(form_text_value),
         };
 
         // clear the display
@@ -233,8 +240,7 @@ jsPsych.plugins['transfer-q'] = (function() {
             response.trial_events.push({
               event_type: "error message",
               event_raw_details: "Error message",
-              event_converted_details:
-                "popup triggered by incomplete transfer_q question",
+              event_converted_details: "popup triggered by incomplete transfer_q question",
               timestamp: jsPsych.totalTime(),
               time_elapsed: jsPsych.totalTime() - timestamp_onload,
             });
@@ -243,7 +249,7 @@ jsPsych.plugins['transfer-q'] = (function() {
             response.trial_events.push({
               event_type: "popup closed",
               event_raw_details: "Close",
-              event_converted_details: trial.event_converted_details,
+              event_converted_details: 'transfer_q question-right rationale text appears',
               timestamp: jsPsych.totalTime(),
               time_elapsed: jsPsych.totalTime() - timestamp_onload,
             });
