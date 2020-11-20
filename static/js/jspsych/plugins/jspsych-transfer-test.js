@@ -100,7 +100,7 @@ jsPsych.plugins["transfer-test"] = (function() {
     var timestamp_onload = jsPsych.totalTime();
     var latestSavedColor = 'blank'
 
-    // render blank vending machine 
+    // render blank vending machine
     html += '<div id="jspsych-stimulus">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
       '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
@@ -111,7 +111,7 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     html +=
       `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
-              <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+              <div class="modal__overlay" tabindex="-1">
                 <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                   <header class="modal__header">
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
@@ -133,7 +133,7 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     function change_colors(notes) {
       notes = [];
-      
+
       // creating an array with random colors sequence
       var sequence = jsPsych.randomization.shuffle([
         {

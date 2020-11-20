@@ -128,7 +128,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     // add modal
     new_html +=
       `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__overlay" tabindex="-1">
           <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
             <header class="modal__header">
               <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
@@ -268,7 +268,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
 
       // clear popup timer
       clearTimeout(timer);
-      
+
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 

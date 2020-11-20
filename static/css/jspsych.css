@@ -232,6 +232,84 @@
 }
 /* SLIDER => */
 
+/* transfer_q => */
+.transfer-q-form .text_box {
+  color: #000;
+}
+.transfer-q-form {
+  display: flex;
+  flex-direction: column;
+}
+.transfer-q-right-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.votes-container-transfer #slider {
+  width: 100%;
+}
+.vending-machine-icon-left {
+  width: 30px;
+  height: 50px;
+  transform: rotate(-15deg) translateX(-15%)
+}
+.vending-machine-icon-right {
+  width: 30px;
+  height: 50px;
+  transform: rotate(15deg) translateX(15%)
+}
+.description-transfer {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #fff;
+  top: -9.7rem;
+  right: -5.5rem;
+}
+.description--left,
+.description--right {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 150px;
+}
+.description--left {
+  align-items: flex-start;
+}
+.description--right {
+  align-items: flex-end;
+}
+.description--left div {
+  position: absolute;
+  top: 5rem;
+  left: -7rem;
+  width: 150px;
+  height: 30px;
+  text-align: center;
+}
+.description--right div {
+  position: absolute;
+  top: 5rem;
+  right: -7rem;
+  width: 150px;
+  height: 30px;
+  text-align: center;
+}
+.instructions-transfer {
+  width: 80%;
+  outline: 1px solid #fff;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.instructions-transfer li {
+  margin-left: 5rem;
+}
+/* transfer_q <= */
+
 /* Vending machine VVR */
 .vvr-question-container {
   display: flex;
@@ -244,7 +322,8 @@
   flex-direction: column;
   justify-content: center;
 }
-.vvr-question-b ul {
+.vvr-question-b ul,
+.instructions {
   display: flex;
   flex-direction: column;
   align-items: center;

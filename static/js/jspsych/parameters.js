@@ -314,6 +314,44 @@ var close_instruct_text_recall =
     "<p>Close instruction Recall</p>";
 
 /************************************************************
+ * transfer_q
+ ************************************************************/
+var open_instruct_transfer_q = false;
+var close_instruct_transfer_q = false;
+var open_instruct_text_transfer_q =
+    "<p>Open instruction for transfer_q</p>";
+var close_instruct_text_transfer_q =
+    "<p>Close instruction for transfer_q</p>";
+
+var transfer_q_q1_green = true;
+var transfer_q_q2_green = true;
+var transfer_q_q3_green = true;
+var transfer_q_q1_red = true;
+var transfer_q_q2_red = true;
+var transfer_q_q3_red = true;
+var transfer_q_q1_blue = true;
+var transfer_q_q2_blue = true;
+var transfer_q_q3_blue = true;
+var transfer_q_q1_yellow = true;
+var transfer_q_q2_yellow = true;
+var transfer_q_q3_yellow = true;
+
+var transfer_q_1a_questiontext = "How likely is it that you will you get food if you tilt the machine now?";
+var transfer_q_1b_questiontext = "How do you know?";
+var transfer_q_1a_lvas = "Very Unlikely";
+var transfer_q_1a_rvas = "Very Likely";
+var transfer_q_2a_questiontext = "Does it matter which direction you tilt the machine?";
+var transfer_q_2b_questiontext = "Why do you think so?";
+var transfer_q_2a_lvas = "Not Important";
+var transfer_q_2a_rvas = "Very Important";
+var transfer_q_3a_questiontext = "What direction should you tilt the machine to get a snack now?";
+var transfer_q_3b_questiontext = "How do you know?";
+var transfer_q_3a_lvas = "Left";
+var transfer_q_3a_rvas = "Right";
+var transfer_q_text_limit = 50;
+var transfer_popup_text = "You must provide your answer in the text box before proceeding (minimum of " + transfer_q_text_limit + " characters).";
+
+/************************************************************
  * Close HIT Questions
  ************************************************************/
 var close_instruct_text_close_HIT_q = 'Thank you for your participation!'

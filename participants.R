@@ -423,6 +423,23 @@ Recall <- data.table(
   belief_strength = character()
 )
 
+Transfer_q <- data.table(
+  PIN = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  stage = character(),
+  commit = character(),
+  version = character(),
+  location = character(),
+  block = character(),  
+  item = numeric(),
+  stimulus = character(),
+  belief_strength = character(),
+  text = character()
+)
+
 # Geo ---------------------------------------------------------------------
 
 getGeoInfoByIP <- function(ipList){
@@ -584,14 +601,12 @@ if(isClass(query))
       specs <- fromJSON(trialdata[parameters_index,]$specs)
       date <- format(as.IDate(dateTime[specs_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[specs_index]))
-      
-      for(j in 1:length(specs)){
-        Specs <- rbindlist(list(Specs, list(
-          PIN, complete, date, time,
-          country, commit, version,
-          specs[[3]], specs[[4]], specs[[5]], specs[[1]], specs[[2]]
-        )))
-      }
+ 
+      Specs <- rbindlist(list(Specs, list(
+        PIN, complete, date, time,
+        country, commit, version,
+        specs[[3]], specs[[4]], specs[[5]], specs[[1]], specs[[2]]
+      )))
     }
     
     # Demographics --------------------------------------------------------------------
@@ -1313,6 +1328,32 @@ if(isClass(query))
       }
 
     }
+
+    # Transfer_q --------------------------------------------------------------
+
+    # block = character(),  
+    # item = numeric(),
+    # stimulus = character(),
+    # belief_strength = character(),
+    # text = character()
+    transfer_q_index <- which(trialdata$stage_name %in% "\"transfer_q\"")
+
+    if(length(transfer_q_index) != 0){
+      transfer <- trialdata[transfer_q_index,]
+      transfer_q <- trialdata[transfer_q_index,]$stage_name
+   
+ 
+      for(j in 1:length(transfer_q)){
+        date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
+        time <- as.character(as.ITime(dateTime[j]))
+      
+        Transfer_q <- rbindlist(list(Transfer_q, list(
+          PIN, complete, date, time, transfer$timestamp[j], fromJSON(transfer_q[j]), commit,
+          version, country, "NA", transfer$item_id[j], fromJSON(transfer$stimulus[j]),
+          fromJSON(transfer$strength_of_belief[j]), fromJSON(transfer$text[j])
+        )))
+      }
+    }
     
     # CompleteData ------------------------------------------------------------
     
@@ -1399,7 +1440,8 @@ if(isClass(query))
     "consent_feedback" = ConsentFeedback,
     "pav_con" = PavCondition,
     "recall" = Recall,
-    "complete" = CompleteData
+    "complete" = CompleteData,
+    "transfer_q" = Transfer_q
   )
   
   for (i in 1:length(results)) {
