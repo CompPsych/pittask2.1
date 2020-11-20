@@ -232,6 +232,7 @@
 }
 /* SLIDER => */
 
+/* transfer_q => */
 .transfer-q-form .text_box {
   color: #000;
 }
@@ -307,6 +308,7 @@
 .instructions-transfer li {
   margin-left: 5rem;
 }
+/* transfer_q <= */
 
 /* Vending machine VVR */
 .vvr-question-container {
