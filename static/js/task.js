@@ -1488,6 +1488,145 @@ var RECALL = {
     ]
 };
 
+// transfer_q
+var TRANSFER_Q = {
+    timeline: [
+        {
+            timeline: [{
+                stage_name: 'transfer_q_open',
+                type: 'html-keyboard-response',
+                stimulus: open_instruct_text_transfer_q,
+                trial_latency: open_instruct_latency,
+                trial_duration: null,
+                response_ends_trial: false,
+                event_type: 'text appears',
+                event_raw_details: 'open_instruct_text_transfer_q',
+                event_converted_details: "open_instruct_text_transfer_q text appears",
+            }],
+            conditional_function: function() {
+                return open_instruct_transfer_q;
+            }
+        }
+    ]
+};
+
+// hold array of transfer stages for shuffling
+var transfer_q_holder = [];
+
+// contains specific variables for generate transfer_q 12 stages
+var transfer_vars = [
+    {
+        question_text1: [
+            transfer_q_1a_questiontext,
+            transfer_q_2a_questiontext,
+            transfer_q_3a_questiontext,
+        ],
+        question_text2: [
+            transfer_q_1b_questiontext,
+            transfer_q_2b_questiontext,
+            transfer_q_3b_questiontext,
+        ],
+        left_text: [
+            transfer_q_1a_lvas,
+            transfer_q_2a_lvas,
+            transfer_q_3a_lvas,
+        ],
+        right_text: [
+            transfer_q_1a_rvas,
+            transfer_q_2a_rvas,
+            transfer_q_3a_rvas,
+        ],
+        conditional: [
+            transfer_q_q1_green,
+            transfer_q_q2_green,
+            transfer_q_q3_green
+        ]
+    },
+];
+
+var transfer_vars_colors = [
+    {
+        color: stim1_colour,
+        name: 'stim1_colour'
+    },
+    {
+        color: stim2_colour,
+        name: 'stim2_colour'
+    },
+    {
+        color: stim3_colour,
+        name: 'stim3_colour'
+    },
+    {
+        color: stim4_colour,
+        name: 'stim4_colour'
+    }
+];
+
+// create 12 transfer_q stages trough loop function
+for (var i = 0; i < 4; i++) {
+    var transfer_stages_holder = [];
+    var $transfer = transfer_vars[0];
+
+    for (var j = 0; j < 3; j++) {
+        transfer_stages_holder.push({
+            timeline: [
+                {
+                    stage_name: "transfer_q",
+                    type: "transfer-q",
+                    color: transfer_vars_colors[i].color,
+                    name: transfer_vars_colors[i].name,
+                    item_id: j+1,
+                    question_text1: $transfer.question_text1[j],
+                    question_text2: $transfer.question_text2[j],
+                    left_text: $transfer.left_text[j],
+                    right_text: $transfer.right_text[j],
+                    event_type: "text",
+                    event_raw_details: "text",
+                    event_converted_details: "text appears",
+                }
+            ],
+            conditional_function: function() {
+                return $transfer.conditional[j];
+            }
+        })
+    }
+
+    transfer_q_holder.push(transfer_stages_holder);
+}
+
+// shuffle transfer_q array
+transfer_q_holder = jsPsych.randomization.shuffle(transfer_q_holder);
+
+// push transfer_q stages to the main TRANSFER_Q function
+transfer_q_holder.forEach(function(item) {
+    item.forEach(function(obj) {
+        // insert stages after open_instruct stage
+        TRANSFER_Q.timeline.push(obj);
+    });
+});
+
+// push close_instr object
+TRANSFER_Q.timeline.push(
+    {
+        timeline: [{
+            stage_name: 'transfer_q_close',
+            type: 'html-keyboard-response',
+            stimulus: close_instruct_text_transfer_q,
+            trial_latency: close_instruct_latency,
+            trial_duration: null,
+            response_ends_trial: false,
+            event_type: 'text appears',
+            event_raw_details: 'close_instruct_text_transfer_q',
+            event_converted_details: "close_instruct_text_transfer_q text appears",
+        }],
+        conditional_function: function() {
+            return close_instruct_transfer_q;
+        }
+    }
+);
+
+
 var CLOSE_HIT = {
     stage_name: 'close_HIT_q',
     type: 'close-hit-questions',
@@ -1575,6 +1714,8 @@ timeline.push(ICAR);
 // timeline.push(WBF_CLOSE);
 // Recall
 timeline.push(RECALL)
+// transfer_q
+timeline.push(TRANSFER_Q)
 //  Close HIT Questions
 timeline.push(CLOSE_HIT);
 // Thanks
