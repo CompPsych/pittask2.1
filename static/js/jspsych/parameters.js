@@ -24,7 +24,7 @@
  ***********************************************************/
 
 var re_captcha = false;
-var re_captcha_duration = 15
+var re_captcha_duration = 180;
 var full_screen_mode = true;
 var open_instruct_latency = 1500;
 var close_instruct_latency = 500;
