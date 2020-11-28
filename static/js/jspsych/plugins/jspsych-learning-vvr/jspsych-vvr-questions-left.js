@@ -189,7 +189,6 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     // countdown instruction for preventing random response
     if (item_id === 0 && answer_latency_countdown) {
       $('.answer_latency').text(answer_latency_text);
-
       setTimeout(function() {
         $('.answer_latency').text(trial.vars.VVR_q_text_a2);
       }, answer_latency);
@@ -205,6 +204,13 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
         "timestamp": jsPsych.totalTime(),
         "time_elapsed": jsPsych.totalTime() - timestamp_onload
       });
+    }
+
+    // solution to move VAS up/down to prevent equal responses by mouse click
+    if (item_id === 0) {
+      $('.votes-container').css('margin-bottom', '8rem');
+    } else if(item_id === 1) {
+      $('.votes-container').css('margin-top', '8rem');
     }
 
     setModalShowTimer()

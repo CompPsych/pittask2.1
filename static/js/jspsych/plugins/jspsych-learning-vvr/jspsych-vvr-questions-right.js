@@ -207,6 +207,13 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       });
     }
 
+    // solution to move VAS up/down to prevent equal responses by mouse click
+    if (item_id === 0) {
+      $('.votes-container').css('margin-bottom', '8rem');
+    } else if(item_id === 1) {
+      $('.votes-container').css('margin-top', '8rem');
+    }
+
     setModalShowTimer();
 
     // function to handle responses by the subject
