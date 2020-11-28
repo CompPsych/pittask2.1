@@ -728,6 +728,7 @@ var VVR = function(data) {
                 loop_node_counter_vvr = 0;
                 loop_node_counter_vvr_determination = 0;
                 vvr_timer = 0;
+                item_id = 0;
             };
 
             if(loop_node_counter_vvr_determination >= min_blocks_num && max_num_incorrect <= loop_node_counter_max_num_incorrect) {
