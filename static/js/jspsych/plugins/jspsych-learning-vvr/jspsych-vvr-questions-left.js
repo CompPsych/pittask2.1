@@ -151,11 +151,12 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
     };
 
     var timestamp_onload = vvr_timer;
+    var question_number = item_id + 1;
 
     response.trial_events.push({
       "event_type": trial.details.a.event_type,
-      "event_raw_details": trial.details.a.event_raw_details,
-      "event_converted_details": trial.details.a.event_converted_details,
+      "event_raw_details": "question " + question_number + '(a) appears',
+      "event_converted_details": "question " + question_number + '(a) appears; ' +  counter_balancing[0].left + ' image appears',
       "timestamp": jsPsych.totalTime(),
       "time_elapsed": jsPsych.totalTime() - timestamp_onload
     });
@@ -199,8 +200,8 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
       $('.vvr-question-b').fadeIn('slow');
       response.trial_events.push({
         "event_type": trial.details.b.event_type,
-        "event_raw_details": trial.details.b.event_raw_details,
-        "event_converted_details": trial.details.b.event_converted_details,
+        "event_raw_details": "question " + question_number + '(b) appears',
+        "event_converted_details": "question " + question_number + '(b) appears',
         "timestamp": jsPsych.totalTime(),
         "time_elapsed": jsPsych.totalTime() - timestamp_onload
       });

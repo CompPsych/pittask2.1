@@ -111,6 +111,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
       "time_elapsed": jsPsych.totalTime() - timestamp_onload
     });
 
+    var $outcome_container = $('.outcome-container');
+
     // outcome presentation logic
     (function() {
       var x = 0;
@@ -141,8 +143,11 @@ jsPsych.plugins['survey-vvr'] = (function() {
           });
         }
 
+        // increment counter
+        x += 1;
+
         if (random_boolean && outcome_present) {
-          $('.outcome-container').html('<img class="outcome" src="'+ OUTCOME[counter_balancing[0][outcome_present]] +'"/>');
+          $outcome_container.html('<img class="outcome" src="'+ OUTCOME[counter_balancing[0][outcome_present]] +'"/>');
 
           response.trial_events.push({
             "timestamp": jsPsych.totalTime(),
@@ -153,14 +158,17 @@ jsPsych.plugins['survey-vvr'] = (function() {
             "event_converted_details": counter_balancing[0][outcome_present] + ' image appears'
           });
 
-          jsPsych.pluginAPI.setTimeout(function() {
-            $('.outcome-container').html('');
-
-            if (++x === VVR_INTERVAL_NUM) {
+          // terminate stage
+          if (x === VVR_INTERVAL_NUM) {
+            jsPsych.pluginAPI.setTimeout(function() {
               clearTimeout(timerId);
               end_trial();
-            }
+            }, VVR_OUTCOME_DURATION);
+          }
 
+          // clear outcome
+          jsPsych.pluginAPI.setTimeout(function() {
+            $outcome_container.html('');
           }, VVR_OUTCOME_DURATION);
 
           duration = VVR_OUTCOME_DURATION + VVR_INTERVAL_DURATION;
@@ -174,7 +182,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
             "event_converted_details": 'no outcome'
           });
 
-          if (++x === VVR_INTERVAL_NUM) {
+          if (x === VVR_INTERVAL_NUM) {
             clearTimeout(timerId);
             end_trial();
           }
@@ -182,10 +190,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
           duration = VVR_INTERVAL_DURATION;
         }
 
-        timerId = jsPsych.pluginAPI.setTimeout(request, duration);
-
-        if (x === VVR_INTERVAL_NUM) {
-          jsPsych.pluginAPI.clearAllTimeouts();
+        if (x < VVR_INTERVAL_NUM) {
+          timerId = jsPsych.pluginAPI.setTimeout(request, duration);
         }
 
         if (interval_number_holder < VVR_INTERVAL_NUM) {
