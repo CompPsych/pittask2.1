@@ -245,6 +245,14 @@ var popup_machine_VVR3 = true;
 var popup_duration_machine_VVR3 = 10; //(seconds)
 var popup_text_machine_VVR3 = "Don’t forget, you can tip the machine any time in this stage to earn snacks.";
 /************************************************************
+ * VOR Virtual Outcome Reinstatement
+ ************************************************************/
+var extinct_duration = 10;
+var OI_duration_A = 6000;
+var OI_duration_B = 5000;
+var OI_threshold = 30;
+var VOR_duration = 180;
+/************************************************************
  * Pavlovian Conditioning
  ************************************************************/
 var open_instruct_pav = true;

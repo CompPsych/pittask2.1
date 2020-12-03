@@ -1337,6 +1337,13 @@ var DEVAL_TEST = {
     ]
 };
 
+var VOR = {
+    stage_name: 'VOR',
+    type: 'vor',
+    stimulus: 'vending machine',
+    trial_duration: VOR_duration * 1000,
+}
+
 // Recall (memory test)
 var RECALL = {
     timeline: [
@@ -1673,73 +1680,75 @@ timeline.push({
     stage_name: 'parameters',
 });
 
-// Key-testing
-timeline.push(KEY_TESTING);
-// Food & Hunger Questions pre-rating
-timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
-//  Instrumental Conditioning (VVR1)
-timeline.push(VVR1);
-// Transfer Test
-timeline.push(TRANSFER1);
-// Instrumental Degradation (VVR2)
-timeline.push(VVR2);
-// Pavlovian Condition
-timeline.push(PAV_CON);
-// Transfer Test 2
-timeline.push(TRANSFER2);
-// Instrumental Restoration (VVR3)
-timeline.push(VVR3);
-// Deval Video
-timeline.push(DEVAL_VIDEO);
-// Deval Test
-timeline.push(DEVAL_TEST);
-// Food & Hunger Questions post-rating
-timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
-// Transfer Test 3
-timeline.push(TRANSFER3);
-// Intro: We'd like to briefly ask you about some symptoms before the online game.
-timeline.push(WBF_OPEN);
-// Demographics
-timeline.push(DEMOGRAPHICS);
-timeline.push(INVENTORY_OPEN);
-// Symptom Inventories
-for(var item of symptom_inventory_arr){
-    timeline.push(item);
-}
-timeline.push(INVENTORY_CLOSE);
-// SDS
-timeline.push(SDS);
-// ICAR
-timeline.push(ICAR);
-// Close: That's it for the symptom questions. Now we're ready to start the online game
-// timeline.push(WBF_CLOSE);
-// Recall
-timeline.push(RECALL)
-// transfer_q
-timeline.push(TRANSFER_Q)
-//  Close HIT Questions
-timeline.push(CLOSE_HIT);
-// Thanks
-timeline.push(THANKS)
+// // Key-testing
+// timeline.push(KEY_TESTING);
+// // Food & Hunger Questions pre-rating
+// timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
+// //  Instrumental Conditioning (VVR1)
+// timeline.push(VVR1);
+// // Transfer Test
+// timeline.push(TRANSFER1);
+// // Instrumental Degradation (VVR2)
+// timeline.push(VVR2);
+// // Pavlovian Condition
+// timeline.push(PAV_CON);
+// // Transfer Test 2
+// timeline.push(TRANSFER2);
+// // Instrumental Restoration (VVR3)
+// timeline.push(VVR3);
+// // Deval Video
+// timeline.push(DEVAL_VIDEO);
+// // Deval Test
+// timeline.push(DEVAL_TEST);
+// VOR Virtual Outcome Reinstatement
+timeline.push(VOR)
+// // Food & Hunger Questions post-rating
+// timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
+// // Transfer Test 3
+// timeline.push(TRANSFER3);
+// // Intro: We'd like to briefly ask you about some symptoms before the online game.
+// timeline.push(WBF_OPEN);
+// // Demographics
+// timeline.push(DEMOGRAPHICS);
+// timeline.push(INVENTORY_OPEN);
+// // Symptom Inventories
+// for(var item of symptom_inventory_arr){
+//     timeline.push(item);
+// }
+// timeline.push(INVENTORY_CLOSE);
+// // SDS
+// timeline.push(SDS);
+// // ICAR
+// timeline.push(ICAR);
+// // Close: That's it for the symptom questions. Now we're ready to start the online game
+// // timeline.push(WBF_CLOSE);
+// // Recall
+// timeline.push(RECALL)
+// // transfer_q
+// timeline.push(TRANSFER_Q)
+// //  Close HIT Questions
+// timeline.push(CLOSE_HIT);
+// // Thanks
+// timeline.push(THANKS)
 
 function startExperiment(){
     jsPsych.init({
             timeline: timeline,
             preload_images: images,
-            // on_finish: function(){ jsPsych.data.displayData(); }, // Debug mode, on_finish and on_data_update must be commented out in debug mode
-            on_finish: function() {
-                psiTurk.saveData({
-                    success: function() { 
-                        psiTurk.completeHIT();
-                    },
-                    error: prompt_resubmit
-                });
-            }, 
-            on_data_update: function(data) {
-                psiTurk.recordTrialData(data),
-                psiTurk.recordUnstructuredData(),
-                psiTurk.saveData();
-			}
+            on_finish: function(){ jsPsych.data.displayData(); }, // Debug mode, on_finish and on_data_update must be commented out in debug mode
+            // on_finish: function() {
+            //     psiTurk.saveData({
+            //         success: function() { 
+            //             psiTurk.completeHIT();
+            //         },
+            //         error: prompt_resubmit
+            //     });
+            // }, 
+            // on_data_update: function(data) {
+            //     psiTurk.recordTrialData(data),
+            //     psiTurk.recordUnstructuredData(),
+            //     psiTurk.saveData();
+			// }
         }
     );
 
