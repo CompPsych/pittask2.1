@@ -1338,10 +1338,46 @@ var DEVAL_TEST = {
 };
 
 var VOR = {
-    stage_name: 'VOR',
-    type: 'vor',
-    stimulus: 'vending machine',
-    trial_duration: VOR_duration * 1000,
+    timeline: [
+        {
+            timeline: [{
+                stage_name: 'VOR_open',
+                type: 'html-keyboard-response',
+                stimulus: open_instruct_text_VOR,
+                trial_latency: open_instruct_latency,
+                trial_duration: null,
+                response_ends_trial: false,
+                event_type: 'text appears',
+                event_raw_details: 'open_instruct_text_VOR',
+                event_converted_details: "open_instruct_text_VOR text appears",
+            }],
+            conditional_function: function() {
+                return open_instruct_VOR;
+            }
+        },
+        {
+            stage_name: 'VOR',
+            type: 'vor',
+            stimulus: 'vending machine',
+            trial_duration: VOR_duration * 1000,
+        },
+        {
+            timeline: [{
+                stage_name: 'VOR_close',
+                type: 'html-keyboard-response',
+                stimulus: close_instruct_text_VOR,
+                trial_latency: close_instruct_latency,
+                trial_duration: null,
+                response_ends_trial: false,
+                event_type: 'text appears',
+                event_raw_details: 'close_instruct_text_VOR',
+                event_converted_details: "close_instruct_text_VOR text appears",
+            }],
+            conditional_function: function() {
+                return close_instruct_VOR;
+            }
+        },
+    ]
 }
 
 // Recall (memory test)

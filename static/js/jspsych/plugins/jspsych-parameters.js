@@ -231,7 +231,18 @@ jsPsych.plugins['parameters'] = (function(){
             transfer_q_3a_lvas: transfer_q_3a_lvas,
             transfer_q_3a_rvas: transfer_q_3a_rvas,
             transfer_q_text_limit: transfer_q_text_limit,
-            transfer_popup_text: transfer_popup_text
+            transfer_popup_text: transfer_popup_text,
+
+            VOR_block_num: VOR_block_num,
+            extinct_duration: extinct_duration,
+            OI_duration_A: OI_duration_A,
+            OI_duration_B: OI_duration_B,
+            OI_threshold: OI_threshold,
+            VOR_duration: VOR_duration,
+            open_instruct_VOR: open_instruct_VOR,
+            close_instruct_VOR: close_instruct_VOR,
+            open_instruct_text_VOR: open_instruct_text_VOR,
+            close_instruct_text_VOR: close_instruct_text_VOR,
         };
 
         // copy symptom inventory array

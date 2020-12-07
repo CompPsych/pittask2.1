@@ -54,7 +54,7 @@ jsPsych.plugins["vor"] = (function () {
       outcome_collection[counter_balancing[0].right]
     ]);
 
-    // store response
+    // store events
     var response = {
       trial_events: [],
     };

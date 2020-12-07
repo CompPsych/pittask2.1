@@ -247,11 +247,19 @@ var popup_text_machine_VVR3 = "Don’t forget, you can tip the machine any time 
 /************************************************************
  * VOR Virtual Outcome Reinstatement
  ************************************************************/
+var VOR_block_num = 3;
 var extinct_duration = 10;
 var OI_duration_A = 6000;
 var OI_duration_B = 5000;
 var OI_threshold = 30;
 var VOR_duration = 180;
+
+var open_instruct_VOR = false;
+var close_instruct_VOR = false;
+var open_instruct_text_VOR =
+    "<p>Open instruction for VOR</p>";
+var close_instruct_text_VOR =
+    "<p>Close instruction for VOR</p>";
 /************************************************************
  * Pavlovian Conditioning
  ************************************************************/
