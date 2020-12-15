@@ -179,6 +179,24 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
     html += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"' + (trial.button_label ? ' value="'+trial.button_label + '"': '') + '></input>';
     html += '</form>';
 
+    // add modal
+    html +=
+    '<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">' +
+      '<div class="modal__overlay" tabindex="-1">' +
+      '<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">' +
+        '<header class="modal__header">' +
+        '<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>' +
+        '</header>' +
+        '<main class="modal__content" id="modal-1-content">' +
+        '<p>' + popup_text_WBF + '</p>' +
+        '</main>' +
+        '<footer class="modal__footer">' +
+        '<button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>' +
+        '</footer>' +
+      '</div>' +
+      '</div>' +
+    '</div>';
+
     // render
     display_element.innerHTML = html;
 
@@ -245,11 +263,12 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
 
       // create object to hold responses
       var question_data = {};
+      var val;
       for(var i=0; i<trial.questions.length; i++){
         var match = display_element.querySelector('#jspsych-survey-multi-choice-'+i);
         var id = "Q" + i;
         if(match.querySelector("input[type=radio]:checked") !== null){
-          var val = match.querySelector("input[type=radio]:checked").value;
+          val = match.querySelector("input[type=radio]:checked").value;
           if(color_value === val) {
             pav_is_correct = true;
             pav_correct_holder ++;
@@ -258,7 +277,7 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
             pav_correct_holder = 0;
           }
         } else {
-          var val = "";
+          val = "";
           pav_incorrect_holder ++;
           pav_correct_holder = 0;
         }
@@ -272,34 +291,60 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
         Object.assign(question_data, obje);
       };
 
-      // save data
-      var trial_data = {
-        stage_name: JSON.stringify(trial.stage_name),
-        stage_type: JSON.stringify(trial.stage_type),
-        response: JSON.stringify(color_value),
-        response_submitted: JSON.stringify(color_response_submitted),
-        timestamp: JSON.stringify(jsPsych.totalTime()),
-        responses: JSON.stringify(question_data),
-        question_order: JSON.stringify(question_order),
-        correct: pav_is_correct ? "y" : "n",
-        events: JSON.stringify(response.trial_events),
-      };
+      if(val === '') {
+        // show modal, register events
+        MicroModal.show('modal-1', {
+          onShow() {
+            response.trial_events.push({
+              "event_type": "error message",
+              "event_raw_details": 'Error message',
+              "event_converted_details": 'popup triggered by incomplete WBF question',
+              "timestamp": jsPsych.totalTime(),
+              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            });
+          },
+          onClose() {
+            response.trial_events.push({
+              "event_type": "popup closed",
+              "event_raw_details": 'Close',
+              "event_converted_details": "question with " + color_name + " vending machine appears",
+              "timestamp": jsPsych.totalTime(),
+              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+            });
+          }
+        });
+      } else {
+        // save data
+        var trial_data = {
+          stage_name: JSON.stringify(trial.stage_name),
+          stage_type: JSON.stringify(trial.stage_type),
+          response: JSON.stringify(color_value),
+          response_submitted: JSON.stringify(color_response_submitted),
+          timestamp: JSON.stringify(jsPsych.totalTime()),
+          responses: JSON.stringify(question_data),
+          question_order: JSON.stringify(question_order),
+          correct: pav_is_correct ? "y" : "n",
+          events: JSON.stringify(response.trial_events),
+        };
 
-      if(trial.stage_name === "recall"){
-        trial_data.block_number = trial.stage_type
+        if(trial.stage_name === "recall"){
+          trial_data.block_number = trial.stage_type
+        }
+        
+        // clear the display
+        display_element.innerHTML = '';
+
+        // kill keyboard listeners
+        if (typeof keyboardListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+          jsPsych.pluginAPI.cancelClickResponse(clickListener);
+        }
+
+        // next trial
+        jsPsych.finishTrial(trial_data);
       }
-      
-      // clear the display
-      display_element.innerHTML = '';
 
-      // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-        jsPsych.pluginAPI.cancelClickResponse(clickListener);
-      }
 
-      // next trial
-      jsPsych.finishTrial(trial_data);
     });
 
     // start the response listener

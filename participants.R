@@ -1330,12 +1330,7 @@ if(isClass(query))
     }
 
     # Transfer_q --------------------------------------------------------------
-
-    # block = character(),  
-    # item = numeric(),
-    # stimulus = character(),
-    # belief_strength = character(),
-    # text = character()
+    
     transfer_q_index <- which(trialdata$stage_name %in% "\"transfer_q\"")
 
     if(length(transfer_q_index) != 0){
