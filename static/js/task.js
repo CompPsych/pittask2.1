@@ -2,12 +2,16 @@
 
 var psiTurk = new PsiTurk(uniqueId, adServerLoc, mode);
 
-var mycondition = condition;  // these two variables are passed by the psiturk server process
-var mycounterbalance = counterbalance;  // they tell you which condition you have been assigned to
-// they are not used in the stroop code but may be useful to you
-
-// reset all previous data in case if page was reloaded
+// remove previous data from the database on page reloading
 psiTurk.taskdata.set('data', [])
+// reset all previous data in case if page was reloaded
+jsPsych.data.reset();
+
+// adding beforeunload listener which will minimize
+// page reloading during the experiment
+$(window).on("beforeunload", function(){
+    return 'Changes you made may not be saved';
+});
 
 var DEGRAD_PATTERN = {
     A0: {
@@ -1726,18 +1730,22 @@ function startExperiment(){
     jsPsych.init({
             timeline: timeline,
             preload_images: images,
-            // on_finish: function(){ jsPsych.data.displayData(); }, // Debug mode, on_finish and on_data_update must be commented out in debug mode
+            // on_finish: function(){
+            //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
+            //     $(window).off("beforeunload");
+            //     jsPsych.data.displayData(); 
+            // }, 
             on_finish: function() {
                 psiTurk.saveData({
-                    success: function() { 
+                    success: function() {
+                        $(window).off("beforeunload");
                         psiTurk.completeHIT();
                     },
                     error: prompt_resubmit
                 });
             }, 
             on_data_update: function(data) {
-                psiTurk.recordTrialData(data),
-                psiTurk.recordUnstructuredData(),
+                psiTurk.recordTrialData(data);
                 psiTurk.saveData();
 			}
         }
