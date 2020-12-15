@@ -106,8 +106,6 @@ jsPsych.plugins.animation = (function () {
         var animate_interval = jsPsych.pluginAPI.setTimeout(function request() {
 
             var isShowColor = true;
-            // clear page
-            display_element.innerHTML = '';
             animate_frame++;
             
             if (animate_frame === trial.stimuli.length) {
