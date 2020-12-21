@@ -38,9 +38,12 @@ jsPsych.plugins["vor"] = (function () {
     var extinct_duration_lockout = false;
     var block_number = 0;
     var interval_number = 0;
+    var $interval_number = 'NA';
+    var $block_number = 'NA';
     var OI_duration = OI_duration_A;
     var OI_interval_timer;
     var OI_threshold_interval;
+    var OI_threshold_timer;
     var OI_interval = 0;
 
     var outcome_collection = {
@@ -61,6 +64,15 @@ jsPsych.plugins["vor"] = (function () {
 
     var timestamp_onload = jsPsych.totalTime();
 
+    // store first appearance
+    response.trial_events.push({
+      event_type: "NA",
+      event_raw_details: "VOR stage commences",
+      event_converted_details: "extinct_duration commences",
+      timestamp: jsPsych.totalTime(),
+      time_elapsed: jsPsych.totalTime() - timestamp_onload,
+    });
+
     var new_html =
       '<div id="jspsych-stimulus" class="vvr_stage">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
@@ -76,16 +88,45 @@ jsPsych.plugins["vor"] = (function () {
     var $outcome_container = $(".outcome-container");
 
     function start_OI() {
+
+      $interval_number = interval_number + 1;
+      $block_number = block_number + 1;
+      var outcome_OI = outcome_arr[$interval_number - 1];
+      
       clearTimeout(OI_interval_timer);
+      OI_duration = OI_duration_A;
 
       // display outcome
       $outcome_container.html(
-        '<img class="outcome" src="' + outcome_arr[interval_number] + '"/>'
+        '<img class="outcome" src="' + outcome_OI + '"/>'
       );
 
-      // clear outcome container
+      // store an outcome appearance event
+      response.trial_events.push({
+        event_type: "image appears",
+        event_raw_details: "outcome image appears",
+        event_converted_details: outcome_OI + " image appears",
+        interval_number: $interval_number,
+        block_number: $block_number,
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp_onload,
+      });
+
       jsPsych.pluginAPI.setTimeout(function () {
+
+        // clear outcome container
         $outcome_container.html("");
+
+        // store an outcome disappearance event
+        response.trial_events.push({
+          event_type: "image disappears",
+          event_raw_details: "outcome image disappears",
+          event_converted_details: outcome_OI + " image disappears",
+          interval_number: $interval_number,
+          block_number: $block_number,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
+        });
       }, outcome_duration);
 
       interval_number += 1;
@@ -96,16 +137,17 @@ jsPsych.plugins["vor"] = (function () {
           outcome_collection[counter_balancing[0].left],
           outcome_collection[counter_balancing[0].right],
         ]);
-        threshold_interval();
       }
 
-      OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
+      OI_interval_timer = jsPsych.pluginAPI.setTimeout(function() {
         // terminate VOR stage
         if (block_number === VOR_block_num) {
           clearTimeout(OI_interval_timer);
           end_trial();
-        } else {
+        // continue VOR stage
+        } else { 
           start_OI();
+          threshold_interval();
         }
       }, OI_duration + outcome_duration);
     }
@@ -113,6 +155,7 @@ jsPsych.plugins["vor"] = (function () {
 
     function reset_OI() {
 
+      OI_threshold_timer = jsPsych.totalTime();
       clearTimeout(OI_interval_timer);
 
       OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
@@ -130,7 +173,23 @@ jsPsych.plugins["vor"] = (function () {
       clearTimeout(OI_threshold_interval);
 
       OI_threshold_interval = jsPsych.pluginAPI.setTimeout(function() {
+
         OI_duration = OI_duration_B;
+
+        var internal_threshold_timer = jsPsych.totalTime() - OI_threshold_timer;
+        if(internal_threshold_timer >= OI_duration_B) {
+          start_OI();
+        } else {
+          clearTimeout(OI_interval_timer);
+          OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
+            if (block_number === VOR_block_num) {
+              clearTimeout(OI_interval_timer);
+              end_trial();
+            } else {
+              start_OI();
+            }
+          }, OI_duration_B - internal_threshold_timer);
+        }
       }, OI_threshold * 1000);
     }
 
@@ -159,6 +218,8 @@ jsPsych.plugins["vor"] = (function () {
           event_type: "key press",
           event_raw_details: info.key,
           event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + " key pressed",
+          interval_number: $interval_number,
+          block_number: $block_number,
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
@@ -169,6 +230,8 @@ jsPsych.plugins["vor"] = (function () {
           event_type: "key release",
           event_raw_details: info.key_release,
           event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + " key released",
+          interval_number: $interval_number,
+          block_number: $block_number,
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
@@ -194,6 +257,8 @@ jsPsych.plugins["vor"] = (function () {
           event_type: "left tilt",
           event_raw_details: shake_left_translateX + "%, " + shake_left_rotate + "deg",
           event_converted_details: "vending machine was tilted left " + shake_left_translateX + "%, " + shake_left_rotate + "deg",
+          interval_number: $interval_number,
+          block_number: $block_number,
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
@@ -215,6 +280,8 @@ jsPsych.plugins["vor"] = (function () {
           event_type: "right tilt",
           event_raw_details: shake_right_translateX + "%, " + shake_right_rotate + "deg",
           event_converted_details: "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
+          interval_number: $interval_number,
+          block_number: $block_number,
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
@@ -222,7 +289,7 @@ jsPsych.plugins["vor"] = (function () {
 
       if (info.key === left_tilt || info.key === right_tilt) {
         if(!extinct_duration_lockout) {
-           extinct_interval();
+          extinct_interval();
         } else {
           reset_OI();
         }
@@ -247,7 +314,7 @@ jsPsych.plugins["vor"] = (function () {
         stage_name: trial.stage_name,
         stimulus: trial.stimulus,
         block_number: loop_node_counter_vvr,
-        events: JSON.stringify(response.trial_events),
+        events: JSON.stringify(response.trial_events)
       };
 
       // clear the display
