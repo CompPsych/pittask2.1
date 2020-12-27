@@ -216,10 +216,27 @@ var close_instruct_text_pav =
 "<br><p>Press any key to begin. </p>";
 
 /************************************************************
+ * VOR Virtual Outcome Reinstatement
+ ************************************************************/
+var VOR_block_num = 3;
+var extinct_duration = 10;
+var OI_duration_A = 6000;
+var OI_duration_B = 5000;
+var OI_threshold = 30;
+var VOR_duration = 180;
+
+var open_instruct_VOR = false;
+var close_instruct_VOR = false;
+var open_instruct_text_VOR =
+"<p>Open instruction for VOR</p>";
+var close_instruct_text_VOR =
+"<p>Close instruction for VOR</p>";
+
+/************************************************************
  * ======================== VVR =============================
  ************************************************************/
 var interval_duration = 500;
-var interval_num = 60;
+var interval_num = 6;
 var answer_latency_countdown = false;
 var answer_latency = 1000;
 var answer_latency_text = "Please wait for a moment till you can answer the question...";
