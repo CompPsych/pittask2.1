@@ -35,7 +35,7 @@ jsPsych.plugins["vor"] = (function () {
 
   plugin.trial = function (display_element, trial) {
 
-    var extinct_duration_lockout = false;
+    var extinct_lockout = false;
     var block_number = 0;
     var interval_number = 0;
     var $interval_number = 'NA';
@@ -198,9 +198,9 @@ jsPsych.plugins["vor"] = (function () {
     
       clearTimeout(OI_interval);
  
-      if(!extinct_duration_lockout) {
+      if(!extinct_lockout) {
         OI_interval = jsPsych.pluginAPI.setTimeout(function() {
-          extinct_duration_lockout = true;
+          extinct_lockout = true;
           start_OI();
           threshold_interval();
         }, extinct_duration * 1000);
@@ -288,7 +288,7 @@ jsPsych.plugins["vor"] = (function () {
       }
 
       if (info.key === left_tilt || info.key === right_tilt) {
-        if(!extinct_duration_lockout) {
+        if(!extinct_lockout) {
           extinct_interval();
         } else {
           reset_OI();
@@ -301,7 +301,6 @@ jsPsych.plugins["vor"] = (function () {
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
-      clearTimeout(OI_interval)
 
       // kill keyboard listeners
       if (typeof keyboardListener !== "undefined") {
@@ -313,7 +312,6 @@ jsPsych.plugins["vor"] = (function () {
       var trial_data = {
         stage_name: trial.stage_name,
         stimulus: trial.stimulus,
-        block_number: loop_node_counter_vvr,
         events: JSON.stringify(response.trial_events)
       };
 
