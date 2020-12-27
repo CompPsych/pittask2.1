@@ -353,6 +353,23 @@ var popup_duration_machine_deval_test = 5; // (seconds)
 var popup_text_machine_deval_test = "You can tip the machine any time in this stage. Any snacks you earn will be recorded.";
 
 /************************************************************
+ * VOR Virtual Outcome Reinstatement
+ ************************************************************/
+var VOR_block_num = 3;
+var extinct_duration = 10;
+var OI_duration_A = 6000;
+var OI_duration_B = 5000;
+var OI_threshold = 30;
+var VOR_duration = 180;
+
+var open_instruct_VOR = false;
+var close_instruct_VOR = false;
+var open_instruct_text_VOR =
+"<p>Open instruction for VOR</p>";
+var close_instruct_text_VOR =
+"<p>Close instruction for VOR</p>";
+
+/************************************************************
  * Recall(memory test)
  ************************************************************/
 var open_instruct_recall = false;

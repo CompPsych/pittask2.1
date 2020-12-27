@@ -1330,7 +1330,7 @@ if(isClass(query))
     }
 
     # Transfer_q --------------------------------------------------------------
-    
+
     transfer_q_index <- which(trialdata$stage_name %in% "\"transfer_q\"")
 
     if(length(transfer_q_index) != 0){
@@ -1375,8 +1375,13 @@ if(isClass(query))
               PIN, complete, format(as.IDate(formatDateTime(time_ms + events$timestamp[e])), "%d-%m-%Y"),
               as.character(as.ITime(formatDateTime(time_ms + events$timestamp[e]))),
               ifelse(is.na(events$timestamp[e]), 'NA', events$timestamp[e]),
-              country, timezone, stage_name, commit, version, block_number,
-              ifelse(!is.null(events$interval_number[e]), events$interval_number[e], 'NA'),
+              country, timezone, stage_name, commit, version, 
+              ifelse(stage_name != "VOR", block_number, 
+                ifelse(!is.na(events$block_number[e]), events$block_number[e], 'NA')
+              ),
+              ifelse(!is.null(events$interval_number[e]), 
+                ifelse(!is.na(events$interval_number[e]), events$interval_number[e], 'NA')
+              , 'NA'),
               events$event_type[e],
               ifelse(is.null(events$event_raw_details[e]), NA, events$event_raw_details[e]),
               events$event_converted_details[e]
