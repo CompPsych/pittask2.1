@@ -136,8 +136,8 @@ var shake_transition = 0.05;
 * behavioural stages
 ***********************************************************/
 var outcome_duration = 1000;
-var stim_duration = 1000;
-var ITI_duration = 1000;
+var stim_duration = 6000;
+var ITI_duration = 6000;
 var correct_text = "";
 var incorrect_text = "";
 var feedback_duration = 1;

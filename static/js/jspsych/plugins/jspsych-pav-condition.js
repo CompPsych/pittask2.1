@@ -1,10 +1,3 @@
-/**
- * jsPsych plugin for showing animations and recording keyboard responses
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- */
-
 jsPsych.plugins.animation = (function () {
 
     var plugin = {};
@@ -84,12 +77,12 @@ jsPsych.plugins.animation = (function () {
 
         // render a blank vending machine
         display_element.innerHTML =
-            '<style class="pav-conditioning">.outcome_transparent { height: 340px; }</style>' +
+            '<style class="pav-conditioning">.outcome_container { height: 340px; }</style>' +
             '<svg class="vending-machine"  viewBox="0 0 253 459" fill="none" xmlns="http://www.w3.org/2000/svg">' +
             '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
             '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
             '</svg>' +
-            '<div class="outcome_transparent"></div>';
+            '<div class="outcome_container"></div>';
        
         animation_sequence.push({
             stimulus: "blank",
@@ -111,9 +104,8 @@ jsPsych.plugins.animation = (function () {
 
         // sequence animation
         var animate_interval = jsPsych.pluginAPI.setTimeout(function request() {
+
             var isShowColor = true;
-            // clear page
-            display_element.innerHTML = '';
             animate_frame++;
             
             if (animate_frame === trial.stimuli.length) {
@@ -125,14 +117,9 @@ jsPsych.plugins.animation = (function () {
                 }, ITI_duration);
             }
            
-            display_element.innerHTML =
-                '<div class="pav-conditioning">' +
-                '<svg class="vending-machine"  viewBox="0 0 253 459" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
-                '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
-                "</svg>" +
-                "</div>" +
-                '<div style="height: 340px"></div>';
+            // reset machine color, hide outcome
+            $('.vending-machine rect').css({ fill: "#000" });
+            $('.outcome').addClass('hidden');
 
             animation_sequence.push({
                 stimulus: "blank",
@@ -158,17 +145,11 @@ jsPsych.plugins.animation = (function () {
 
 
         function show_next_frame() {
-            // show image
-            display_element.innerHTML =
-                '<div>' +
-                '<svg class="vending-machine"  viewBox="0 0 253 459" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
-                '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
-                '</svg>' +
-                '</div>' +
-                '<div style="height: 340px"><img class="outcome hidden" src="' + trial.stimuli[animate_frame] + '" id="jspsych-animation-image" style="margin-top: 4rem;"></div>';
 
+            // show image
+            $('.outcome_container').html('<img class="outcome hidden" src="' + trial.stimuli[animate_frame] + '" id="jspsych-animation-image" style="margin-top: 4rem;">');
             var outcome_presentation = stim_duration - outcome_duration;
+            
             jsPsych.pluginAPI.setTimeout(function () {
                 $('.outcome').removeClass('hidden');
                 response.trial_events.push({
@@ -196,7 +177,6 @@ jsPsych.plugins.animation = (function () {
               timestamp: jsPsych.totalTime(),
               time_elapsed: jsPsych.totalTime() - timestamp_onload,
             });
-            
         }
 
         // function to handle responses by the subject
@@ -265,6 +245,95 @@ jsPsych.plugins.animation = (function () {
             persist: true,
             allow_held_key: false
         });
+
+
+        // Patches setInterval, clearInterval, setTimeout and clearTimeout to avoid browser throttling these functions when tab is inactive.
+        (function () {
+            var $momentum;
+        
+            function createWorker() {
+                var containerFunction = function () {
+                    var idMap = {};
+        
+                    self.onmessage = function (e) {
+                        if (e.data.type === 'setInterval') {
+                            idMap[e.data.id] = setInterval(function () {
+                                self.postMessage({
+                                    type: 'fire',
+                                    id: e.data.id
+                                });
+                            }, e.data.delay);
+                        } else if (e.data.type === 'clearInterval') {
+                            clearInterval(idMap[e.data.id]);
+                            delete idMap[e.data.id];
+                        } else if (e.data.type === 'setTimeout') {
+                            idMap[e.data.id] = setTimeout(function () {
+                                self.postMessage({
+                                    type: 'fire',
+                                    id: e.data.id
+                                });
+                                // remove reference to this timeout after is finished
+                                delete idMap[e.data.id];
+                            }, e.data.delay);
+                        } else if (e.data.type === 'clearCallback') {
+                            clearTimeout(idMap[e.data.id]);
+                            delete idMap[e.data.id];
+                        }
+                    };
+                };
+        
+                return new Worker(URL.createObjectURL(new Blob([
+                    '(',
+                    containerFunction.toString(),
+                    ')();'
+                ], {type: 'application/javascript'})));
+            }
+        
+            $momentum = {
+                worker: createWorker(),
+                idToCallback: {},
+                currentId: 0
+            };
+        
+            function generateId() {
+                return $momentum.currentId++;
+            }
+        
+            function patchedSetTimeout(callback, delay) {
+                var intervalId = generateId();
+        
+                $momentum.idToCallback[intervalId] = function () {
+                    callback();
+                    delete $momentum.idToCallback[intervalId];
+                };
+        
+                $momentum.worker.postMessage({
+                    type: 'setTimeout',
+                    delay: delay,
+                    id: intervalId
+                });
+                return intervalId;
+            }
+        
+            function patchedClearTimeout(intervalId) {
+                $momentum.worker.postMessage({
+                    type: 'clearInterval',
+                    id: intervalId
+                });
+        
+                delete $momentum.idToCallback[intervalId];
+            }
+        
+            $momentum.worker.onmessage = function (e) {
+                if (e.data.type === 'fire') {
+                    $momentum.idToCallback[e.data.id]();
+                }
+            };
+        
+            window.$momentum = $momentum;
+            window.setTimeout = patchedSetTimeout;
+            window.clearTimeout = patchedClearTimeout;
+        })();
     };
 
     return plugin;
