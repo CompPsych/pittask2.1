@@ -13,6 +13,7 @@ $(window).on("beforeunload", function(){
     return 'Changes you made may not be saved';
 });
 
+// determining the presence of outcome for VVR stage
 var DEGRAD_PATTERN = {
     A0: {
         d0: false,
@@ -29,7 +30,8 @@ var DEGRAD_PATTERN = {
         d1: 'right',
         d2: 'right',
     }
-}
+};
+
 // Each game launching has 
 // a randomly chosen game version
 var counter_balancing_input = [

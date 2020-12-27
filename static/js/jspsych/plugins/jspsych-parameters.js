@@ -113,6 +113,7 @@ jsPsych.plugins['parameters'] = (function(){
             FHQ_VAS_right: FHQ_VAS_right,
             FHQ_VAS_left_hungry: FHQ_VAS_left_hungry,
             FHQ_VAS_right_hungry: FHQ_VAS_right_hungry,
+            FHQ_VAS_instruct: FHQ_VAS_instruct,
 
             VVR_q_text_a1: VVR_q_text_a1,
             VVR_q_text_a2: VVR_q_text_a2,

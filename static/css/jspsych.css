@@ -1,44 +1,46 @@
 /*
- * CSS for jsPsych experiments.
- *
- * This stylesheet provides minimal styling to make jsPsych
- * experiments look polished without any additional styles.
- */
+* CSS for jsPsych experiments.
+*
+* This stylesheet provides minimal styling to make jsPsych
+* experiments look polished without any additional styles.
+*/
 
- @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 /* Container holding jsPsych content */
 
- .jspsych-display-element {
-   display: flex;
-   flex-direction: column;
-   overflow-y: auto;
- }
+.jspsych-display-element {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
 
- .jspsych-display-element:focus {
-   outline: none;
- }
+.jspsych-display-element:focus {
+  outline: none;
+}
 
- .jspsych-content-wrapper {
-   display: flex;
-   margin: auto;
-   flex: 1 1 100%;
-   width: 100%;
- }
+.jspsych-content-wrapper {
+  display: flex;
+  margin: auto;
+  flex: 1 1 100%;
+  width: 100%;
+}
 
- .jspsych-content {
-   max-width: 95%; /* this is mainly an IE 10-11 fix */
-   text-align: center;
-   margin: auto; /* this is for overflowing content */
- }
+.jspsych-content {
+  max-width: 95%;
+/* this is mainly an IE 10-11 fix */
+  text-align: center;
+  margin: auto;
+/* this is for overflowing content */;
+}
 
- .jspsych-top {
-   align-items: flex-start;
- }
+.jspsych-top {
+  align-items: flex-start;
+}
 
- .jspsych-middle {
-   align-items: center;
- }
+.jspsych-middle {
+  align-items: center;
+}
 
 /* fonts and type */
 
@@ -99,10 +101,12 @@
   width: 100%;
   line-height: 1em;
 }
+
 #jspsych-progressbar-container span {
   font-size: 14px;
   padding-right: 14px;
 }
+
 #jspsych-progressbar-outer {
   background-color: #eee;
   width: 50%;
@@ -112,6 +116,7 @@
   vertical-align: middle;
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
+
 #jspsych-progressbar-inner {
   background-color: #aaa;
   width: 0%;
@@ -132,49 +137,54 @@
 .votes-container {
   position: relative;
 }
+
 #slider {
-    margin: 3.5rem auto;
-    width: 500px;
-    height: 50px;
-    position: relative;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    top: -30px;
+  margin: 3.5rem auto;
+  width: 500px;
+  height: 50px;
+  position: relative;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  top: -30px;
 }
+
 #slider label,
 #slider label {
-    position: absolute;
-    width: 20px;
-    height: 10px;
-    margin-top: 25px;
-    margin-left: -10px;
-    text-align: center;
-    color: white;
-    cursor: pointer;
+  position: absolute;
+  width: 20px;
+  height: 10px;
+  margin-top: 25px;
+  margin-left: -10px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
 }
 
 #slider:after {
-    content: '|';
-    position: absolute;
-    top: 15px;
-    left: -4px;
-    cursor: pointer;
-    color: #fff;
+  content: '|';
+  position: absolute;
+  top: 15px;
+  left: -4px;
+  cursor: pointer;
+  color: #fff;
 }
+
 #slider:before {
-    content: '|';
-    position: absolute;
-    top: 15px;
-    right: -4px;
-    cursor: pointer;
-    color: #fff;
+  content: '|';
+  position: absolute;
+  top: 15px;
+  right: -4px;
+  cursor: pointer;
+  color: #fff;
 }
+
 #slider label + .visible_el {
-    visibility: visible;
+  visibility: visible;
 }
+
 #slider label.\30 .visible_el {
-    visibility: visible;
+  visibility: visible;
 }
 
 .line {
@@ -188,17 +198,19 @@
 .ui-slider {
   background-color: #fff;
 }
+
 .ui-slider .ui-slider-handle {
-    position: absolute;
-    visibility: hidden;
-    top: 10px;
-    width: 5px;
-    height: 40px;
-    margin-left: 0;
-    background-color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
+  position: absolute;
+  visibility: hidden;
+  top: 10px;
+  width: 5px;
+  height: 40px;
+  margin-left: 0;
+  background-color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
 }
+
 .ui-state-disabled {
   opacity: .85;
 }
@@ -214,16 +226,20 @@
   top: -3.7rem;
   right: -3.5rem;
 }
+
 .description p {
   line-height: 0;
   font-weight: 100;
 }
+
 .description .description--center {
   margin-right: 0.4rem;
 }
+
 .description > div {
   text-align: center;
 }
+
 .confirm-button {
   color: #000;
   border-radius: 3px;
@@ -235,28 +251,34 @@
 .transfer-q-form .text_box {
   color: #000;
 }
+
 .transfer-q-form {
   display: flex;
   flex-direction: column;
 }
+
 .transfer-q-right-side {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .votes-container-transfer #slider {
   width: 100%;
 }
+
 .vending-machine-icon-left {
   width: 30px;
   height: 50px;
-  transform: rotate(-15deg) translateX(-15%)
+  transform: rotate(-15deg) translateX(-15%);
 }
+
 .vending-machine-icon-right {
   width: 30px;
   height: 50px;
-  transform: rotate(15deg) translateX(15%)
+  transform: rotate(15deg) translateX(15%);
 }
+
 .description-transfer {
   width: 100%;
   height: 60px;
@@ -267,6 +289,7 @@
   top: -9.7rem;
   right: -5.5rem;
 }
+
 .description--left,
 .description--right {
   display: flex;
@@ -274,12 +297,15 @@
   position: relative;
   width: 150px;
 }
+
 .description--left {
   align-items: flex-start;
 }
+
 .description--right {
   align-items: flex-end;
 }
+
 .description--left div {
   position: absolute;
   top: 5rem;
@@ -288,6 +314,7 @@
   height: 30px;
   text-align: center;
 }
+
 .description--right div {
   position: absolute;
   top: 5rem;
@@ -296,6 +323,7 @@
   height: 30px;
   text-align: center;
 }
+
 .instructions-transfer {
   width: 80%;
   outline: 1px solid #fff;
@@ -304,6 +332,7 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
 .instructions-transfer li {
   margin-left: 5rem;
 }
@@ -313,61 +342,75 @@
 .vvr-question-container {
   display: flex;
 }
+
 .vvr-question-container > div {
   padding: 0 5rem;
 }
+
 .vvr-question-b {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.vvr-question-b ul,
-.instructions {
+
+.instructions-wrap {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  outline: 1px solid #fff;
+  justify-content: center;
+  max-width: 540px;
+  border: 1px solid #fff;
   padding: 3rem;
+}
+
+.instructions {
+  text-align: left;
 }
 
 .vending-machine {
   height: 350px;
-  width: 350px; 
+  width: 350px;
 }
+
 .outcome-container {
   padding-top: 50px;
   height: 250px;
 }
+
 .outcome {
   height: 250px;
   width: auto;
 }
+
 .outcome-container-learning img {
   height: 220px;
 }
 
-@media (max-width: 1200px) { 
+@media (max-width: 1200px) {
+
   .vending-machine {
     height: 250px;
-    width: 250px; 
+    width: 250px;
   }
+
   .outcome {
     height: 180px;
     width: auto;
   }
+
   .pavlovian-conditioning-form .jspsych-survey-multi-choice-option {
     margin-top: 0;
   }
+
   .pavlovian-conditioning-form .jspsych-survey-multi-choice-question {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
   }
+
   .pavlovian-conditioning-form .jspsych-survey-multi-choice-text {
     font-size: 1.7rem;
   }
+
   #jspsych-survey-multi-choice-form.pavlovian-conditioning-form {
     margin-left: 0;
     width: 250px;
   }
-
 }

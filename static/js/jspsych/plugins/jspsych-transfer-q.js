@@ -82,7 +82,7 @@ jsPsych.plugins['transfer-q'] = (function() {
       '<div id="slider">' +
       '<span class="line"></span>' +
       "</div>" +
-      '<ul class="instructions hide-left">' +
+      '<ul class="instructions-wrap hide-left">' +
       "<li>Please click anywhere on the line to answer the question</li>" +
       "</ul>" +
       "</div>" +
