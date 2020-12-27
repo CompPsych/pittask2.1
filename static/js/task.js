@@ -13,6 +13,7 @@ $(window).on("beforeunload", function(){
     return 'Changes you made may not be saved';
 });
 
+// determining the presence of outcome for VVR stage
 var DEGRAD_PATTERN = {
     A0: {
         d0: false,
@@ -29,7 +30,8 @@ var DEGRAD_PATTERN = {
         d1: 'right',
         d2: 'right',
     }
-}
+};
+
 // Each game launching has 
 // a randomly chosen game version
 var counter_balancing_input = [
@@ -1480,10 +1482,7 @@ var RECALL = {
                         VVR_q_text_b3: VVR_q_text_b3,
                         VVR_q_text_b4: VVR_q_text_b4,
                         max_num_correct_consecutive_questions: 1
-                    },
-                    popup_machine: false,
-                    popup_machine_duration: 1000,
-                    popup_machine_text: 'text popup'
+                    }
                 },
                 {
                     type: 'survey-vvr-questions-right',
@@ -1510,10 +1509,7 @@ var RECALL = {
                         VVR_q_text_b3: VVR_q_text_b3,
                         VVR_q_text_b4: VVR_q_text_b4,
                         max_num_correct_consecutive_questions: 1
-                    },
-                    popup_machine: false,
-                    popup_machine_duration: 1000,
-                    popup_machine_text: 'text popup'
+                    }
                 }
             ])
 

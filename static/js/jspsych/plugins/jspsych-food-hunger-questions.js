@@ -112,7 +112,6 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
                 'img { width: 300px; margin: 20px 0; }' +
                 '.votes-container { margin-top: 8rem; }' +
                 '.key-testing-text { padding-bottom: 4rem; }' +
-                'ul { display: flex; outline: 1px solid #fff; padding: 3rem; justify-content: center; }' +
                 '</style>';
 
         html += '<div id="jspsych-stimulus"><h3 class="key-testing-text">' + h3 + '</h3>';
@@ -135,9 +134,8 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
                   '<div class="description--right">' + FHQ_VAS_right + '</div>';
         }
         html += '</div>';
-        html += '<div id="slider">';
-        html += '<span class="line"></span>';
-        html += '</div><ul>' + VVR_q_text_b4 + '</ul></div>';
+        html += '<div id="slider"><span class="line"></span></div>';
+        html += '<div class="instructions-wrap"><ul class="instructions">' + FHQ_VAS_instruct + '</ul></div>';
         html += '</div>';
     
         // render

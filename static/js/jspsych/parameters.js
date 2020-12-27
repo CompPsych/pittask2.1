@@ -184,7 +184,7 @@ var FHQ_VAS_center = "";
 var FHQ_VAS_right = "Very much";
 var FHQ_VAS_left_hungry = "Not at All";
 var FHQ_VAS_right_hungry = "Extremely";
-
+var FHQ_VAS_instruct = "<li><span>Please select your answer on the scale.</span></li>";
 /************************************************************
  * ===================== GUI COLORS =========================
  * stim1_colour = green - associated with MM image
@@ -229,7 +229,8 @@ var VVR_q_text_b1 = "How strongly do you believe in your answer?";
 var VVR_q_text_b2 = "Very little";
 var VVR_q_text_b3 = "Very much";
 var VVR_q_text_b4 =
-"<li><span>Please select your answer on the scale.</span></li>";
+"<li><span>Please select your answer on the scale.</span></li>" +
+"<li><span>Click 'Submit answer' when ready.</span></li>";
 
 /************************************************************
  * Instrumental conditioning [VVR_1]
