@@ -1976,6 +1976,7 @@ jsPsych.pluginAPI = (function() {
 
   var keyboard_listeners = [];
   var click_listeners = [];
+  var mousemove_listeners = [];
 
   var held_keys = {};
 
@@ -2208,6 +2209,39 @@ jsPsych.pluginAPI = (function() {
       return listener_id;
   };
 
+  module.getMouseMoveResponse = function(parameters) {
+    // parameters are: callback_function
+
+    var mousemove_listener_id;
+
+    var mousemove_listener_function = function(e) {
+        var w = $(document).width()
+        var h = $(document).height()
+        var target = {
+          tag: e.target.tagName.toLowerCase(),
+          classList: e.target.classList,
+          id: e.target.id
+        }
+        parameters.callback_function({ 
+          x: e.clientX, 
+          y: e.clientY, 
+          target, w, h, 
+          type: 'Cursor hover' 
+        })
+    };
+    
+    $(document).on('mousemove', mousemove_listener_function);
+
+    mousemove_listener_id = {
+      type: 'mousemove',
+      fn: mousemove_listener_function,
+    }
+
+    mousemove_listeners.push(mousemove_listener_id);
+
+    return mousemove_listener_id;
+  };
+
   module.cancelClickResponse = function(listener) {
     // remove the listener from the doc
     $(document).off(listener.type, listener.fn);
@@ -2226,6 +2260,16 @@ jsPsych.pluginAPI = (function() {
     // remove the listener from the list of listeners
     if (keyboard_listeners.includes(listener)) {
       keyboard_listeners.splice(keyboard_listeners.indexOf(listener), 1);
+    }
+  };
+  
+  module.cancelMouseEnterResponse = function(listener) {
+    // remove the listener from the doc
+    $(document).off(listener.type, listener.fn);
+
+    // remove the listener from the list of listeners
+    if ($.inArray(listener, mousemove_listeners) > -1) {
+      mousemove_listeners.splice($.inArray(listener, mousemove_listeners), 1);
     }
   };
 

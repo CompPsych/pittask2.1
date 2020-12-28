@@ -47,6 +47,24 @@ Specs <- data.table(
   `browser(version)` = character()
 )
 
+MouseData <- data.table(
+  PIN = character(),
+  complete = character(),
+  date = character(), 
+  calendar_time = character(),
+  timestamp = character(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  stage = character(),
+  width = character(),
+  height = character(),
+  event_type = character(),
+  x = character(),
+  y = character(),
+  coordinates_details = character()
+)
+
 Demographics <- data.table(
   PIN = character(),
   complete = character(),
@@ -1349,6 +1367,35 @@ if(isClass(query))
         )))
       }
     }
+
+    # Mouse Data --------------------------------------------------------------
+    mousedata_index <- which(!is.na(trialdata$mouse_events))
+
+    if(length(mousedata_index) != 0){
+      for(j in 1:length(mousedata_index)) {
+
+        mousedata_response <- fromJSON(trialdata$mouse_events[mousedata_index[j]])
+
+        date <- format(as.IDate(dateTime[mousedata_index[j]]), "%d-%m-%Y")
+        time <- as.character(as.ITime(dateTime[mousedata_index[j]]))
+        stage_name <- gsub('"', "", trialdata$stage_name[mousedata_index[j]])
+
+        for(k in 1:lengths(mousedata_response)){
+          if (is.na(mousedata_response$target[k])) next
+
+          target <- mousedata_response$target[k]
+          width <- mousedata_response$w[k]
+          height <- mousedata_response$h[k]
+
+          MouseData <- rbindlist(list(MouseData, list(
+            PIN, complete, date, time, mousedata_response$timestamp[k],
+            country, commit, version,
+            stage_name, width, height,
+            mousedata_response$type[k],mousedata_response$x[k], mousedata_response$y[k], target
+          )))
+        }
+      } 
+    }
     
     # CompleteData ------------------------------------------------------------
     
@@ -1440,6 +1487,7 @@ if(isClass(query))
     "consent_feedback" = ConsentFeedback,
     "pav_con" = PavCondition,
     "recall" = Recall,
+    "mouse_data" = MouseData,
     "complete" = CompleteData,
     "transfer_q" = Transfer_q
   )

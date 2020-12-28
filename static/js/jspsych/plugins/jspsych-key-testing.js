@@ -88,7 +88,8 @@ jsPsych.plugins["key-testing"] = (function() {
 
     // store responses, events
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
 
     var timestamp_onload = jsPsych.totalTime();
@@ -130,10 +131,15 @@ jsPsych.plugins["key-testing"] = (function() {
         jsPsych.pluginAPI.cancelClickResponse(clickListener);
       }
 
+      if (typeof mouseMoveListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+      }
+
       // gather the data to store for the trial
       var trial_data = {
         "stage_name": JSON.stringify(trial.stage_name),
-        "events": JSON.stringify(response.trial_events)
+        "events": JSON.stringify(response.trial_events),
+        "mouse_events": JSON.stringify(response.mouse_events)
       };
 
       // clear the display
@@ -232,6 +238,34 @@ jsPsych.plugins["key-testing"] = (function() {
       }
     };
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      var elementsMapping = [
+        {
+          element: 'vending machine',
+          tags: ['rect', 'path'],
+        },
+        {
+          element: 'instruction text',
+          tags: ['p']
+        }
+      ]
+
+      var found = elementsMapping.some(el => {
+        if (el.tags.some(tag => info.target.tag === tag)) {
+          info.target = el.element
+          return true
+        }
+        return false
+      })
+
+      if (!found) info.target = 'background'
+
+      response.mouse_events.push({
+        ...info, timestamp: jsPsych.totalTime(),
+      })
+    };
+
     // start the response listener
     if (trial.choices != jsPsych.NO_KEYS) {
         var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
@@ -250,6 +284,11 @@ jsPsych.plugins["key-testing"] = (function() {
           allow_held_key: false
         });
     }
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+    })
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
