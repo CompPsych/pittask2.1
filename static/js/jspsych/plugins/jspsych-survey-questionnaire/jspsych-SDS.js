@@ -93,10 +93,14 @@ jsPsych.plugins['SDS'] = (function () {
   
       var html = "";
       var timestamp_onload = jsPsych.totalTime();
+      
+      // identifiers for hover event targets
+      var elementsMapping = [];
   
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
   
       response.trial_events.push({
@@ -154,7 +158,7 @@ jsPsych.plugins['SDS'] = (function () {
 
       // show preamble text
       if (trial.preamble !== null) {
-        html += '<div class="jspsych-survey-multi-choice-content"><div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
+        html += '<div class="jspsych-survey-multi-choice-content"><div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
       }
    
       // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
@@ -224,6 +228,7 @@ jsPsych.plugins['SDS'] = (function () {
            
           </div>
         `;
+        
         html += '<div style="display: flex; justify-content: space-around; align-items: center; position: relative; padding-top: 5rem; ">';
         html += '<span class="circle-line"></span>';
         // create option radio buttons
@@ -233,13 +238,18 @@ jsPsych.plugins['SDS'] = (function () {
           var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
           var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
   
-          var required_attr = question.required ? 'required' : '';
+          var required_attr = question.required ? ' required' : '';
   
           // add radio button container
           html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
           html += '<input type="radio" name="' + input_name + '" id="' + input_id + '" class="form-radio hidden" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '</div>';
+
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            for: [input_id]
+          });
         }
   
         html += '</div>';
@@ -248,8 +258,24 @@ jsPsych.plugins['SDS'] = (function () {
           '<div class="input-not-working"><input type="radio" data-time-stamp="Q1S1" data-question-number="Q1S1" name="" class="form-radio" value="Checkbox question.: I have not worked/studied at all during the past week..."></input></div>' +
           '<div style="text-align: left; padding-left: 2rem;"><p>I have not worked / studied at all during the past week for reasons unrelated to the disorder.</p>' +
           '<p>* Work includes paid, unpaid volunteer work or training</p></div></div>';
+
+          elementsMapping.push(
+            {
+              element: 'Checkbox input',
+              value: ['Checkbox question.: I have not worked/studied at all during the past week...']
+            },
+            {
+              element: 'Checkbox label',
+              text: ['<p>I have not worked / studied at all during the past week for reasons unrelated to the disorder.</p><p>* Work includes paid, unpaid volunteer work or training</p>']
+            }
+          );
         }
         html += '</div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [question.prompt]
+        });
         
       }
 
@@ -268,10 +294,21 @@ jsPsych.plugins['SDS'] = (function () {
             question_classes.push('jspsych-survey-multi-choice-horizontal');
           }
 
+
           html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question_name + '">';
 
+          html += '<div style="text-align: left;">'
+
+          // used for elements identification on hover
+          var questionTitleStart = html.length;
+          
           // add question text
-          html += '<div style="text-align: left;"><h3 class="question-title">' + question.title + '</h3><p style="position: relative;">' + question.prompt ;
+          html += '<h3 class="question-title">' + question.title + '</h3><p style="position: relative;">';
+          
+          // used for elements identification on hover
+          var questionTextStart = html.length;
+
+          html += question.prompt;
 
           // create option radio buttons
           html += '<span style="position: absolute; right: 0;">';
@@ -283,13 +320,25 @@ jsPsych.plugins['SDS'] = (function () {
             var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
             var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
             var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
-            html += '<option type="select" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" name="' + input_name + '" id="' + input_id + '" value="' + question.options[j] + '" ' + required_attr + '>' + question.options[j] + '</option>';
+            html += '<option type="select" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" name="' + input_name + '" id="' + input_id + '" value="' + question.options[j] + '"' + required_attr + '>' + question.options[j] + '</option>';
           }
           html += '</select>';
-          html += '</p></span>';
+          html += '</span></p>';
+
+          elementsMapping.push(
+            {
+              element: 'Q' + (i + 1),
+              text: [html.substring(questionTitleStart), html.substring(questionTextStart, html.length - '</p>'.length)]
+            },
+            {
+              element: 'Select Q' + (i + 1),
+              id: [question_name],
+              for: [question_name],
+            }
+          );
+
           html += '</div></div>';
       }
-
       
       html += '</div>';
 
@@ -355,6 +404,19 @@ jsPsych.plugins['SDS'] = (function () {
           });
         }
       };
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        console.log('target: ', info.target)
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          viewport_size: info.viewport_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
+      }
   
       // highlight input
       $('.jspsych-survey-highlight').click(function () {
@@ -478,6 +540,11 @@ jsPsych.plugins['SDS'] = (function () {
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             jsPsych.pluginAPI.cancelClickResponse(clickListener);
           }
+        
+          // kill mouse listener
+          if (typeof mouseMoveListener !== 'undefined') {
+            jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+          }
   
           // save data
           var trial_data = {
@@ -486,7 +553,8 @@ jsPsych.plugins['SDS'] = (function () {
             "timestamp": JSON.stringify(timestamp_data),
             "time_stamp": JSON.stringify(trial.time_stamp),
             "question_order": JSON.stringify(question_order),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
           };
   
           // clear the display
@@ -534,6 +602,24 @@ jsPsych.plugins['SDS'] = (function () {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+    
+      elementsMapping.push(
+        {
+          element: 'submit button',
+          value: [trial.button_label]
+        },
+        {
+          element: 'instruction text',
+          text: [trial.preamble]
+        }
+      );
+    
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
+        ignored_tags: ['h3', 'h2', 'p']
       });
     };
   
