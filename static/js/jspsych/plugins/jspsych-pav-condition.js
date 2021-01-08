@@ -53,7 +53,8 @@ jsPsych.plugins.animation = (function () {
 
         // store responses, events
         var response = {
-            trial_events: []
+            trial_events: [],
+            mouse_events: [],
         };
 
         if(pav_con_timer <= 0) {
@@ -201,6 +202,19 @@ jsPsych.plugins.animation = (function () {
             }
         };
 
+        // function to handle mouse hovering UI elements
+        var after_mousemove = function(info) {
+          console.log('target: ', info.target)
+          response.mouse_events.push({
+            x: info.x, 
+            y: info.y, 
+            viewport_size: info.viewport_size,
+            type: info.type,
+            target: info.target,
+            timestamp: jsPsych.totalTime(),
+          });
+        };
+
         // hold the jspsych response listener object in memory
         // so that we can turn off the response collection when
         // the trial ends
@@ -213,11 +227,17 @@ jsPsych.plugins.animation = (function () {
                 jsPsych.pluginAPI.cancelClickResponse(clickListener);
             }
 
+            // kill mouse listener
+            if (typeof mouseMoveListener !== 'undefined') {
+              jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+            }
+
             // gather the data to store for the trial
             var trial_data = {
                 stage_name: JSON.stringify(trial.stage_name),
                 animation_sequence: JSON.stringify(animation_sequence),
-                events: JSON.stringify(response.trial_events)
+                events: JSON.stringify(response.trial_events),
+                mouse_events: JSON.stringify(response.mouse_events),
             };
 
             // clear all timeouts
@@ -245,7 +265,24 @@ jsPsych.plugins.animation = (function () {
             persist: true,
             allow_held_key: false
         });
-
+        
+        // identifiers for hover event targets
+        var elementsMapping = [
+            {
+                element: 'vending machine',
+                tag: ['rect', 'path'],
+            },
+            {
+                element: 'stimulus image',
+                tag: ['img'],
+            }
+        ];
+        
+        // start mouse move listener
+        var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+            callback_function: after_mousemove,
+            elements_mapping: elementsMapping,
+        });
 
         // Patches setInterval, clearInterval, setTimeout and clearTimeout to avoid browser throttling these functions when tab is inactive.
         (function () {

@@ -64,10 +64,27 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
     }
   }
   plugin.trial = function(display_element, trial) {
+    
+    // identifiers for hover event targets
+    var elementsMapping = [
+      {
+        element: 'vending machine',
+        tag: ['rect', 'path'],
+      },
+      {
+        element: 'question',
+        tag: ['span']
+      },
+      {
+        element: 'submit button',
+        value: [trial.button_label]
+      }
+    ];
 
     // store responses, events
     var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
     };
     var timestamp_onload = pav_con_timer;
 
@@ -145,7 +162,7 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
       }
 
       // add question text
-      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt + '</p>';
+      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice"><span>' + question.prompt + '</span></p>';
       html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
 
       if(question.required){
@@ -154,6 +171,18 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
 
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
+        // add option identifier to mousemove elements mapping
+        elementsMapping.push(
+          {
+            element: question.options[j].name + ' image',
+            alt: [question.options[j].name]
+          },
+          {
+            element: question.options[j].name + ' checkbox',
+            value: [question.options[j].value]
+          }
+        );
+
         // add label and question text
         var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+j;
         var input_name = 'jspsych-survey-multi-choice-response-'+question_id;
@@ -254,6 +283,19 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
           };
     };
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      console.log('target: ', info.target)
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        viewport_size: info.viewport_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    };
+
     // form functionality
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
@@ -325,6 +367,7 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
           question_order: JSON.stringify(question_order),
           correct: pav_is_correct ? "y" : "n",
           events: JSON.stringify(response.trial_events),
+          mouse_events: JSON.stringify(response.mouse_events),
         };
 
         if(trial.stage_name === "recall"){
@@ -338,6 +381,11 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
+        }
+
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
         }
 
         // next trial
@@ -363,6 +411,13 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
         persist: true,
         allow_held_key: false
     });
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+    });
+
   };
 
   return plugin;
