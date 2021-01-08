@@ -92,10 +92,14 @@ jsPsych.plugins['RAADS-14'] = (function () {
 
     var plugin_id_name = "jspsych-survey-multi-choice-RAADS-14";
     var html = "";
+      
+    // identifiers for hover event targets
+    var elementsMapping = [];
 
     // store responses, events
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
     var timestamp_onload = jsPsych.totalTime();
 
@@ -154,7 +158,7 @@ jsPsych.plugins['RAADS-14'] = (function () {
 
     // show preamble text
     if (trial.preamble !== null) {
-      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
+      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
     }
 
     // form element
@@ -173,6 +177,15 @@ jsPsych.plugins['RAADS-14'] = (function () {
             <li>Never true</li>
           </ul>
     </div>`
+
+    var titles = ['True now and when I was young', 'True only now', 'True only when I was younger than 16', 'Never true']
+
+    for (var i = 0; i < titles.length; i++) {
+      elementsMapping.push({
+        element: 'A' + (i + 1),
+        text: [titles[i]]
+      });
+    }
 
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -200,9 +213,9 @@ jsPsych.plugins['RAADS-14'] = (function () {
       html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
 
       // add question text
-      html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' +  + (i + 1)  + '.</span><p class="jspsych-survey-multi-choice-question survey-multi-choice">' + question.prompt
+      html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' +  + (i + 1)  + '.</span><p class="jspsych-survey-multi-choice-question survey-multi-choice"><span>' + question.prompt
       // question.required
-      html += '</p></div>';
+      html += '</span></p></div>';
       html += '<div class="jspsych-survey-multi-choice-option-right">';
 
       // create option radio buttons
@@ -219,9 +232,19 @@ jsPsych.plugins['RAADS-14'] = (function () {
         html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight hidden" for="' + input_id + '">' + question.options[j] + '</label>';
         html += '<input type="radio" name="' + input_name + '" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
         html += '</div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+          id: [input_id]
+        });
       }
 
       html += '</div></div>';
+      
+      elementsMapping.push({
+        element: 'Q' + (i + 1),
+        text: [(i + 1) + '.', question.prompt]
+      });
     }
 
     html += '</div>';
@@ -291,6 +314,19 @@ jsPsych.plugins['RAADS-14'] = (function () {
       }
     }
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      console.log('target: ', info.target)
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        viewport_size: info.viewport_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    }
+
     // save timestamp on input click
     $("input[type=radio]").on("click change touchstart",function(){
       var time_stamp_key = $(this).data('time-stamp'); 
@@ -342,6 +378,11 @@ jsPsych.plugins['RAADS-14'] = (function () {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
+        
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
 
         // save data
         var trial_data = {
@@ -350,7 +391,8 @@ jsPsych.plugins['RAADS-14'] = (function () {
           "timestamp": JSON.stringify(timestamp_data),
           "time_stamp": JSON.stringify(trial.time_stamp),
           "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events)
         };
 
         // clear the display
@@ -398,6 +440,24 @@ jsPsych.plugins['RAADS-14'] = (function () {
       rt_method: 'performance',
       persist: true,
       allow_held_key: false
+    });
+    
+    elementsMapping.push(
+      {
+        element: 'submit button',
+        value: [trial.button_label]
+      },
+      {
+        element: 'instruction text',
+        text: [trial.preamble]
+      }
+    );
+    
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+      ignored_tags: ['p'],
     });
 
   };
