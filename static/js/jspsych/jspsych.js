@@ -2210,24 +2210,82 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.getMouseMoveResponse = function(parameters) {
-    // parameters are: callback_function
+    // parameters are: callback_function, elements_mapping, ignored_tags
+
+    var ignoredTags = ['b', 'strong', 'i', 'em', 'mark', 'small', 'del', 'ins', 'sub', 'sup', 'u'];
+
+    if (parameters.ignored_tags) {
+      for (var i = 0; i < parameters.ignored_tags.length; i++) {
+        ignoredTags.push(parameters.ignored_tags[i])
+      }
+    }
+
+    var identifyTarget = function(elements_mapping, target) {
+      var found = false;
+
+      var findEqual = function(elements, compareBy, exactEqual = true) {
+        for (var j = 0; j < elements[compareBy].length; j++) {
+          if ((exactEqual && target[compareBy] === elements[compareBy][j])
+            || (!exactEqual && target[compareBy].indexOf(elements[compareBy][j]) !== -1)) {
+            target = elements.element;
+            return true;
+          }
+        }
+        return false;
+      }
+
+      var compareBy = ['id', { name: 'class', exact: false }, 'text', 'value', 'alt', 'for', 'tag'];
+
+      for (var i = 0; i < elements_mapping.length; i++) {
+        for (var j = 0; j < compareBy.length && !found; j++) {
+          if (typeof compareBy[j] === 'string') {
+            if (elements_mapping[i][compareBy[j]] && target[compareBy[j]]) {
+              found = findEqual(elements_mapping[i], compareBy[j]);
+            }
+          } else {
+            if (elements_mapping[i][compareBy[j].name] && target[compareBy[j].name]) {
+              found = findEqual(elements_mapping[i], compareBy[j].name, compareBy[j].exact);
+            }
+          }
+        }
+        if (found) break;
+      }
+
+      if (!found) target = 'background';
+
+      return target;
+    };
 
     var mousemove_listener_id;
 
     var mousemove_listener_function = function(e) {
-        var w = $(document).width()
-        var h = $(document).height()
-        var target = {
-          tag: e.target.tagName.toLowerCase(),
-          classList: e.target.classList,
-          id: e.target.id
+        var w = $(document).width();
+        var h = $(document).height();
+        var target = e.target;
+        var tagName = target.tagName.toLowerCase()
+        for (var i = 0; i < ignoredTags.length; i++) {
+          if (tagName === ignoredTags[i]) {
+            target = target.parentNode;
+            break;
+          }
         }
+        target = {
+          id: target.id,
+          text: target.innerHTML,
+          tag: target.tagName.toLowerCase(),
+          class: target.getAttribute('class'),
+          value: target.getAttribute('value'),
+          alt: target.getAttribute('alt'),
+          for: target.getAttribute('for'),
+        };
+        target = identifyTarget(parameters.elements_mapping, target);
         parameters.callback_function({ 
           x: e.clientX, 
           y: e.clientY, 
-          target, w, h, 
+          target: target,
+          viewport_size: w + 'x' + h,
           type: 'Cursor hover' 
-        })
+        });
     };
     
     $(document).on('mousemove', mousemove_listener_function);
@@ -2235,7 +2293,7 @@ jsPsych.pluginAPI = (function() {
     mousemove_listener_id = {
       type: 'mousemove',
       fn: mousemove_listener_function,
-    }
+    };
 
     mousemove_listeners.push(mousemove_listener_id);
 

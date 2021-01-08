@@ -131,6 +131,7 @@ jsPsych.plugins["key-testing"] = (function() {
         jsPsych.pluginAPI.cancelClickResponse(clickListener);
       }
 
+      // kill mouse listener
       if (typeof mouseMoveListener !== 'undefined') {
         jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
       }
@@ -240,30 +241,15 @@ jsPsych.plugins["key-testing"] = (function() {
 
     // function to handle mouse hovering UI elements
     var after_mousemove = function(info) {
-      var elementsMapping = [
-        {
-          element: 'vending machine',
-          tags: ['rect', 'path'],
-        },
-        {
-          element: 'instruction text',
-          tags: ['p']
-        }
-      ]
-
-      var found = elementsMapping.some(el => {
-        if (el.tags.some(tag => info.target.tag === tag)) {
-          info.target = el.element
-          return true
-        }
-        return false
-      })
-
-      if (!found) info.target = 'background'
-
+      console.log('target: ', info.target)
       response.mouse_events.push({
-        ...info, timestamp: jsPsych.totalTime(),
-      })
+        x: info.x, 
+        y: info.y, 
+        viewport_size: info.viewport_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
     };
 
     // start the response listener
@@ -284,11 +270,24 @@ jsPsych.plugins["key-testing"] = (function() {
           allow_held_key: false
         });
     }
+    
+    // identifiers for hover event targets
+    var elementsMapping = [
+      {
+        element: 'vending machine',
+        tag: ['rect', 'path'],
+      },
+      {
+        element: 'instruction text',
+        tag: ['p']
+      }
+    ];
 
     // start mouse move listener
     var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
       callback_function: after_mousemove,
-    })
+      elements_mapping: elementsMapping,
+    });
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
