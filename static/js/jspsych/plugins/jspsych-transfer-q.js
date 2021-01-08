@@ -23,6 +23,7 @@ jsPsych.plugins['transfer-q'] = (function() {
     // store response
     var response = {
       trial_events: [],
+      mouse_events: [],
       vas_response: 0,
       transfer_a_timestamp: 0
     };
@@ -197,6 +198,19 @@ jsPsych.plugins['transfer-q'] = (function() {
       }
     };
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      console.log('target: ', info.target)
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        viewport_size: info.viewport_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    };
+
     // form functionality
     document.querySelector("form").addEventListener("submit", function (event) {
       event.preventDefault();
@@ -217,12 +231,18 @@ jsPsych.plugins['transfer-q'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
 
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
+
         // save data
         var trial_data = {
           stage_name: JSON.stringify(trial.stage_name),
           stimulus: JSON.stringify(machine_color_name),
           timestamp: response.transfer_a_timestamp,
           events: JSON.stringify(response.trial_events),
+          mouse_events: JSON.stringify(response.mouse_events),
           item_id: JSON.stringify(item_id),
           strength_of_belief: JSON.stringify(response.vas_response),
           text: JSON.stringify(form_text_value),
@@ -276,6 +296,54 @@ jsPsych.plugins['transfer-q'] = (function() {
         allow_held_key: false,
       });
     }
+    
+    // identifiers for hover event targets
+    var elementsMapping = [
+      {
+        element: 'question 1',
+        text: [transfer_q_text1]
+      },
+      {
+        element: 'question 2',
+        text: [transfer_q_text2]
+      },
+      {
+        element: 'slider',
+        id: ['slider'],
+        class: ['line', 'ui-slider-handle']
+      },
+      {
+        element: 'instruction text',
+        class: ['instructions'],
+        tag: ['ul', 'li', 'span']
+      },
+      {
+        element: 'answer left',
+        text: [left_text],
+      },
+      {
+        element: 'answer right',
+        text: [right_text]
+      },
+      {
+        element: 'text input',
+        tag: ['textarea']
+      },
+      {
+        element: 'Submit button',
+        tag: ['input']
+      },
+      {
+        element: 'vending machine',
+        tag: ['rect', 'path'],
+      },
+    ];
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+    });
   }
 
   return plugin;
