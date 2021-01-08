@@ -89,7 +89,8 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
 
         // store responses, events
         var response = {
-          trial_events: []
+          trial_events: [],
+          mouse_events: [],
         };
 
         if(FHR_timestamp <= 0) {
@@ -176,11 +177,17 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
               jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
               jsPsych.pluginAPI.cancelClickResponse(clickListener);
             }
+
+            // kill mouse listener
+            if (typeof mouseMoveListener !== 'undefined') {
+              jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
+            }
     
             // gather the data to store for the trial
             var trial_data = {
                 "stage_name": JSON.stringify(trial.stage_name),
                 "events": JSON.stringify(response.trial_events),
+                "mouse_events": JSON.stringify(response.mouse_events),
                 "timestamp": JSON.stringify(jsPsych.totalTime()),
                 "rating_status": JSON.stringify(trial.rating_status),
                 "rating": JSON.stringify(vas_holder),
@@ -219,6 +226,19 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
               });
             }
         };
+
+        // function to handle mouse hovering UI elements
+        var after_mousemove = function(info) {
+          console.log('target: ', info.target)
+          response.mouse_events.push({
+            x: info.x, 
+            y: info.y, 
+            viewport_size: info.viewport_size,
+            type: info.type,
+            target: info.target,
+            timestamp: jsPsych.totalTime(),
+          });
+        };
     
         // start the response listener
         if (trial.choices != jsPsych.NO_KEYS) {
@@ -237,6 +257,47 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
                 allow_held_key: false
             });
         }
+        
+        // identifiers for hover event targets
+        var elementsMapping = [
+          {
+            element: 'stimulus image',
+            tag: ['img'],
+          },
+          {
+            element: 'question',
+            tag: ['h3']
+          },
+          {
+            element: 'bottom text',
+            tag: ['p']
+          },
+          {
+            element: 'slider',
+            id: ['slider'],
+            class: ['line', 'ui-slider-handle']
+          },
+          {
+            element: 'instruction text',
+            class: ['instructions'],
+            tag: ['ul', 'li', 'span']
+          },
+          {
+            element: 'answer left',
+            class: ['description--left']
+          },
+          {
+            element: 'answer right',
+            class: ['description--right']
+          },
+        ];
+
+        // start mouse move listener
+        var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+          callback_function: after_mousemove,
+          elements_mapping: elementsMapping,
+        });
+
   
         // hide stimulus if stimulus_duration is set
         if (trial.stimulus_duration !== null) {
