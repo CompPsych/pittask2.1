@@ -2220,6 +2220,25 @@ jsPsych.pluginAPI = (function() {
       }
     }
 
+    var skipIgnoredTags = function(target) {
+      var skip = true;
+      var tagName;
+
+      while (skip) {
+        skip = false;
+        tagName = target.tagName.toLowerCase();
+        for (var i = 0; i < ignoredTags.length; i++) {
+          if (tagName === ignoredTags[i]) {
+            target = target.parentNode;
+            skip = true;
+            break;
+          }
+        }
+      }
+
+      return target;
+    };
+
     var identifyTarget = function(elements_mapping, target) {
       var found = false;
 
@@ -2262,13 +2281,7 @@ jsPsych.pluginAPI = (function() {
         var w = $(document).width();
         var h = $(document).height();
         var target = e.target;
-        var tagName = target.tagName.toLowerCase()
-        for (var i = 0; i < ignoredTags.length; i++) {
-          if (tagName === ignoredTags[i]) {
-            target = target.parentNode;
-            break;
-          }
-        }
+        target = skipIgnoredTags(target);
         target = {
           id: target.id,
           text: target.innerHTML,
