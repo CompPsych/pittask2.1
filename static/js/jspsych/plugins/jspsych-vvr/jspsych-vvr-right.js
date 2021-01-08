@@ -1,101 +1,102 @@
 jsPsych.plugins['survey-vvr-questions-right'] = (function() {
-  var plugin = {};
+    var plugin = {};
 
-  plugin.info = {
-    name: 'survey-vvr-questions-right',
-    parameters: {
-      choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
-        array: true,
-        pretty_name: 'Choices',
-        default: jsPsych.ALL_KEYS,
-        description: 'The keys the subject is allowed to press to respond to the stimulus.'
-      },
-      trial_duration: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Trial duration',
-        default: null,
-        description: 'How long to show trial before it ends.'
-      },
-      stage_name: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Stage Name',
-        default: null,
-        description: 'Specific name of the current stage.'
-      },
-      vars: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Text variables',
-        default: null,
-        description: 'Text variables.'
-      },
-      details: {
-        a: {
-          event_type: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event type',
-            default: null,
-            description: 'Event type'
-          },
-          event_raw_details: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event raw details',
-            default: null,
-            description: 'Event raw details'
-          },
-          event_converted_details: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event converted details',
-            default: null,
-            description: 'Event converted details'
-          }
-        },
-        b: {
-          event_type: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event type',
-            default: null,
-            description: 'Event type'
-          },
-          event_raw_details: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event raw details',
-            default: null,
-            description: 'Event raw details'
-          },
-          event_converted_details: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Event converted details',
-            default: null,
-            description: 'Event converted details'
-          }
+    plugin.info = {
+        name: 'survey-vvr-questions-right',
+        parameters: {
+            choices: {
+                type: jsPsych.plugins.parameterType.KEYCODE,
+                array: true,
+                pretty_name: 'Choices',
+                default: jsPsych.ALL_KEYS,
+                description: 'The keys the subject is allowed to press to respond to the stimulus.'
+            },
+            trial_duration: {
+                type: jsPsych.plugins.parameterType.INT,
+                pretty_name: 'Trial duration',
+                default: null,
+                description: 'How long to show trial before it ends.'
+            },
+            stage_name: {
+                type: jsPsych.plugins.parameterType.STRING,
+                pretty_name: 'Stage Name',
+                default: null,
+                description: 'Specific name of the current stage.'
+            },
+            vars: {
+                type: jsPsych.plugins.parameterType.STRING,
+                pretty_name: 'Text variables',
+                default: null,
+                description: 'Text variables.'
+            },
+            details: {
+                a: {
+                    event_type: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event type',
+                        default: null,
+                        description: 'Event type'
+                    },
+                    event_raw_details: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event raw details',
+                        default: null,
+                        description: 'Event raw details'
+                    },
+                    event_converted_details: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event converted details',
+                        default: null,
+                        description: 'Event converted details'
+                    }
+                },
+                b: {
+                    event_type: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event type',
+                        default: null,
+                        description: 'Event type'
+                    },
+                    event_raw_details: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event raw details',
+                        default: null,
+                        description: 'Event raw details'
+                    },
+                    event_converted_details: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Event converted details',
+                        default: null,
+                        description: 'Event converted details'
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  plugin.trial = function(display_element, trial) {
+    plugin.trial = function(display_element, trial) {
 
-    // store response
-    var response = {
-      trial_events: []
-    };
+        // store response
+        var response = {
+            trial_events: [],
+            mouse_events: [],
+        };
 
-    // outcome src
-    var outcome_collection = {
-      MM:'/static/images/MM.png',
-      TT:'/static/images/TT.png',
-      BBQ:'/static/images/BBQ.png',
-    };
+        // outcome src
+        var outcome_collection = {
+            MM: '/static/images/MM.png',
+            TT: '/static/images/TT.png',
+            BBQ: '/static/images/BBQ.png',
+        };
 
-    // assign right outcome
-    var OUTCOME = outcome_collection[counter_balancing[0].right];
-    var isMachineTilted = false;
-    var vas_holder = 0;
+        // assign right outcome
+        var OUTCOME = outcome_collection[counter_balancing[0].right];
+        var isMachineTilted = false;
+        var vas_holder = 0;
 
-    // add question
-    var new_html =
-      `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-right'>
+        // add question
+        var new_html =
+            `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-right'>
       <div class='vvr-question-a'>
       <p>${trial.vars.VVR_q_text_a1}</p>
       <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
@@ -126,211 +127,278 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function() {
       </div>
       </div>`;
 
-    var timestamp_onload = vvr_timer;
-    var question_number = item_id + 1;
+        var timestamp_onload = vvr_timer;
+        var question_number = item_id + 1;
 
-    response.trial_events.push({
-        event_type: trial.details.a.event_type,
-        event_raw_details: "question " + question_number + "(a) appears",
-        event_converted_details: "question " + question_number + "(a) appears; " +  counter_balancing[0].right + " image appears",
-        timestamp: jsPsych.totalTime(),
-        time_elapsed: jsPsych.totalTime() - timestamp_onload,
-    });
-
-    // render
-    display_element.innerHTML = new_html;
-
-    var $button = $('.jspsych-btn');
-    var $vending_machine = $(".vending-machine");
-
-    // init VAS slider
-    $("#slider").slider({
-      value: 5,
-      min: 0,
-      max: 10,
-      step: 0.01,
-      change: function(event, ui) {
-        $(".ui-slider .ui-slider-handle").css('visibility', 'visible');
-        $button.prop('disabled', false);
-        vas_holder = ui.value.toFixed(2);
         response.trial_events.push({
-          event_type: "VAS answer has been made",
-          event_raw_details: ui.value.toFixed(2),
-          event_converted_details:
-              ui.value.toFixed(2) + " answer has been made",
-          timestamp: jsPsych.totalTime(),
-          time_elapsed: jsPsych.totalTime() - timestamp_onload,
+            event_type: trial.details.a.event_type,
+            event_raw_details: "question " + question_number + "(a) appears",
+            event_converted_details: "question " + question_number + "(a) appears; " + counter_balancing[0].right + " image appears",
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
-      }
-    });
 
-    $button.prop('disabled', true);
-    $button.on('click', function() {
-      response.trial_events.push({
-        event_type: "button clicked",
-        event_raw_details: 'Submit',
-        event_converted_details: '"Submit" selected',
-        timestamp: jsPsych.totalTime(),
-        time_elapsed: jsPsych.totalTime() - timestamp_onload
-      });
-      end_trial();
-    });
+        // render
+        display_element.innerHTML = new_html;
 
-    // countdown instruction for preventing random response
-    if (item_id === 0 && answer_latency_countdown) {
-      $('.answer_latency').text(answer_latency_text);
-      setTimeout(function() {
-        $('.answer_latency').text(trial.vars.VVR_q_text_a2);
-      }, answer_latency);
-    }
+        var $button = $('.jspsych-btn');
+        var $vending_machine = $(".vending-machine");
 
-    // show a second part of the question with VAS
-    function showNextQuestion() {
-      $('.vvr-question-b').fadeIn('slow');
-      response.trial_events.push({
-        event_type: trial.details.b.event_type,
-        event_raw_details: "question " + question_number + "(b) appears",
-        event_converted_details: "question " + question_number + "(b) appears",
-        timestamp: jsPsych.totalTime(),
-        time_elapsed: jsPsych.totalTime() - timestamp_onload,
-      });
-    }
-
-    // function to handle responses by the subject
-    var after_response = function(info) {
-
-      if (info.key_release === undefined) {
-        response.trial_events.push({
-          event_type: "key press",
-          event_raw_details: info.key,
-          event_converted_details:
-              jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
-              " key pressed",
-          timestamp: jsPsych.totalTime(),
-          time_elapsed: jsPsych.totalTime() - timestamp_onload
+        // init VAS slider
+        $("#slider").slider({
+            value: 5,
+            min: 0,
+            max: 10,
+            step: 0.01,
+            change: function(event, ui) {
+                $(".ui-slider .ui-slider-handle").css('visibility', 'visible');
+                $button.prop('disabled', false);
+                vas_holder = ui.value.toFixed(2);
+                response.trial_events.push({
+                    event_type: "VAS answer has been made",
+                    event_raw_details: ui.value.toFixed(2),
+                    event_converted_details: ui.value.toFixed(2) + " answer has been made",
+                    timestamp: jsPsych.totalTime(),
+                    time_elapsed: jsPsych.totalTime() - timestamp_onload,
+                });
+            }
         });
-      } else {
-        response.trial_events.push({
-          event_type: "key release",
-          event_raw_details: info.key_release,
-          event_converted_details:
-              jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
-                  info.key_release
-              ) + " key released",
-          timestamp: jsPsych.totalTime(),
-          time_elapsed: jsPsych.totalTime() - timestamp_onload
-        });
-      }
 
-      if (info.key === left_tilt && !isMachineTilted) {
-        $vending_machine.css({
-          transform:  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
-          transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+        $button.prop('disabled', true);
+        $button.on('click', function() {
+            response.trial_events.push({
+                event_type: "button clicked",
+                event_raw_details: 'Submit',
+                event_converted_details: '"Submit" selected',
+                timestamp: jsPsych.totalTime(),
+                time_elapsed: jsPsych.totalTime() - timestamp_onload
+            });
+            end_trial();
         });
-        vvrIsCorrect = false;
-        isMachineTilted = true;
-        ++loop_node_counter_max_num_incorrect;
 
-        if (loop_node_counter_max_num_correct !== trial.vars.max_num_correct_consecutive_questions || loop_node_counter_max_num_correct < trial.vars.max_num_correct_consecutive_questions) {
-          loop_node_counter_max_num_correct = 0;
+        // countdown instruction for preventing random response
+        if (item_id === 0 && answer_latency_countdown) {
+            $('.answer_latency').text(answer_latency_text);
+            setTimeout(function() {
+                $('.answer_latency').text(trial.vars.VVR_q_text_a2);
+            }, answer_latency);
         }
 
-        showNextQuestion();
-      } else if (info.key === right_tilt && !isMachineTilted) {
-        $vending_machine.css({
-          transform:  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-          transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+        // show a second part of the question with VAS
+        function showNextQuestion() {
+            $('.vvr-question-b').fadeIn('slow');
+            response.trial_events.push({
+                event_type: trial.details.b.event_type,
+                event_raw_details: "question " + question_number + "(b) appears",
+                event_converted_details: "question " + question_number + "(b) appears",
+                timestamp: jsPsych.totalTime(),
+                time_elapsed: jsPsych.totalTime() - timestamp_onload,
+            });
+        }
+
+        // function to handle responses by the subject
+        var after_response = function(info) {
+
+            if (info.key_release === undefined) {
+                response.trial_events.push({
+                    event_type: "key press",
+                    event_raw_details: info.key,
+                    event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
+                        " key pressed",
+                    timestamp: jsPsych.totalTime(),
+                    time_elapsed: jsPsych.totalTime() - timestamp_onload
+                });
+            } else {
+                response.trial_events.push({
+                    event_type: "key release",
+                    event_raw_details: info.key_release,
+                    event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
+                        info.key_release
+                    ) + " key released",
+                    timestamp: jsPsych.totalTime(),
+                    time_elapsed: jsPsych.totalTime() - timestamp_onload
+                });
+            }
+
+            if (info.key === left_tilt && !isMachineTilted) {
+                $vending_machine.css({
+                    transform: "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+                    transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+                });
+                vvrIsCorrect = false;
+                isMachineTilted = true;
+                ++loop_node_counter_max_num_incorrect;
+
+                if (loop_node_counter_max_num_correct !== trial.vars.max_num_correct_consecutive_questions || loop_node_counter_max_num_correct < trial.vars.max_num_correct_consecutive_questions) {
+                    loop_node_counter_max_num_correct = 0;
+                }
+
+                showNextQuestion();
+            } else if (info.key === right_tilt && !isMachineTilted) {
+                $vending_machine.css({
+                    transform: "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+                    transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+                });
+                vvrIsCorrect = true;
+                isMachineTilted = true;
+                ++loop_node_counter_max_num_correct;
+                showNextQuestion();
+            }
+
+        };
+
+        // function to handle mouse hovering UI elements
+        var after_mousemove = function(info) {
+            console.log('target: ', info.target)
+            response.mouse_events.push({
+                x: info.x,
+                y: info.y,
+                viewport_size: info.viewport_size,
+                type: info.type,
+                target: info.target,
+                timestamp: jsPsych.totalTime(),
+            });
+        };
+
+        // function to end trial when it is time
+        var end_trial = function() {
+
+            // kill any remaining setTimeout handlers
+            jsPsych.pluginAPI.clearAllTimeouts();
+
+            // kill keyboard listeners
+            if (typeof keyboardListener !== 'undefined') {
+                jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+                jsPsych.pluginAPI.cancelClickResponse(clickListener);
+            }
+
+            // kill mouse listener
+            if (typeof mouseMoveListener !== 'undefined') {
+                jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
+            }
+
+            // gather the data to store for the trial
+            var trial_data = {
+                stage_name: JSON.stringify(trial.stage_name),
+                stimulus: trial.stimulus,
+                timestamp: jsPsych.totalTime(),
+                block_number: loop_node_counter_vvr,
+                item_id: ++item_id,
+                food_item: OUTCOME.slice(15),
+                correct: vvrIsCorrect ? "y" : "n",
+                strength_of_belief: vas_holder,
+                events: JSON.stringify(response.trial_events),
+                mouse_events: JSON.stringify(response.mouse_events),
+            };
+
+            // add VVR stage name if plugin was called by VVR stage
+            // make exception for Recall stage
+            if (trial.vvr_stage !== null) {
+                trial_data.vvr_stage = JSON.stringify(trial.vvr_stage);
+            } else {
+                // required for Recall stage
+                trial_data.block_number = trial.stage_type;
+            }
+
+            // clear the display
+            display_element.innerHTML = '';
+
+            // move on to the next trial
+            jsPsych.finishTrial(trial_data);
+        };
+
+        // start the response listener
+        if (trial.choices !== jsPsych.NO_KEYS) {
+            var keyboardListener;
+
+            if (item_id === 0) {
+                setTimeout(function() {
+                    keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+                        callback_function: after_response,
+                        valid_responses: trial.choices,
+                        rt_method: 'performance',
+                        persist: true,
+                        allow_held_key: false
+                    });
+                }, answer_latency);
+            } else {
+                keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+                    callback_function: after_response,
+                    valid_responses: trial.choices,
+                    rt_method: 'performance',
+                    persist: true,
+                    allow_held_key: false
+                });
+            }
+
+            var clickListener = jsPsych.pluginAPI.getMouseResponse({
+                callback_function: after_response,
+                valid_responses: trial.choices,
+                rt_method: 'date',
+                persist: false,
+                allow_held_key: false
+            });
+        }
+
+        // identifiers for mousemove event targets
+        var elementsMapping = [{
+                element: 'vending machine',
+                tag: ['rect', 'path'],
+            },
+            {
+                element: 'outcome image',
+                tag: ['img']
+            },
+            {
+                element: 'submit button',
+                class: ['jspsych-btn']
+            },
+            {
+                element: 'instruction text (a) top',
+                text: [trial.vars.VVR_q_text_a1]
+            },
+            {
+                element: 'instruction text (a) bottom',
+                text: [trial.vars.VVR_q_text_a2]
+            },
+            {
+                element: 'slider',
+                id: ['slider'],
+                class: ['line', 'ui-slider-handle']
+            },
+            {
+                element: 'instruction text (b) top',
+                text: [trial.vars.VVR_q_text_b1]
+            },
+            {
+                element: 'instruction text (b) bottom',
+                class: ['instructions'],
+                tag: ['ul', 'li', 'span']
+            },
+            {
+                element: 'answer left',
+                class: ['description--left']
+            },
+            {
+                element: 'answer right',
+                class: ['description--right']
+            },
+        ];
+
+        // start mouse move listener
+        var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+            callback_function: after_mousemove,
+            elements_mapping: elementsMapping,
         });
-        vvrIsCorrect = true;
-        isMachineTilted = true;
-        ++loop_node_counter_max_num_correct;
-        showNextQuestion();
-      }
 
-    };
+        // end trial if trial_duration is set
+        if (trial.trial_duration !== null) {
+            jsPsych.pluginAPI.setTimeout(function() {
+                end_trial();
+            }, trial.trial_duration);
+        }
 
-    // function to end trial when it is time
-    var end_trial = function() {
-
-      // kill any remaining setTimeout handlers
-      jsPsych.pluginAPI.clearAllTimeouts();
-
-      // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-        jsPsych.pluginAPI.cancelClickResponse(clickListener);
-      }
-
-      // gather the data to store for the trial
-      var trial_data = {
-        stage_name: JSON.stringify(trial.stage_name),
-        stimulus: trial.stimulus,
-        timestamp: jsPsych.totalTime(),
-        block_number: loop_node_counter_vvr,
-        item_id: ++item_id,
-        food_item: OUTCOME.slice(15),
-        correct: vvrIsCorrect ? "y" : "n",
-        strength_of_belief: vas_holder,
-        events: JSON.stringify(response.trial_events),
-      };
-
-      // add VVR stage name if plugin was called by VVR stage
-      // make exception for Recall stage
-      if(trial.vvr_stage !== null) {
-        trial_data.vvr_stage = JSON.stringify(trial.vvr_stage);
-      } else {
-        // required for Recall stage
-        trial_data.block_number = trial.stage_type;
-      }
-
-      // clear the display
-      display_element.innerHTML = '';
-
-      // move on to the next trial
-      jsPsych.finishTrial(trial_data);
-    };
-
-    // start the response listener
-    if (trial.choices !== jsPsych.NO_KEYS) {
-      var keyboardListener;
-
-      if (item_id === 0) {
-        setTimeout( function() {
-          keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-            callback_function: after_response,
-            valid_responses: trial.choices,
-            rt_method: 'performance',
-            persist: true,
-            allow_held_key: false
-          });
-        }, answer_latency);
-      } else {
-        keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'performance',
-          persist: true,
-          allow_held_key: false
-        });
-      }
-
-      var clickListener = jsPsych.pluginAPI.getMouseResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'date',
-        persist: false,
-        allow_held_key: false
-      });
     }
 
-    // end trial if trial_duration is set
-    if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
-    }
-
-  }
-
-  return plugin;
+    return plugin;
 })();
