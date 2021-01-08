@@ -93,10 +93,14 @@ jsPsych.plugins['Smoking-Status'] = (function () {
       var plugin_id_name = "jspsych-survey-multi-choice-smoking-status";
       var html = "";
       var timestamp_onload = jsPsych.totalTime();
+      
+      // identifiers for hover event targets
+      var elementsMapping = [];
   
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
   
       response.trial_events.push({
@@ -143,7 +147,7 @@ jsPsych.plugins['Smoking-Status'] = (function () {
 
       // show preamble text
       if (trial.preamble !== null) {
-        html += '<div class="jspsych-survey-multi-choice-content"><div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
+        html += '<div class="jspsych-survey-multi-choice-content"><div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
       }
    
       // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
@@ -172,9 +176,9 @@ jsPsych.plugins['Smoking-Status'] = (function () {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (i + 1) + '">';
   
         // add question text
-        html += '<div><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span>' + question.prompt
+        html += '<div><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div style="display: flex; flex-flow: column; align-items: flex-start; padding: 2rem;">';
   
         // create option radio buttons
@@ -191,9 +195,25 @@ jsPsych.plugins['Smoking-Status'] = (function () {
           html += '<input type="radio" name="' + input_name + '" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '<label class="jspsych-survey-multi-choice-text" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '</div>';
+
+          elementsMapping.push(
+            {
+              element: 'Q' + (i+1) +'A' + (j+1) + ' input',
+              value: [question.options[j]]
+            },
+            {
+              element: 'Q' + (i+1) +'A' + (j+1) + ' label',
+              text: [question.options[j]]
+            }
+          );
         }
   
         html += '</div></div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '.', question.prompt]
+        });
       }
 
   
@@ -260,6 +280,19 @@ jsPsych.plugins['Smoking-Status'] = (function () {
             "time_elapsed": jsPsych.totalTime() - timestamp_onload
           });
         }
+      }
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        console.log('target: ', info.target)
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          viewport_size: info.viewport_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
       }
   
       // highlight input
@@ -335,6 +368,11 @@ jsPsych.plugins['Smoking-Status'] = (function () {
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             jsPsych.pluginAPI.cancelClickResponse(clickListener);
           }
+        
+          // kill mouse listener
+          if (typeof mouseMoveListener !== 'undefined') {
+            jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+          }
   
           // save data
           var trial_data = {
@@ -343,7 +381,8 @@ jsPsych.plugins['Smoking-Status'] = (function () {
             "timestamp": JSON.stringify(timestamp_data),
             "time_stamp": JSON.stringify(trial.time_stamp),
             "question_order": JSON.stringify(question_order),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
           };
 
           // clear the display
@@ -390,6 +429,24 @@ jsPsych.plugins['Smoking-Status'] = (function () {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+    
+      elementsMapping.push(
+        {
+          element: 'submit button',
+          value: [trial.button_label]
+        },
+        {
+          element: 'instruction text',
+          text: [trial.preamble]
+        }
+      );
+    
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
+        ignored_tags: ['p'],
       });
     };
   
