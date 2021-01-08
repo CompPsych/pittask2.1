@@ -93,9 +93,13 @@ jsPsych.plugins['ASRM'] = (function () {
     var plugin_id_name = "jspsych-survey-multi-choice-ASRM";
     var html = "";
 
+    // identifiers for hover event targets
+    var elementsMapping = [];
+
     // store responses, events
     var response = {
         trial_events: [],
+        mouse_events: [],
     };
 
     var timestamp_onload = jsPsych.totalTime();
@@ -171,9 +175,9 @@ jsPsych.plugins['ASRM'] = (function () {
       html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
 
       // add question text
-      html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice">' + (i + 1) + '.'
+      html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice"><span>' + (i + 1) + '.'
       // question.required
-      html += '</p></div>';
+      html += '</span></p></div>';
       html += '<div style="padding-left: 2rem;">';
 
       // create option radio buttons
@@ -190,9 +194,19 @@ jsPsych.plugins['ASRM'] = (function () {
         html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '"><span style="padding-right: 1rem">' + j + '</span> ' + question.options[j] + '</label>';
         html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + j + '" ' + required_attr + '></input>';
         html += '</div>';
+
+        elementsMapping.push({
+          element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+          for: [input_id]
+        });
       }
 
       html += '</div></div>';
+
+      elementsMapping.push({
+        element: 'Q' + (i + 1),
+        text: [(i + 1) + '.']
+      });
     }
 
     // add submit button
@@ -259,6 +273,19 @@ jsPsych.plugins['ASRM'] = (function () {
       }
     }
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      console.log('target: ', info.target)
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        viewport_size: info.viewport_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    }
+
     // highlight input
     $('.jspsych-survey-highlight').click(function () {
       $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
@@ -323,6 +350,11 @@ jsPsych.plugins['ASRM'] = (function () {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
 
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
+
         // save data
         var trial_data = {
           "stage_name": JSON.stringify(plugin.info.stage_name),
@@ -330,7 +362,8 @@ jsPsych.plugins['ASRM'] = (function () {
           "timestamp": JSON.stringify(timestamp_data),
           "time_stamp": JSON.stringify(trial.time_stamp),
           "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events)
         };
 
         // clear the display
@@ -377,6 +410,24 @@ jsPsych.plugins['ASRM'] = (function () {
       rt_method: 'performance',
       persist: true,
       allow_held_key: false
+    });
+    
+    elementsMapping.push(
+      {
+        element: 'submit button',
+        value: [trial.button_label]
+      },
+      {
+        element: 'instruction text',
+        class: ['preamble-wrapper']
+      }
+    );
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+      ignored_tags: ['p'],
     });
   };
 
