@@ -1927,31 +1927,27 @@ timeline.push(CLOSE_HIT);
 // Thanks
 timeline.push(THANKS);
 
-function startExperiment(){
-    jsPsych.init({
-            timeline: timeline,
-            preload_images: images,
-            // on_finish: function(){
-            //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
-            //     $(window).off("beforeunload");
-            //     jsPsych.data.displayData(); 
-            // }, 
-            on_finish: function() {
-                psiTurk.saveData({
-                    success: function() {
-                        $(window).off("beforeunload");
-                        psiTurk.completeHIT();
-                    },
-                    error: prompt_resubmit
-                });
-            }, 
-            on_data_update: function(data) {
-                psiTurk.recordTrialData(data);
-                psiTurk.saveData();
-			}
+
+jsPsych.init({
+        timeline: timeline,
+        preload_images: images,
+        // on_finish: function(){
+        //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
+        //     $(window).off("beforeunload");
+        //     jsPsych.data.displayData(); 
+        // }, 
+        on_finish: function() {
+            psiTurk.saveData({
+                success: function() {
+                    $(window).off("beforeunload");
+                    psiTurk.completeHIT();
+                },
+                error: prompt_resubmit
+            });
+        }, 
+        on_data_update: function(data) {
+            psiTurk.recordTrialData(data);
+            psiTurk.saveData();
         }
-    );
-
-}
-
-startExperiment();
+    }
+);
