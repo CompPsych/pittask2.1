@@ -74,9 +74,13 @@ jsPsych.plugins['close-hit-questions'] = (function() {
 
       var html = "";
 
+      // identifiers for hover event targets
+      var elementsMapping = [];
+
        // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
 
       var timestamp_onload = jsPsych.totalTime();
@@ -110,7 +114,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
   
       // show preamble text
       if(trial.preamble !== null){
-        html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">'+trial.preamble+'</div>';
+        html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>'+trial.preamble+'</span></div>';
       }
   
       // form element
@@ -142,7 +146,7 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
   
         // add question text
-        html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt 
+        html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice"><span>' + question.prompt + '</span>'
         if(question.required){
           html += "<span class='required'>*</span>";
         }
@@ -162,9 +166,25 @@ jsPsych.plugins['close-hit-questions'] = (function() {
           html += '<label class="jspsych-survey-multi-choice-text" data-time-stamp="Q' + i + '" for="'+input_id+'">'+question.options[j]+'</label>';
           html += '<input type="radio" name="'+input_name+'" data-time-stamp="Q' + i + '" id="'+input_id+'" class="form-radio" value="'+question.options[j]+'" '+required_attr+'></input>';
           html += '</div>';
+          
+          elementsMapping.push(
+            {
+              element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+              id: [input_id]
+            },
+            {
+              element: 'Q' + (i + 1) + 'A' + (j + 1) + ' label',
+              for: [input_id]
+            }
+          );
         }
   
         html += '</div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [question.prompt]
+        });
       }
       html += '<div><textarea class="text_box" data-time-stamp="Q4" rows="6" cols="80" name="comment" placeholder="Please type your suggestions for us here..." form="usrform"></textarea></div>'
       // add submit button
@@ -230,6 +250,19 @@ jsPsych.plugins['close-hit-questions'] = (function() {
           $("#" + labelID).prop('checked', true).trigger('click').trigger('change');
         };
       });
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        console.log('target: ', info.target)
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          viewport_size: info.viewport_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
+      };
   
       // save timestamp on input click
       $("input[type=radio]").on("click change touchstart",function(){
@@ -280,12 +313,18 @@ jsPsych.plugins['close-hit-questions'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
 
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
+
         // save data
         var trial_data = {
             "stage_name": JSON.stringify(trial.stage_name),
             "responses": JSON.stringify(question_data),
             "timestamp": JSON.stringify(timestamp_data),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
         };
         
         // clear the display
@@ -311,6 +350,27 @@ jsPsych.plugins['close-hit-questions'] = (function() {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+      
+      elementsMapping.push(
+        {
+          element: 'text input',
+          tag: ['textarea']
+        },
+        {
+          element: 'submit button',
+          value: [trial.button_label]
+        },
+        {
+          element: 'instruction text',
+          text: [trial.preamble]
+        }
+      );
+
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
       });
     };
   
