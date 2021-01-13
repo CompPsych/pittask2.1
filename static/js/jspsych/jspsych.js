@@ -2280,6 +2280,10 @@ jsPsych.pluginAPI = (function() {
     var mousemove_listener_function = function(e) {
         var w = $(document).width();
         var h = $(document).height();
+        var types = {
+          mousemove: 'Cursor hover',
+          click: 'Click',
+        }
         var target = e.target;
         target = skipIgnoredTags(target);
         target = {
@@ -2297,20 +2301,26 @@ jsPsych.pluginAPI = (function() {
           y: e.clientY, 
           target: target,
           viewport_size: w + 'x' + h,
-          type: 'Cursor hover' 
+          type: types[e.type]
         });
     };
     
     $(document).on('mousemove', mousemove_listener_function);
+    $(document).on('click', mousemove_listener_function);
 
     mousemove_listener_id = {
       type: 'mousemove',
       fn: mousemove_listener_function,
     };
 
-    mousemove_listeners.push(mousemove_listener_id);
+    click_listener_id = {
+      type: 'click',
+      fn: mousemove_listener_function
+    };
 
-    return mousemove_listener_id;
+    mousemove_listeners.push(mousemove_listener_id, click_listener_id);
+
+    return [mousemove_listener_id, click_listener_id];
   };
 
   module.cancelClickResponse = function(listener) {
@@ -2334,13 +2344,14 @@ jsPsych.pluginAPI = (function() {
     }
   };
   
-  module.cancelMouseEnterResponse = function(listener) {
-    // remove the listener from the doc
-    $(document).off(listener.type, listener.fn);
-
-    // remove the listener from the list of listeners
-    if ($.inArray(listener, mousemove_listeners) > -1) {
-      mousemove_listeners.splice($.inArray(listener, mousemove_listeners), 1);
+  module.cancelMouseEnterResponse = function(listeners) {
+    for (var i = 0; i < listeners.length; i++) {
+      // remove the listener from the doc
+      $(document).off(listeners[i].type, listeners[i].fn);
+      // remove the listener from the list of listeners
+      if ($.inArray(listeners[i], mousemove_listeners) > -1) {
+        mousemove_listeners.splice($.inArray(listeners[i], mousemove_listeners), 1);
+      }
     }
   };
 
