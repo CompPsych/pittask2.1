@@ -92,10 +92,14 @@ jsPsych.plugins['ICAR'] = (function () {
       
       var plugin_id_name = "jspsych-survey-multi-choice-ICAR";
       var html = "";
+      
+      // identifiers for hover event targets
+      var elementsMapping = [];
   
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
       var timestamp_onload = jsPsych.totalTime();
   
@@ -192,9 +196,9 @@ jsPsych.plugins['ICAR'] = (function () {
           html += '<div class="letter-number-series" id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '" style="display: none;"  data-name="' + question.number + '">';
     
           // add question text
-          html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;">' + question.prompt + '</p>';
+          html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;"><span>' + question.prompt + '</span></p>';
           
-          html += '<p style="font-weight: bold; font-size: 2rem;">' + question.sequence + '</p></div>';
+          html += '<p style="font-weight: bold; font-size: 2rem;"><span>' + question.sequence + '</span></p></div>';
           html += '<div class="jspsych-survey-container-radio">';
     
           // create option radio buttons
@@ -211,16 +215,32 @@ jsPsych.plugins['ICAR'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j] + '</label>';
             html += '<input type="radio" name="' + input_name + '" data-time-stamp="Q' + i + '" data-response-id="' + (j+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
             html += '</div>';
+          
+            elementsMapping.push(
+              {
+                element: 'A' + (j + 1) + ' input',
+                id: [input_id]
+              },
+              {
+                element: 'A' + (j + 1) + ' label',
+                for: [input_id]
+              },
+            );
           }
     
           html += '</div></div>';
+          
+          elementsMapping.push({
+            element: 'sequence',
+            text: [question.sequence]
+          });
         }
         // Verbal Reasoning
         else if(question.name === 'verbal_reasoning') {
           html += '<div class="verbal-reasoning" id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '" style="display: none;"  data-name="' + question.number + '">';
     
           // add question text
-          html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;">' + question.prompt + '</p></div>';
+          html += '<div><p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;"><span>' + question.prompt + '</span></p></div>';
           html += '<div class="jspsych-survey-container-radio">';
     
           // create option radio buttons
@@ -237,6 +257,17 @@ jsPsych.plugins['ICAR'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j] + '</label>';
             html += '<input type="radio" name="' + input_name + '" data-time-stamp="Q' + i + '" data-response-id="' + (j+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
             html += '</div>';
+          
+            elementsMapping.push(
+              {
+                element: 'A' + (j + 1) + ' input',
+                id: [input_id]
+              },
+              {
+                element: 'A' + (j + 1) + ' label',
+                for: [input_id]
+              },
+            );
           }
     
           html += '</div></div>';
@@ -245,7 +276,7 @@ jsPsych.plugins['ICAR'] = (function () {
         else if(question.name === 'matrix_reasoning') {
           html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '" style="display: none;"  data-name="' + question.number + '">';
     
-          html += '<p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;">' + question.prompt + '</p>';
+          html += '<p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;"><span>' + question.prompt + '</span></p>';
           // add question image
           html += '<div class="matrix-reasoning-wrap"><img class="matrix-reasoning" src="/static/images/ICAR/matrix_reasoning/' + question.img + '">';
           html += '<ul class="jspsych-survey-container-radio">';
@@ -264,6 +295,13 @@ jsPsych.plugins['ICAR'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '"></label>';
             html += '<input type="radio" class="hidden" name="' + input_name + '" data-time-stamp="Q' + i + '" data-response-id="' + question.options[j] + '" data-matrix-reasoning="matrix-reasoning-'+ question_id + '-' + j + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="NA" ' + required_attr + '></input>';
             html += '</li>';
+          
+            elementsMapping.push(
+              {
+                element: 'A' + (j + 1),
+                for: [input_id]
+              },
+            );
           }
           html += '</ul>';
           html += '</div></div>';
@@ -274,7 +312,7 @@ jsPsych.plugins['ICAR'] = (function () {
           html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  style="display: none;" data-name="' + question.number + '">';
     
           // add question image
-          html += '<p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;">' + question.prompt + '</p>';
+          html += '<p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;"><span>' + question.prompt + '</span></p>';
           html += '<div class="three-dimensional-rotate-wrap"><img class="three-dimensional-rotate" src="/static/images/ICAR/three-dimensional_rotate/' + question.img + '">';
           html += '<ul class="jspsych-survey-container-radio">';
     
@@ -292,10 +330,28 @@ jsPsych.plugins['ICAR'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '"></label>';
             html += '<input type="radio" class="hidden" name="' + input_name + '" data-time-stamp="Q' + i + '" data-response-id="' + question.options[j] + '" data-three-dimensional-rotate="three-dimensional-rotate-'+ question_id + '-' + j + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="NA" ' + required_attr + '></input>';
             html += '</li>';
+          
+            elementsMapping.push(
+              {
+                element: 'A' + (j + 1),
+                for: [input_id]
+              },
+            );
           }
           html += '</ul>';
           html += '</div></div>';
         }
+        
+        elementsMapping.push(
+          {
+            element: 'question',
+            text: [question.prompt]
+          },
+          {
+            element: 'image',
+            tag: ['img']
+          },
+        );
       }
   
       // add submit button
@@ -364,6 +420,19 @@ jsPsych.plugins['ICAR'] = (function () {
             "time_elapsed": jsPsych.totalTime() - timestamp_onload
           });
         }
+      }
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        console.log('target: ', info.target)
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          viewport_size: info.viewport_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
       }
 
       // Display first question on page load
@@ -499,6 +568,11 @@ jsPsych.plugins['ICAR'] = (function () {
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             jsPsych.pluginAPI.cancelClickResponse(clickListener);
           }
+        
+          // kill mouse listener
+          if (typeof mouseMoveListener !== 'undefined') {
+            jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+          }
   
           // save data
           var trial_data = {
@@ -508,7 +582,8 @@ jsPsych.plugins['ICAR'] = (function () {
             "timestamp": JSON.stringify(timestamp_data),
             "time_stamp": JSON.stringify(trial.time_stamp),
             "question_order": JSON.stringify(question_order),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
           };
   
           // clear the display
@@ -556,6 +631,17 @@ jsPsych.plugins['ICAR'] = (function () {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+    
+      elementsMapping.push({
+        element: 'submit button',
+        class: ['next-question']
+      });
+    
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
       });
   
     };
