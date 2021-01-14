@@ -2282,7 +2282,7 @@ jsPsych.pluginAPI = (function() {
         var h = $(document).height();
         var types = {
           mousemove: 'Cursor hover',
-          click: 'Click',
+          mouseup: 'Click',
         }
         var target = e.target;
         target = skipIgnoredTags(target);
@@ -2306,7 +2306,7 @@ jsPsych.pluginAPI = (function() {
     };
     
     $(document).on('mousemove', mousemove_listener_function);
-    $(document).on('click', mousemove_listener_function);
+    $(document).on('mouseup', mousemove_listener_function);
 
     mousemove_listener_id = {
       type: 'mousemove',
@@ -2314,7 +2314,7 @@ jsPsych.pluginAPI = (function() {
     };
 
     click_listener_id = {
-      type: 'click',
+      type: 'mouseup',
       fn: mousemove_listener_function
     };
 
