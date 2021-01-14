@@ -472,7 +472,23 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       {
         element: 'Instruction text',
         text: ['<p>In the past month, have you...</p>']
-      }
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
     );
     
     // start mouse move listener

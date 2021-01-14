@@ -436,7 +436,23 @@ jsPsych.plugins['WBF-checkbox'] = (function () {
         {
           element: 'instruction text',
           text: [trial.preamble]
-        }
+        },
+        {
+            element: 'cross close button',
+            class: ['modal__close'],
+        },
+        {
+            element: 'close button',
+            class: ['modal__btn'],
+        },
+        {
+            element: 'modal background',
+            class: ['modal__container', 'modal__header', 'modal__footer'],
+        },
+        {
+            element: 'modal text',
+            class: ['modal__content'],
+        },
       );
     
       // start mouse move listener

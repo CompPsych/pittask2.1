@@ -191,13 +191,14 @@ jsPsych.plugins['ASRM'] = (function () {
 
         // add radio button container
         html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
-        html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '"><span style="padding-right: 1rem">' + j + '</span> ' + question.options[j] + '</label>';
+        html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '"><span style="padding-right: 1rem" class="' + input_id + '">' + j + '</span> ' + question.options[j] + '</label>';
         html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + j + '" ' + required_attr + '></input>';
         html += '</div>';
 
         elementsMapping.push({
           element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
-          for: [input_id]
+          for: [input_id],
+          class: [input_id]
         });
       }
 
@@ -420,7 +421,23 @@ jsPsych.plugins['ASRM'] = (function () {
       {
         element: 'instruction text',
         class: ['preamble-wrapper']
-      }
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
     );
 
     // start mouse move listener

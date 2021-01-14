@@ -269,9 +269,9 @@ jsPsych.plugins['EAT-26'] = (function () {
         html += '<div style="z-index:2;position:sticky;top:59px;font-weight:bold;background:#000;" id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
 
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding-left: 10px; width: 100%;">In the past 6 months have you:'
+        html += '<div class="jspsych-survey-multi-choice-option-left"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding-left: 10px; width: 100%;"><span>In the past 6 months have you:'
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div class="jspsych-survey-multi-choice-option-right questions-right-row">';
 
         var questionsTitle = ['Never', 'Once a <br> month or less', '2-3 <br> times a month', 'Once a week', '2-6 <br> times a week', 'Once a <br> day or more'];
@@ -344,6 +344,10 @@ jsPsych.plugins['EAT-26'] = (function () {
           html += '</div>';
 
           elementsMapping.push(
+            {
+              element: 'Q' + (i + 1) + 'A' + (j + 1) + ' label',
+              for: [input_id]
+            },
             {
               element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
               id: [input_id]
@@ -575,7 +579,23 @@ jsPsych.plugins['EAT-26'] = (function () {
         {
           element: 'instruction text',
           text: [trial.preamble]
-        }
+        },
+        {
+            element: 'cross close button',
+            class: ['modal__close'],
+        },
+        {
+            element: 'close button',
+            class: ['modal__btn'],
+        },
+        {
+            element: 'modal background',
+            class: ['modal__container', 'modal__header', 'modal__footer'],
+        },
+        {
+            element: 'modal text',
+            class: ['modal__content'],
+        },
       );
 
       // start mouse move listener

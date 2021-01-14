@@ -633,15 +633,34 @@ jsPsych.plugins['ICAR'] = (function () {
         allow_held_key: false
       });
     
-      elementsMapping.push({
-        element: 'submit button',
-        class: ['next-question']
-      });
+      elementsMapping.push(
+        {
+          element: 'submit button',
+          class: ['next-question']
+        },
+        {
+            element: 'cross close button',
+            class: ['modal__close'],
+        },
+        {
+            element: 'close button',
+            class: ['modal__btn'],
+        },
+        {
+            element: 'modal background',
+            class: ['modal__container', 'modal__header', 'modal__footer'],
+        },
+        {
+            element: 'modal text',
+            class: ['modal__content'],
+        },
+      );
     
       // start mouse move listener
       var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
         callback_function: after_mousemove,
         elements_mapping: elementsMapping,
+        ignored_tags: ['p'],
       });
   
     };
