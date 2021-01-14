@@ -531,7 +531,7 @@ if(isClass(query))
     }
 
     for (j in 1: length(temp_mouse_events)) {
-      complete_mouse_events_data_size <- complete_mouse_events_data_size + nrow(fromJSON(temp_mouse_events[j]))
+      complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
     }
   }
   
@@ -1382,11 +1382,13 @@ if(isClass(query))
 
         mousedata_response <- fromJSON(trialdata$mouse_events[mousedata_index[j]])
 
+        if (NROW(mousedata_response) == 0) next
+
         date <- format(as.IDate(dateTime[mousedata_index[j]]), "%d-%m-%Y")
         time <- as.character(as.ITime(dateTime[mousedata_index[j]]))
         stage_name <- gsub('"', "", trialdata$stage_name[mousedata_index[j]])
 
-        for (k in 1:nrow(mousedata_response)) {
+        for (k in 1:NROW(mousedata_response)) {
           if (is.na(mousedata_response$target[k])) next
 
           target <- mousedata_response$target[k]
