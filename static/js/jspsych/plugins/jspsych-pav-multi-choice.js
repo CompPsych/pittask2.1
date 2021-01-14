@@ -78,7 +78,24 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function() {
       {
         element: 'submit button',
         value: [trial.button_label]
-      }
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          text: [popup_text_WBF],
+          class: ['modal__content'],
+      },
     ];
 
     // store responses, events

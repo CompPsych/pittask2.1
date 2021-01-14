@@ -392,12 +392,29 @@ jsPsych.plugins["transfer-test"] = (function() {
           element: 'vending machine',
           tag: ['rect', 'path'],
       },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
     ];
     
     // start mouse move listener
     var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
       callback_function: after_mousemove,
       elements_mapping: elementsMapping,
+      ignored_tags: ['p']
     });
 
     // hide stimulus if stimulus_duration is set

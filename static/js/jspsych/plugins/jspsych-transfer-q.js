@@ -337,6 +337,23 @@ jsPsych.plugins['transfer-q'] = (function() {
         element: 'vending machine',
         tag: ['rect', 'path'],
       },
+      {
+        element: 'cross close button',
+        class: ['modal__close'],
+      },
+      {
+        element: 'close button',
+        class: ['modal__btn'],
+      },
+      {
+        element: 'modal background',
+        class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+        element: 'modal text',
+        text: [transfer_popup_text],
+        class: ['modal__content'],
+      },
     ];
 
     // start mouse move listener
