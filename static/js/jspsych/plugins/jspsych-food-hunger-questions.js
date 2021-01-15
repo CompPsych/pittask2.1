@@ -261,8 +261,8 @@ jsPsych.plugins["food-and-hunger-questions"] = (function() {
         // identifiers for hover event targets
         var elementsMapping = [
           {
-            element: 'stimulus image',
-            tag: ['img'],
+            element: trial.food_item.split('.')[0] + ' image',
+            src: [IMAGE_SRC],
           },
           {
             element: 'question',

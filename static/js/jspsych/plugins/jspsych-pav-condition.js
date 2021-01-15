@@ -273,9 +273,9 @@ jsPsych.plugins.animation = (function () {
                 tag: ['rect', 'path'],
             },
             {
-                element: 'stimulus image',
+                element: 'outcome image',
                 tag: ['img'],
-            }
+            },
         ];
         
         // start mouse move listener
