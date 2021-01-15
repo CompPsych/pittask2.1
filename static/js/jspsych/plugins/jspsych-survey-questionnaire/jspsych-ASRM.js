@@ -3,12 +3,8 @@ jsPsych.plugins['ASRM'] = (function() {
 
   /**
    * Timer Module Factory.
-   *
-   * firstTime {Number} - Time in milliseconds.
-   * secondTime {Number} - Time in milliseconds.
-   * wasFirstClick {Boolean} - First press indicator.
    */
-  var timerModuleFactory = function() {
+  var timerModuleFactory = function(responseStore, timestamp) {
     var firstTime = 0;
     var tmpAnswerTime = 0;
     var ceilingTime = 0;
@@ -25,24 +21,24 @@ jsPsych.plugins['ASRM'] = (function() {
       onShow: function() {
         var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
 
-        response.trial_events.push({
+        responseStore.trial_events.push({
           'event_type': 'error message',
           'event_raw_details': 'Error message',
           'event_converted_details': text,
           'timestamp': jsPsych.totalTime(),
-          'time_elapsed': jsPsych.totalTime() - timestamp_onload
+          'time_elapsed': jsPsych.totalTime() - timestamp
         });
       },
       onClose: function() {
         restartResponseTimer();
         restartCeilingTimer();
 
-        response.trial_events.push({
+        responseStore.trial_events.push({
           'event_type': 'popup closed',
           'event_raw_details': 'Close',
           'event_converted_details': '',
           'timestamp': jsPsych.totalTime(),
-          'time_elapsed': jsPsych.totalTime() - timestamp_onload
+          'time_elapsed': jsPsych.totalTime() - timestamp
         });
       },
     };
