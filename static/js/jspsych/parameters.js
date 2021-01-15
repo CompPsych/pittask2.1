@@ -190,7 +190,7 @@ var FHQ_VAS_instruct = "<li><span>Please select your answer on the scale.</span>
  * stim1_colour = green - associated with MM image
  * stim2_colour = blue - associated with BBQ image
  * stim3_colour = red - associated with TT image
- * stim4_colour = yellow - associated with Empty image 
+ * stim4_colour = yellow - associated with Empty image
  ************************************************************/
 var stim1_colour = "rgb(0,128,0)";
 var stim2_colour = "rgb(0,0,255)";
@@ -204,11 +204,11 @@ var min_num_correct_pav = 4;
 var max_num_incorrect_pav = 10;
 var open_instruct_pav = true;
 var close_instruct_pav = false;
-var open_instruct_text_pav = 
+var open_instruct_text_pav =
 "<p>The vending machine is still overflowing. But it cannot be tipped now.</p><br>" +
 "<p>Coloured lights will appear on the machine will show you which snack will fall out.</p><br>" +
 "<p>Press any key to begin. </p>";
-var close_instruct_text_pav = 
+var close_instruct_text_pav =
 "<p>The vending machine is still overflowing, and you can tip it again now.</p><br> " +
 "<p>The coloured lights will sometimes appear.</p><br> " +
 "<p>You won't always see the snack fall out. All the snacks you get will be recorded.</p><br>" +
@@ -304,7 +304,7 @@ var transfer_test2 = true;
 var transfer_test3 = true;
 var open_instruct_transfer_test = true;
 var close_instruct_transfer_test = false;
-var open_instruct_text_transfer_test = 
+var open_instruct_text_transfer_test =
 "<p>The vending machine is still overflowing.</p> " +
 "<p>You will see coloured lights on the machine again.</p><br>" +
 "<p>You can tip the machine at any time.</p>" +
@@ -430,3 +430,14 @@ var close_instruct_text_thanks =
 "<p>This window will close automatically after any keypress on the keyboard.</p><br>" +
 "<p>Please do NOT close the window by clicking on the ‘X’ at the top right corner of this window.</p>" +
 "<p>Otherwise, we cannot process your payment.</p>";
+
+/************************************************************
+ * Timer Popups
+ ************************************************************/
+var popup_answer_latency_floor = true;
+var answer_latency_floor = 4000;
+var answer_latency_text_floor = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
+var popup_answer_latency_ceiling = true;
+var answer_latency_ceiling = 10000;
+var answer_latency_text_ceiling = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
+
