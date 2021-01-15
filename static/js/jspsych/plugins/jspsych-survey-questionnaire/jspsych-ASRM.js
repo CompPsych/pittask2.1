@@ -20,11 +20,30 @@ jsPsych.plugins['ASRM'] = (function() {
     var maxAnswerTime = 10000;
     var ceilingTimer = null;
     var timer = null;
+    var openEventName = ''
     var microModalConfig = {
-      onShow: function() {},
+      onShow: function() {
+        var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
+
+        response.trial_events.push({
+          'event_type': 'error message',
+          'event_raw_details': 'Error message',
+          'event_converted_details': text,
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
+        });
+      },
       onClose: function() {
         restartResponseTimer();
         restartCeilingTimer();
+
+        response.trial_events.push({
+          'event_type': 'popup closed',
+          'event_raw_details': 'Close',
+          'event_converted_details': '',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
+        });
       },
     };
 
@@ -42,6 +61,7 @@ jsPsych.plugins['ASRM'] = (function() {
         ceilingTime += 10;
 
         if (ceilingTime >= maxAnswerTime) {
+          setOpenPopupEventText('ceiling');
           setPopupText(popupCeilingText);
           showPopup();
           stopTimer(ceilingTimer);
@@ -58,6 +78,7 @@ jsPsych.plugins['ASRM'] = (function() {
       clearInterval(timer);
 
       startFloorTimer();
+      openEventName = '';
     }
 
     function restartCeilingTimer() {
@@ -65,6 +86,7 @@ jsPsych.plugins['ASRM'] = (function() {
       clearInterval(ceilingTimer);
 
       startCeilingTimer();
+      openEventName = '';
     }
 
     function showPopup() {
@@ -74,6 +96,10 @@ jsPsych.plugins['ASRM'] = (function() {
     function setPopupText(value) {
       popupText = value;
       window.document.getElementById('modal-2-content__text').innerText = value;
+    }
+
+    function setOpenPopupEventText(value) {
+      openEventName = value;
     }
 
     return {
@@ -87,6 +113,7 @@ jsPsych.plugins['ASRM'] = (function() {
         }
 
         if (tmpAnswerTime < minAnswerTime) {
+          setOpenPopupEventText('floor');
           setPopupText(popupFloorText);
           showPopup();
           stopTimer(timer);
