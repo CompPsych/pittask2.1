@@ -2253,7 +2253,12 @@ jsPsych.pluginAPI = (function() {
         return false;
       }
 
-      var compareBy = ['id', { name: 'class', exact: false }, 'text', 'value', 'alt', 'for', 'tag'];
+      var compareBy = [
+        'id', 
+        { name: 'class', exact: false }, 
+        { name: 'src', exact: false },
+        'text', 'value', 'alt', 'for', 'tag'
+      ];
 
       for (var i = 0; i < elements_mapping.length; i++) {
         for (var j = 0; j < compareBy.length && !found; j++) {
@@ -2294,6 +2299,7 @@ jsPsych.pluginAPI = (function() {
           value: target.getAttribute('value'),
           alt: target.getAttribute('alt'),
           for: target.getAttribute('for'),
+          src: target.getAttribute('src'),
         };
         target = identifyTarget(parameters.elements_mapping, target);
         parameters.callback_function({ 
