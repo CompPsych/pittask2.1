@@ -1,4 +1,4 @@
-jsPsych.plugins['RAADS-14'] = (function () {
+jsPsych.plugins['RAADS-14'] = (function() {
   var plugin = {};
 
   plugin.info = {
@@ -87,11 +87,11 @@ jsPsych.plugins['RAADS-14'] = (function () {
         description: 'Event converted details'
       }
     }
-  }
-  plugin.trial = function (display_element, trial) {
+  };
 
-    var plugin_id_name = "jspsych-survey-multi-choice-RAADS-14";
-    var html = "";
+  plugin.trial = function (display_element, trial) {
+    var plugin_id_name = 'jspsych-survey-multi-choice-RAADS-14';
+    var html = '';
 
     // store responses, events
     var response = {
@@ -100,11 +100,11 @@ jsPsych.plugins['RAADS-14'] = (function () {
     var timestamp_onload = jsPsych.totalTime();
 
     response.trial_events.push({
-      "event_type": trial.event_type,
-      "event_raw_details": trial.event_raw_details,
-      "event_converted_details": trial.event_converted_details,
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+      'event_type': trial.event_type,
+      'event_raw_details': trial.event_raw_details,
+      'event_converted_details': trial.event_converted_details,
+      'timestamp': jsPsych.totalTime(),
+      'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
     // inject CSS for trial
@@ -140,8 +140,8 @@ jsPsych.plugins['RAADS-14'] = (function () {
       "}"
     html += '</style>';
 
-    // fixed heder
-    html += 
+    // fixed header
+    html +=
       '<header>' +
       '<nav class="navbar navbar-inverse navbar-fixed-top">' +
       '<div class="container-fluid">' +
@@ -172,27 +172,29 @@ jsPsych.plugins['RAADS-14'] = (function () {
             <li>True only when I was younger than 16</li>
             <li>Never true</li>
           </ul>
-    </div>`
+        </div>`;
 
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
+
     for (var i = 0; i < trial.questions.length; i++) {
       question_order.push(i);
     }
+
     if (trial.randomize_question_order) {
       question_order = jsPsych.randomization.shuffle(question_order);
     }
 
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
-
       // get question based on question_order
       var question = trial.questions[question_order[i]];
       var question_id = question_order[i];
 
       // create question container
       var question_classes = ['jspsych-survey-multi-choice-question'];
+
       if (question.horizontal) {
         question_classes.push('jspsych-survey-multi-choice-horizontal');
       }
@@ -208,10 +210,9 @@ jsPsych.plugins['RAADS-14'] = (function () {
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
         // add label and question text
-        var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+        var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j;
         var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
         var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
-
         var required_attr = question.required ? 'required' : '';
 
         // add radio button container
@@ -250,93 +251,98 @@ jsPsych.plugins['RAADS-14'] = (function () {
           </div>
       </div>`;
 
-
     // render
     display_element.innerHTML = html;
 
     // function to handle responses by the subject
-    var after_response = function (info) {
-
+    var after_response = function(info) {
       if (info.key_release === undefined) {
         response.trial_events.push({
-          "event_type": "key press",
-          "event_raw_details": info.key,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key press',
+          'event_raw_details': info.key,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
 
-        if(info.el) {
-          if(info.el.dataset.timeStamp) {
+        if (info.el) {
+          if (info.el.dataset.timeStamp) {
             trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
           }
-          if(info.el.dataset.questionNumber) {
+
+          if (info.el.dataset.questionNumber) {
             response.trial_events.push({
-              "event_type": "answer displayed",
-              "event_raw_details": info.el.dataset.questionNumber,
-              "event_converted_details": info.el.dataset.questionNumber + ' answer displayed',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'answer displayed',
+              'event_raw_details': info.el.dataset.questionNumber,
+              'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         }
       } else {
         response.trial_events.push({
-          "event_type": "key release",
-          "event_raw_details": info.key_release,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key release',
+          'event_raw_details': info.key_release,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
     }
 
     // save timestamp on input click
-    $("input[type=radio]").on("click change touchstart",function(){
-      var time_stamp_key = $(this).data('time-stamp'); 
-      if(time_stamp_key) {
+    $('input[type=radio]').on('click change touchstart', function() {
+      var time_stamp_key = $(this).data('time-stamp');
+
+      if (time_stamp_key) {
         trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-      };
+      }
     });
 
     // form functionality
     document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
       response.trial_events.push({
-        "event_type": "button clicked",
-        "event_raw_details": 'Submit',
-        "event_converted_details": '"Submit" selected',
-        "timestamp": jsPsych.totalTime(),
-        "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
       });
 
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
+
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
-
         var id = i + 1;
-        if (match.querySelector("input[type=radio]:checked") !== null) {
-          var val = match.querySelector("input[type=radio]:checked").value;
+
+        if (match.querySelector('input[type=radio]:checked') !== null) {
+          var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
         } else {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
-          var val = "";
+          var val = '';
         }
+
         var obje = {};
         var name = id;
+
         if (match.attributes['data-name'].value !== '') {
           name = match.attributes['data-name'].value;
         }
+
         obje[name] = val;
         timestamp_data[name] = trial.time_stamp['Q' + id];
         Object.assign(question_data, obje);
       }
 
-      if ($(".survey-error-after").length < 1) {
+      if ($('.survey-error-after').length < 1) {
         // kill keyboard listeners
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -345,12 +351,12 @@ jsPsych.plugins['RAADS-14'] = (function () {
 
         // save data
         var trial_data = {
-          "stage_name": JSON.stringify(plugin.info.stage_name),
-          "responses": JSON.stringify(question_data),
-          "timestamp": JSON.stringify(timestamp_data),
-          "time_stamp": JSON.stringify(trial.time_stamp),
-          "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          'stage_name': JSON.stringify(plugin.info.stage_name),
+          'responses': JSON.stringify(question_data),
+          'timestamp': JSON.stringify(timestamp_data),
+          'time_stamp': JSON.stringify(trial.time_stamp),
+          'question_order': JSON.stringify(question_order),
+          'events': JSON.stringify(response.trial_events)
         };
 
         // clear the display
@@ -363,25 +369,24 @@ jsPsych.plugins['RAADS-14'] = (function () {
         MicroModal.show('modal-1', {
           onShow() {
             response.trial_events.push({
-              "event_type": "error message",
-              "event_raw_details": 'Error message',
-              "event_converted_details": 'popup triggered by incomplete WBF question',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'error message',
+              'event_raw_details': 'Error message',
+              'event_converted_details': 'popup triggered by incomplete WBF question',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           },
           onClose() {
             response.trial_events.push({
-              "event_type": "popup closed",
-              "event_raw_details": 'Close',
-              "event_converted_details": trial.event_converted_details,
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'popup closed',
+              'event_raw_details': 'Close',
+              'event_converted_details': trial.event_converted_details,
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         });
       }
-
     });
 
     // start the response listener
@@ -392,6 +397,7 @@ jsPsych.plugins['RAADS-14'] = (function () {
       persist: true,
       allow_held_key: false
     });
+
     var clickListener = jsPsych.pluginAPI.getMouseResponse({
       callback_function: after_response,
       valid_responses: jsPsych.ALL_KEYS,
@@ -399,7 +405,6 @@ jsPsych.plugins['RAADS-14'] = (function () {
       persist: true,
       allow_held_key: false
     });
-
   };
 
   return plugin;
