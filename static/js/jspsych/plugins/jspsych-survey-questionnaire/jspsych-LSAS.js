@@ -385,7 +385,7 @@ jsPsych.plugins['LSAS'] = (function() {
         }
 
         obje_f['F' + (i + 1)] = val_f;
-        obje_a["A' + (i + 1)] = val_a;
+        obje_a['A' + (i + 1)] = val_a;
 
         timestamp_data['F' + (i + 1)] = trial.time_stamp['F' + (i+1)];
         timestamp_data['A' + (i + 1)] = trial.time_stamp['A' + (i+1)];
