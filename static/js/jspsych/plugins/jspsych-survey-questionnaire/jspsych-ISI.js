@@ -1,4 +1,4 @@
-jsPsych.plugins['ISI'] = (function () {
+jsPsych.plugins['ISI'] = (function() {
   var plugin = {};
 
   plugin.info = {
@@ -87,11 +87,11 @@ jsPsych.plugins['ISI'] = (function () {
         description: 'Event converted details'
       }
     }
-  }
-  plugin.trial = function (display_element, trial) {
+  };
 
-    var plugin_id_name = "jspsych-survey-multi-choice-ISI";
-    var html = "";
+  plugin.trial = function (display_element, trial) {
+    var plugin_id_name = 'jspsych-survey-multi-choice-ISI';
+    var html = '';
 
     // store responses, events
     var response = {
@@ -100,11 +100,11 @@ jsPsych.plugins['ISI'] = (function () {
     var timestamp_onload = jsPsych.totalTime();
 
     response.trial_events.push({
-      "event_type": trial.event_type,
-      "event_raw_details": trial.event_raw_details,
-      "event_converted_details": trial.event_converted_details,
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+      'event_type': trial.event_type,
+      'event_raw_details': trial.event_raw_details,
+      'event_converted_details': trial.event_converted_details,
+      'timestamp': jsPsych.totalTime(),
+      'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
     // inject CSS for trial
@@ -139,8 +139,8 @@ jsPsych.plugins['ISI'] = (function () {
       "}";
     html += '</style>';
 
-    // fixed heder
-    html += 
+    // fixed header
+    html +=
       '<header>' +
       '<nav class="navbar navbar-inverse navbar-fixed-top">' +
       '<div class="container-fluid">' +
@@ -163,6 +163,7 @@ jsPsych.plugins['ISI'] = (function () {
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
+
     for (var i = 0; i < trial.questions.length; i++) {
       question_order.push(i);
     }
@@ -173,22 +174,21 @@ jsPsych.plugins['ISI'] = (function () {
 
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
-
       // get question based on question_order
       var question = trial.questions[question_order[i]];
       var question_id = question_order[i];
 
       // create question container
       var question_classes = ['jspsych-survey-multi-choice-question'];
+
       if (question.horizontal) {
         question_classes.push('jspsych-survey-multi-choice-horizontal');
       }
 
-      
-      if(i !== 0) {
-          html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="jspsych-survey-multi-choice-contain"  data-name="' + question.name + '">';
+      if (i !== 0) {
+        html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="jspsych-survey-multi-choice-contain"  data-name="' + question.name + '">';
       } else {
-          html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
+        html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
       }
 
       // add question text
@@ -199,33 +199,38 @@ jsPsych.plugins['ISI'] = (function () {
       i !== 0 ? html += '<div class="jspsych-survey-multi-choice-option-right">': html += '<div>';
 
       html += '<div style="width: 100%; ">';
+
       for (var j = 0; j < question.options.length; j++) {
         if (question_id === 0) {
           if (j === 0) {
             html += '<div style="display: flex;"><div class="jspsych-survey-multi-choice-left"></div><div class="jspsych-survey-multi-choice-right-top-main">';
+
             for (var index = 0; index < question.title.length; index++) {
               html += '<div>' + question.title[index] + '</div>';
             }
+
             html += '</div>';
           }
-        } 
+        }
         else {
           if (j === 0) {
             html += '<div style="display: flex;"><div style="width: 100%; display: flex; justify-content: space-around;">';
+
             for (var index = 0; index < question.title.length; index++) {
               html += '<div style="display: flex; justify-content: center; align-items: center; width: 100px; text-align: center;">' + question.title[index] + '</div>';
             }
+
             html += '</div>';
           }
-
         }
       }
+
       html += '</div>';
       html += '<div class="jspsych-survey-multi-choice-right">';
 
       for (var j = 0; j < question.options.length; j++) {
         if (question_id != 0) {
-          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+          var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j;
           var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
           var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
 
@@ -235,16 +240,17 @@ jsPsych.plugins['ISI'] = (function () {
           html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j] + '"></input>';
           html += '</div>';
         }
-
       }
-      
+
       html += '</div>';
+
       for (var j = 0; j < question.options.length; j++) {
         if (question_id === 0) {
           html += '<div style="display: flex;" id="jspsych-survey-multi-choice-1-' + j + '"><div class="jspsych-survey-multi-choice-left jspsych-survey-multi-choice-left-top jspsych-survey-multi-choice-question"><p>' + question.options[j].prompt + '</p></div>';
           html += '<div class="jspsych-survey-multi-choice-right-top">';
+
           for (var k = 0; k < question.options[j].options.length; k++) {
-            var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j + '-' + k;
+            var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j + '-' + k;
             var input_name = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
             var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j + '-' + k;
 
@@ -252,11 +258,12 @@ jsPsych.plugins['ISI'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + 'S' + (j+1) + '" data-question-number="Q' + (i+1) + 'S' + (j+1) + 'A' + (k+1) +'" for="' + input_id + '">' + question.options[j].options[k] + '</label>';
             html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j].options[k] + '"></input></div>';
           }
+
           html += '</div>'
           html += '</div>'
         }
-
       }
+
       html += '</div>';
       html += '</div>';
       html += '</div>';
@@ -290,38 +297,38 @@ jsPsych.plugins['ISI'] = (function () {
     display_element.innerHTML = html;
 
     // function to handle responses by the subject
-    var after_response = function (info) {
-
+    var after_response = function(info) {
       if (info.key_release === undefined) {
         response.trial_events.push({
-          "event_type": "key press",
-          "event_raw_details": info.key,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key press',
+          'event_raw_details': info.key,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
 
-        if(info.el) {
-          if(info.el.dataset.timeStamp) {
+        if (info.el) {
+          if (info.el.dataset.timeStamp) {
             trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
           }
-          if(info.el.dataset.questionNumber) {
+
+          if (info.el.dataset.questionNumber) {
             response.trial_events.push({
-              "event_type": "answer displayed",
-              "event_raw_details": info.el.dataset.questionNumber,
-              "event_converted_details": info.el.dataset.questionNumber + ' answer displayed',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'answer displayed',
+              'event_raw_details': info.el.dataset.questionNumber,
+              'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         }
       } else {
         response.trial_events.push({
-          "event_type": "key release",
-          "event_raw_details": info.key_release,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key release',
+          'event_raw_details': info.key_release,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
     }
@@ -329,57 +336,66 @@ jsPsych.plugins['ISI'] = (function () {
     $('.jspsych-survey-question').parent().css('border-top', '1px solid')
 
     // highlight input
-    $('.jspsych-survey-highlight').click(function () {
+    $('.jspsych-survey-highlight').on('click', function() {
       $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
       $(this).addClass('bg-primary');
     });
 
     // forced click event fix for some laptops touchpad
-    $("label").on("click",function(){
+    $('label').on('click', function() {
       var labelID = $(this).attr('for');
-      if('labelID') {
-        $("#" + labelID).prop('checked', true).trigger('click').trigger('change');
-      };
+
+      if ('labelID') {
+        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
+      }
     });
 
     // save timestamp on input click
-    $("input[type=radio]").on("click change touchstart",function(){
-      var time_stamp_key = $(this).data('time-stamp'); 
-      if(time_stamp_key) {
+    $('input[type=radio]').on('click change touchstart', function() {
+      var time_stamp_key = $(this).data('time-stamp');
+
+      if (time_stamp_key) {
         trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-      };
+      }
     });
 
     document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
       response.trial_events.push({
-        "event_type": "button clicked",
-        "event_raw_details": 'Submit',
-        "event_converted_details": '"Submit" selected',
-        "timestamp": jsPsych.totalTime(),
-        "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
       });
 
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
+
       for (var i = 1; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = i;
-        if (match.querySelector("input[type=radio]:checked") !== null) {
-          var val = match.querySelector("input[type=radio]:checked").value;
+
+        if (match.querySelector('input[type=radio]:checked') !== null) {
+          var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
         } else {
-          var val = "";
+          var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
         }
+
         var obje = {};
         var name = id;
+
         if (match.attributes['data-name'].value !== '') {
           name = match.attributes['data-name'].value;
         }
+
         obje[name] = val;
         timestamp_data[name] = trial.time_stamp['Q' + id];
         Object.assign(question_data, obje);
@@ -390,33 +406,37 @@ jsPsych.plugins['ISI'] = (function () {
         var match_first = display_element.querySelector('#jspsych-survey-multi-choice-0');
         var id_array = ['1 (falling)', '1 (staying)', '1 (waking)'];
         var id = id_array[i];
-        if (match.querySelector("input[type=radio]:checked") !== null) {
-          var val = match.querySelector("input[type=radio]:checked").value;
+
+        if (match.querySelector('input[type=radio]:checked') !== null) {
+          var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
           $(match_first).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
           $(match_first).find('.jspsych-survey-multi-choice-option-left .jspsych-survey-multi-choice-text').removeClass('survey-error-after');
         } else {
-          var val = "";
+          var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
           $(match_first).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
           $(match_first).find('.jspsych-survey-multi-choice-option-left .jspsych-survey-multi-choice-text').addClass('survey-error-after');
         }
 
-        if (display_element.querySelector('#jspsych-survey-multi-choice-1-' + 0).querySelector("input[type=radio]:checked") === null ||
-            display_element.querySelector('#jspsych-survey-multi-choice-1-' + 1).querySelector("input[type=radio]:checked") === null) {
+        if (display_element.querySelector('#jspsych-survey-multi-choice-1-' + 0).querySelector('input[type=radio]:checked') === null ||
+            display_element.querySelector('#jspsych-survey-multi-choice-1-' + 1).querySelector('input[type=radio]:checked') === null) {
             $(match_first).find('.jspsych-survey-multi-choice-option-left .jspsych-survey-multi-choice-text').addClass('survey-error-after');
             $(match_first).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
-        };
+        }
 
         var obje = {};
         var name = id;
+
         timestamp_data[id] = trial.time_stamp['Q1S' + (i+1)];
         obje[name] = val;
         Object.assign(question_data, obje);
       }
 
-      if ($(".survey-error-after").length < 1) {
+      if ($('.survey-error-after').length < 1) {
         // kill keyboard listeners
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -425,12 +445,12 @@ jsPsych.plugins['ISI'] = (function () {
 
         // save data
         var trial_data = {
-          "stage_name": JSON.stringify(plugin.info.stage_name),
-          "responses": JSON.stringify(question_data),
-          "timestamp": JSON.stringify(timestamp_data),
-          "time_stamp": JSON.stringify(trial.time_stamp),
-          "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          'stage_name': JSON.stringify(plugin.info.stage_name),
+          'responses': JSON.stringify(question_data),
+          'timestamp': JSON.stringify(timestamp_data),
+          'time_stamp': JSON.stringify(trial.time_stamp),
+          'question_order': JSON.stringify(question_order),
+          'events': JSON.stringify(response.trial_events)
         };
 
         // clear the display
@@ -443,26 +463,24 @@ jsPsych.plugins['ISI'] = (function () {
         MicroModal.show('modal-1', {
           onShow() {
             response.trial_events.push({
-              "event_type": "error message",
-              "event_raw_details": 'Error message',
-              "event_converted_details": 'popup triggered by incomplete WBF question',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'error message',
+              'event_raw_details': 'Error message',
+              'event_converted_details': 'popup triggered by incomplete WBF question',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           },
           onClose() {
             response.trial_events.push({
-              "event_type": "popup closed",
-              "event_raw_details": 'Close',
-              "event_converted_details": trial.event_converted_details,
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'popup closed',
+              'event_raw_details': 'Close',
+              'event_converted_details': trial.event_converted_details,
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         });
       }
-
-
     });
 
     // start the response listener
@@ -473,6 +491,7 @@ jsPsych.plugins['ISI'] = (function () {
       persist: true,
       allow_held_key: false
     });
+
     var clickListener = jsPsych.pluginAPI.getMouseResponse({
       callback_function: after_response,
       valid_responses: jsPsych.ALL_KEYS,
