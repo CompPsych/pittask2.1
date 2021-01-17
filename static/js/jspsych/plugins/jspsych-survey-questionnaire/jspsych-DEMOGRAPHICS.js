@@ -1,6 +1,149 @@
 jsPsych.plugins['Demographics'] = (function() {
   var plugin = {};
 
+  /**
+   * Timer Module Factory.
+   */
+  var timerModuleFactory = function(responseStore, timestamp) {
+    var firstTime = 0;
+    var tmpAnswerTime = 0;
+    var ceilingTime = 0;
+    var wasFirstClick = false;
+    var popupText = '';
+    var popupFloorText = '';
+    var popupCeilingText = '';
+    var minAnswerTime = 4000;
+    var maxAnswerTime = 10000;
+    var ceilingTimer = null;
+    var timer = null;
+    var openEventName = ''
+    var microModalConfig = {
+      onShow: function() {
+        var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
+
+        responseStore.trial_events.push({
+          'event_type': 'error message',
+          'event_raw_details': 'Error message',
+          'event_converted_details': text,
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp
+        });
+      },
+      onClose: function() {
+        restartResponseTimer();
+        restartCeilingTimer();
+
+        responseStore.trial_events.push({
+          'event_type': 'popup closed',
+          'event_raw_details': 'Close',
+          'event_converted_details': '',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp
+        });
+      },
+    };
+
+    startFloorTimer();
+    startCeilingTimer();
+
+    function startFloorTimer() {
+      timer = setInterval(function() {
+        tmpAnswerTime += 10;
+      }, 10);
+    }
+
+    function startCeilingTimer() {
+      ceilingTimer = setInterval(function() {
+        ceilingTime += 10;
+
+        if (ceilingTime >= maxAnswerTime) {
+          setOpenPopupEventText('ceiling');
+          setPopupText(popupCeilingText);
+          showPopup();
+          stopTimer(ceilingTimer);
+        }
+      }, 10);
+    }
+
+    function stopTimer(timer) {
+      clearInterval(timer);
+    }
+
+    function restartResponseTimer() {
+      tmpAnswerTime = 0;
+      clearInterval(timer);
+
+      startFloorTimer();
+      openEventName = '';
+    }
+
+    function restartCeilingTimer() {
+      ceilingTime = 0;
+      clearInterval(ceilingTimer);
+
+      startCeilingTimer();
+      openEventName = '';
+    }
+
+    function showPopup() {
+      MicroModal.show('modal-2', microModalConfig);
+    }
+
+    function setPopupText(value) {
+      popupText = value;
+      window.document.getElementById('modal-2-content__text').innerText = value;
+    }
+
+    function setOpenPopupEventText(value) {
+      openEventName = value;
+    }
+
+    return {
+      getFirstTime: function() {
+        return firstTime;
+      },
+      check: function() {
+        if (!wasFirstClick) {
+          wasFirstClick = true;
+          firstTime = tmpAnswerTime;
+        }
+
+        if (tmpAnswerTime < minAnswerTime) {
+          setOpenPopupEventText('floor');
+          setPopupText(popupFloorText);
+          showPopup();
+          stopTimer(timer);
+          stopTimer(ceilingTimer);
+          return false;
+        }
+
+        restartResponseTimer();
+        restartCeilingTimer();
+        return true;
+      },
+      getPopupText: function() {
+        return popupText;
+      },
+      setPopupFloorText: function(value) {
+        popupFloorText = value;
+        popupText = value;
+      },
+      setPopupCeilingText: function(value) {
+        popupCeilingText = value;
+      },
+      getMicroModalConfig: function() {
+        return microModalConfig;
+      },
+      setMinAnswerTime: function(value) {
+        minAnswerTime = value;
+      },
+      setMaxAnswerTime: function(value) {
+        maxAnswerTime = value;
+      },
+    };
+  };
+  var timerModule = null;
+
   plugin.info = {
     name: 'Demographics',
     stage_name: 'demographics',
@@ -91,13 +234,23 @@ jsPsych.plugins['Demographics'] = (function() {
 
   plugin.trial = function(display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-DEMOGRAPHICS';
-    var html = "";
+    var html = '';
     var timestamp_onload = jsPsych.totalTime();
 
     // store responses, events
     var response = {
       trial_events: []
     };
+
+    if (trial.type === 'Demographics' && popup_answer_latency_floor) {
+      timerModule = timerModuleFactory(response, timestamp_onload);
+    }
+
+    timerModule.setPopupFloorText(answer_latency_text_floor);
+    timerModule.setPopupCeilingText(answer_latency_text_ceiling);
+
+    timerModule.setMinAnswerTime(answer_latency_floor);
+    timerModule.setMaxAnswerTime(answer_latency_ceiling);
 
     response.trial_events.push({
       'event_type': trial.event_type,
@@ -243,7 +396,6 @@ jsPsych.plugins['Demographics'] = (function() {
         var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j;
         var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
         var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
-
         var required_attr = question.required ? 'required' : '';
 
         // add radio button container
@@ -417,6 +569,26 @@ jsPsych.plugins['Demographics'] = (function() {
               <main class="modal__content" id="modal-1-content">
                 <p>
                 ${ popup_text_WBF }
+                </p>
+              </main>
+              <footer class="modal__footer">
+                <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+              </footer>
+            </div>
+          </div>
+      </div>`;
+
+    // Modal window content
+    html +=
+      `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
+          <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
+              <header class="modal__header">
+                <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+              </header>
+              <main class="modal__content" id="modal-2-content">
+                <p id="modal-2-content__text">
+                  ${ timerModule.getPopupText() }
                 </p>
               </main>
               <footer class="modal__footer">
