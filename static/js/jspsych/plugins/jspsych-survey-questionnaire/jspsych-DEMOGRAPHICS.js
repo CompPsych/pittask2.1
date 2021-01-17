@@ -648,11 +648,20 @@ jsPsych.plugins['Demographics'] = (function() {
     });
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function() {
-      var time_stamp_key = $(this).data('time-stamp');
+    $('input[type=radio]').on('click change touchstart', function(event) {
+      if (event.type === 'click') {
+        var isSuccess = timerModule.check();
+        var time_stamp_key;
 
-      if (time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        if (isSuccess) {
+          time_stamp_key = $(this).data('time-stamp');
+
+          if (time_stamp_key) {
+            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          }
+        }
+
+        return isSuccess
       }
     });
 

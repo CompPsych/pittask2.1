@@ -235,16 +235,14 @@ jsPsych.plugins['ASRM'] = (function() {
   plugin.trial = function (display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-ASRM';
     var html = '';
-
     // store responses, events
     var response = {
       trial_events: [],
     };
-
     var timestamp_onload = jsPsych.totalTime();
 
     if (trial.type === 'ASRM' && popup_answer_latency_floor) {
-      timerModule = timerModuleFactory();
+      timerModule = timerModuleFactory(response, timestamp_onload);
     }
 
     timerModule.setPopupFloorText(answer_latency_text_floor);
@@ -457,10 +455,19 @@ jsPsych.plugins['ASRM'] = (function() {
 
     // save timestamp on input click
     $('input[type=radio]').on('click change touchstart', function(event) {
-      var time_stamp_key = $(this).data('time-stamp');
+      if (event.type === 'click') {
+        var isSuccess = timerModule.check();
+        var time_stamp_key;
 
-      if (time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        if (isSuccess) {
+          time_stamp_key = $(this).data('time-stamp');
+
+          if (time_stamp_key) {
+            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          }
+        }
+
+        return isSuccess
       }
     });
 

@@ -235,12 +235,10 @@ jsPsych.plugins['EAT-26'] = (function() {
   plugin.trial = function(display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-EAT-26';
     var html = '';
-
     // store responses, events
     var response = {
       trial_events: []
     };
-
     var timestamp_onload = jsPsych.totalTime();
 
     if (trial.type === 'EAT-26' && popup_answer_latency_floor) {
@@ -559,7 +557,7 @@ jsPsych.plugins['EAT-26'] = (function() {
     }
 
     // highlight input
-    $('.jspsych-survey-highlight').on('click', function() {
+    $('.jspsych-survey-highlight').on('click', function(event) {
       $(this).addClass('bg-primary');
       $(this).next('input').prop('checked', true);
     })
@@ -574,11 +572,20 @@ jsPsych.plugins['EAT-26'] = (function() {
     });
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function() {
-      var time_stamp_key = $(this).data('time-stamp');
+    $('input[type=radio]').on('click change touchstart', function(event) {
+      if (event.type === 'click') {
+        var isSuccess = timerModule.check();
+        var time_stamp_key;
 
-      if (time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        if (isSuccess) {
+          time_stamp_key = $(this).data('time-stamp');
+
+          if (time_stamp_key) {
+            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          }
+        }
+
+        return isSuccess
       }
     });
 

@@ -235,12 +235,10 @@ jsPsych.plugins['AUDIT'] = (function() {
   plugin.trial = function (display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-AUDIT';
     var html = '';
-
     // store responses, events
     var response = {
       trial_events: []
     };
-
     var timestamp_onload = jsPsych.totalTime();
 
     if (trial.type === 'AUDIT' && popup_answer_latency_floor) {
@@ -710,14 +708,18 @@ jsPsych.plugins['AUDIT'] = (function() {
 
      // save timestamp on input click
     $('input[type=radio]').on('click change touchstart', function(event) {
-      var time_stamp_key = $(this).data('time-stamp');
-      var isSuccess = timerModule.check();
-
-      if (time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-      }
-
       if (event.type === 'click') {
+        var isSuccess = timerModule.check();
+        var time_stamp_key;
+
+        if (isSuccess) {
+          time_stamp_key = $(this).data('time-stamp');
+
+          if (time_stamp_key) {
+            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          }
+        }
+
         return isSuccess
       }
     });

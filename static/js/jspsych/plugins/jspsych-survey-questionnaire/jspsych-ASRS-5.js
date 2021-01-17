@@ -235,12 +235,10 @@ jsPsych.plugins['ASRS-5'] = (function() {
   plugin.trial = function(display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-ASRS-5';
     var html = '';
-
     // store responses, events
     var response = {
       trial_events: []
     };
-
     var timestamp_onload = jsPsych.totalTime();
 
     if (trial.type === 'ASRS-5' && popup_answer_latency_floor) {
@@ -457,15 +455,21 @@ jsPsych.plugins['ASRS-5'] = (function() {
     };
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function() {
-      var time_stamp_key = $(this).data('time-stamp');
-      var isSuccess = timerModule.check();
+    $('input[type=radio]').on('click change touchstart', function(event) {
+      if (event.type === 'click') {
+        var isSuccess = timerModule.check();
+        var time_stamp_key;
 
-      if (time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        if (isSuccess) {
+          time_stamp_key = $(this).data('time-stamp');
+
+          if (time_stamp_key) {
+            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          }
+        }
+
+        return isSuccess
       }
-
-      return isSuccess
     });
 
     // form functionality
