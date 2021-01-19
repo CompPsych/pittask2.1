@@ -80,7 +80,6 @@ jsPsych.plugins['ASRM'] = (function() {
     function restartCeilingTimer() {
       ceilingTime = 0;
       clearInterval(ceilingTimer);
-
       startCeilingTimer();
       openEventName = '';
     }
@@ -114,6 +113,7 @@ jsPsych.plugins['ASRM'] = (function() {
           showPopup();
           stopTimer(timer);
           stopTimer(ceilingTimer);
+
           return false;
         }
 
@@ -362,7 +362,7 @@ jsPsych.plugins['ASRM'] = (function() {
             </header>
             <main class="modal__content" id="modal-1-content">
               <p>
-              ${popup_text_WBF}
+              ${ popup_text_WBF }
               </p>
             </main>
             <footer class="modal__footer">
@@ -433,43 +433,33 @@ jsPsych.plugins['ASRM'] = (function() {
     }
 
     // highlight input
-    $('.jspsych-survey-highlight').on('click', function(event) {
+    $('.jspsych-survey-highlight').on('click touchstart', function() {
+      var time_stamp_key;
       var isSuccess = timerModule.check();
 
       if (isSuccess) {
         $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
         $(this).addClass('bg-primary');
+
+        // save timestamp on input click
+        time_stamp_key = $(this).parent().find('input[type=radio]');
+
+        if (time_stamp_key) {
+          trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        }
       }
 
       return isSuccess;
     });
 
     // forced click event fix for some laptops touchpad
-    $('label').on('click', function() {
-      var labelID = $(this).attr('for');
-
-      if ('labelID') {
-        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-      }
-    });
-
-    // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
-      if (event.type === 'click') {
-        var isSuccess = timerModule.check();
-        var time_stamp_key;
-
-        if (isSuccess) {
-          time_stamp_key = $(this).data('time-stamp');
-
-          if (time_stamp_key) {
-            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-          }
-        }
-
-        return isSuccess
-      }
-    });
+    // $('label').on('click', function() {
+    //   var labelID = $(this).attr('for');
+    //
+    //   if (labelID) {
+    //     $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
+    //   }
+    // });
 
     // form functionality
     document.querySelector('form').addEventListener('submit', function(event) {
