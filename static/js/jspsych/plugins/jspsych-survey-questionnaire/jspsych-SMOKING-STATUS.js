@@ -241,7 +241,7 @@ jsPsych.plugins['Smoking-Status'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
-    if (trial.type === 'SS' && popup_answer_latency_floor) {
+    if (trial.type === 'Smoking-Status' && popup_answer_latency_floor) {
       timerModule = timerModuleFactory(response, timestamp_onload);
     }
 
