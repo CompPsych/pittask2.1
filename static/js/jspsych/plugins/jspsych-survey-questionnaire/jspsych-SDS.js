@@ -533,58 +533,71 @@ jsPsych.plugins['SDS'] = (function() {
     };
 
     // highlight input
-    $('.jspsych-survey-highlight').on('click', function() {
+    $('.jspsych-survey-highlight').on('click touchstart', function() {
       var isSuccess = timerModule ? timerModule.check() : true;
+      var time_stamp_key;
 
       if (isSuccess) {
         $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary'); // remove previous bg-primary items
         $(this).addClass('bg-primary');
         $(this).next('input').prop('checked', true);
+
+        time_stamp_key = $(this).data('time-stamp');
+
+        if (time_stamp_key) {
+          trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        }
       }
     })
 
     // handle select inputs
     $('select').change(function() {
-      var questionNumber = $(this)[0].selectedOptions[0].getAttribute('data-question-number');
-      var questionTimestamp = $(this)[0].selectedOptions[0].getAttribute('data-time-stamp');
+      var isSuccess = true;
 
-      trial.time_stamp[questionTimestamp] = jsPsych.totalTime();
+      if (isSuccess) {
+        var questionNumber = $(this)[0].selectedOptions[0].getAttribute('data-question-number');
+        var questionTimestamp = $(this)[0].selectedOptions[0].getAttribute('data-time-stamp');
 
-      response.trial_events.push({
-        'event_type': 'answer displayed',
-        'event_raw_details': questionNumber,
-        'event_converted_details': questionNumber + ' answer displayed',
-        'timestamp': jsPsych.totalTime(),
-        'time_elapsed': jsPsych.totalTime() - timestamp_onload
-      });
+        trial.time_stamp[questionTimestamp] = jsPsych.totalTime();
+
+        response.trial_events.push({
+          'event_type': 'answer displayed',
+          'event_raw_details': questionNumber,
+          'event_converted_details': questionNumber + ' answer displayed',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
+        });
+      }
+
+      return isSuccess;
     });
 
     // forced click event fix for some laptops touchpad
-    $('label').on('click', function() {
-      var labelID = $(this).attr('for');
-
-      if ('labelID') {
-        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-      }
-    });
-
-    // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
-      if (event.type === 'click') {
-        var isSuccess = timerModule.check();
-        var time_stamp_key;
-
-        if (isSuccess) {
-          time_stamp_key = $(this).data('time-stamp');
-
-          if (time_stamp_key) {
-            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-          }
-        }
-
-        return isSuccess
-      }
-    });
+    // $('label').on('click', function() {
+    //   var labelID = $(this).attr('for');
+    //
+    //   if ('labelID') {
+    //     $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
+    //   }
+    // });
+    //
+    // // save timestamp on input click
+    // $('input[type=radio]').on('click change touchstart', function(event) {
+    //   if (event.type === 'click') {
+    //     var isSuccess = timerModule.check();
+    //     var time_stamp_key;
+    //
+    //     if (isSuccess) {
+    //       time_stamp_key = $(this).data('time-stamp');
+    //
+    //       if (time_stamp_key) {
+    //         trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+    //       }
+    //     }
+    //
+    //     return isSuccess
+    //   }
+    // });
 
     // from functionality
     document.querySelector('form').addEventListener('submit', function (event) {
