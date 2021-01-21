@@ -242,15 +242,15 @@ jsPsych.plugins['GAD-7'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
-    if (trial.type === 'GAD-7' && popup_answer_latency_floor) {
+    if (trial.type === 'GAD-7' && (popup_answer_latency_floor && popup_answer_latency_ceiling)) {
       timerModule = timerModuleFactory(response, timestamp_onload);
+
+      timerModule.setPopupFloorText(answer_latency_text_floor);
+      timerModule.setPopupCeilingText(answer_latency_text_ceiling);
+
+      timerModule.setMinAnswerTime(answer_latency_floor);
+      timerModule.setMaxAnswerTime(answer_latency_ceiling);
     }
-
-    timerModule.setPopupFloorText(answer_latency_text_floor);
-    timerModule.setPopupCeilingText(answer_latency_text_ceiling);
-
-    timerModule.setMinAnswerTime(answer_latency_floor);
-    timerModule.setMaxAnswerTime(answer_latency_ceiling);
 
     response.trial_events.push({
       'event_type': trial.event_type,
@@ -442,7 +442,7 @@ jsPsych.plugins['GAD-7'] = (function() {
         </div>`;
 
     // Modal window content
-    html +=
+    var timerModuleModal =
       `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
           <div class="modal__overlay" tabindex="-1" data-micromodal-close>
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
@@ -450,9 +450,7 @@ jsPsych.plugins['GAD-7'] = (function() {
                 <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
               </header>
               <main class="modal__content" id="modal-2-content">
-                <p id="modal-2-content__text">
-                  ${ timerModule.getPopupText() }
-                </p>
+                <p id="modal-2-content__text"></p>
               </main>
               <footer class="modal__footer">
                 <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
@@ -460,6 +458,10 @@ jsPsych.plugins['GAD-7'] = (function() {
             </div>
           </div>
       </div>`;
+
+    if (timerModule) {
+      html += timerModuleModal;
+    }
 
     // render
     display_element.innerHTML = html;
@@ -504,7 +506,7 @@ jsPsych.plugins['GAD-7'] = (function() {
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
       var time_stamp_key;
-      var isSuccess = timerModule.check();
+      var isSuccess = timerModule ? timerModule.check() : true;
 
       if (isSuccess) {
         $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');

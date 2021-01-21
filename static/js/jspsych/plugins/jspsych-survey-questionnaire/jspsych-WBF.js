@@ -241,15 +241,15 @@ jsPsych.plugins['WBF'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
-    if (trial.type === 'WBF' && popup_answer_latency_floor) {
+    if (trial.type === 'WBF' && (popup_answer_latency_floor && popup_answer_latency_ceiling)) {
       timerModule = timerModuleFactory(response, timestamp_onload);
+
+      timerModule.setPopupFloorText(answer_latency_text_floor);
+      timerModule.setPopupCeilingText(answer_latency_text_ceiling);
+
+      timerModule.setMinAnswerTime(answer_latency_floor);
+      timerModule.setMaxAnswerTime(answer_latency_ceiling);
     }
-
-    timerModule.setPopupFloorText(answer_latency_text_floor);
-    timerModule.setPopupCeilingText(answer_latency_text_ceiling);
-
-    timerModule.setMinAnswerTime(answer_latency_floor);
-    timerModule.setMaxAnswerTime(answer_latency_ceiling);
 
     response.trial_events.push({
       'event_type': trial.event_type,
@@ -407,7 +407,7 @@ jsPsych.plugins['WBF'] = (function() {
       </div>`;
 
     // Modal window content
-    html +=
+    var timerModuleModal =
       `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
           <div class="modal__overlay" tabindex="-1" data-micromodal-close>
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
@@ -415,9 +415,7 @@ jsPsych.plugins['WBF'] = (function() {
                 <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
               </header>
               <main class="modal__content" id="modal-2-content">
-                <p id="modal-2-content__text">
-                  ${ timerModule.getPopupText() }
-                </p>
+                <p id="modal-2-content__text"></p>
               </main>
               <footer class="modal__footer">
                 <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
@@ -425,6 +423,10 @@ jsPsych.plugins['WBF'] = (function() {
             </div>
           </div>
       </div>`;
+
+    if (timerModule) {
+      html += timerModuleModal;
+    }
 
     // render
     display_element.innerHTML = html;
@@ -467,36 +469,23 @@ jsPsych.plugins['WBF'] = (function() {
     }
 
     // highlight input
-    $('.jspsych-survey-highlight').on('click', function() {
-      $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
-      $(this).addClass('bg-primary');
-    });
+    $('.jspsych-survey-highlight').on('click touchstart', function() {
+      var isSuccess = timerModule ? timerModule.check() : true;
+      var time_stamp_key;
 
-    // forced click event fix for some laptops touchpad
-    $('label').on('click', function() {
-      var labelID = $(this).attr('for');
+      if (isSuccess) {
+        $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
+        $(this).addClass('bg-primary');
 
-      if ('labelID') {
-        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-      }
-    });
+        // save timestamp on input click
+        time_stamp_key = $(this).parent().find('input[type=radio]');
 
-    // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
-      if (event.type === 'click') {
-        var isSuccess = timerModule.check();
-        var time_stamp_key;
-
-        if (isSuccess) {
-          time_stamp_key = $(this).data('time-stamp');
-
-          if (time_stamp_key) {
-            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-          }
+        if (time_stamp_key) {
+          trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
         }
-
-        return isSuccess
       }
+
+      return isSuccess;
     });
 
     // form functionality
