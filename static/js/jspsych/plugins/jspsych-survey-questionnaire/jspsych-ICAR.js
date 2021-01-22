@@ -4,7 +4,7 @@ jsPsych.plugins['ICAR'] = (function() {
   /**
    * Timer Module Factory.
    */
-  var timerModuleFactory = function(responseStore, timestamp) {
+  var timerModuleFactory = function(responseStore, timestamp, isOnFloor, isOnCeil) {
     var firstTime = 0;
     var tmpAnswerTime = 0;
     var ceilingTime = 0;
@@ -30,8 +30,13 @@ jsPsych.plugins['ICAR'] = (function() {
         });
       },
       onClose: function() {
-        restartResponseTimer();
-        restartCeilingTimer();
+        if (isOnFloor) {
+          restartFloorTimer();
+        }
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
 
         responseStore.trial_events.push({
           'event_type': 'popup closed',
@@ -43,8 +48,13 @@ jsPsych.plugins['ICAR'] = (function() {
       },
     };
 
-    startFloorTimer();
-    startCeilingTimer();
+    if (isOnFloor) {
+      startFloorTimer();
+    }
+
+    if (isOnCeil) {
+      startCeilingTimer();
+    }
 
     function startFloorTimer() {
       timer = setInterval(function() {
@@ -69,7 +79,7 @@ jsPsych.plugins['ICAR'] = (function() {
       clearInterval(timer);
     }
 
-    function restartResponseTimer() {
+    function restartFloorTimer() {
       tmpAnswerTime = 0;
       clearInterval(timer);
 
@@ -80,7 +90,6 @@ jsPsych.plugins['ICAR'] = (function() {
     function restartCeilingTimer() {
       ceilingTime = 0;
       clearInterval(ceilingTimer);
-
       startCeilingTimer();
       openEventName = '';
     }
@@ -108,17 +117,31 @@ jsPsych.plugins['ICAR'] = (function() {
           firstTime = tmpAnswerTime;
         }
 
+        if (isOnFloor !== true) {
+
+          if (isOnCeil) {
+            restartCeilingTimer();
+          }
+
+          return true
+        }
+
         if (tmpAnswerTime < minAnswerTime) {
           setOpenPopupEventText('floor');
           setPopupText(popupFloorText);
           showPopup();
           stopTimer(timer);
           stopTimer(ceilingTimer);
+
           return false;
         }
 
-        restartResponseTimer();
-        restartCeilingTimer();
+        restartFloorTimer();
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
+
         return true;
       },
       getPopupText: function() {
