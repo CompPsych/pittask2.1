@@ -4,7 +4,7 @@ jsPsych.plugins['ASRM'] = (function() {
   /**
    * Timer Module Factory.
    */
-  var timerModuleFactory = function(responseStore, timestamp) {
+  var timerModuleFactory = function(responseStore, timestamp, isOnFloor, isOnCeil) {
     var firstTime = 0;
     var tmpAnswerTime = 0;
     var ceilingTime = 0;
@@ -30,8 +30,13 @@ jsPsych.plugins['ASRM'] = (function() {
         });
       },
       onClose: function() {
-        restartResponseTimer();
-        restartCeilingTimer();
+        if (isOnFloor) {
+          restartFloorTimer();
+        }
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
 
         responseStore.trial_events.push({
           'event_type': 'popup closed',
@@ -43,8 +48,13 @@ jsPsych.plugins['ASRM'] = (function() {
       },
     };
 
-    startFloorTimer();
-    startCeilingTimer();
+    if (isOnFloor) {
+      startFloorTimer();
+    }
+
+    if (isOnCeil) {
+      startCeilingTimer();
+    }
 
     function startFloorTimer() {
       timer = setInterval(function() {
@@ -69,7 +79,7 @@ jsPsych.plugins['ASRM'] = (function() {
       clearInterval(timer);
     }
 
-    function restartResponseTimer() {
+    function restartFloorTimer() {
       tmpAnswerTime = 0;
       clearInterval(timer);
 
@@ -107,6 +117,15 @@ jsPsych.plugins['ASRM'] = (function() {
           firstTime = tmpAnswerTime;
         }
 
+        if (isOnFloor !== true) {
+
+          if (isOnCeil) {
+            restartCeilingTimer();
+          }
+
+          return true
+        }
+
         if (tmpAnswerTime < minAnswerTime) {
           setOpenPopupEventText('floor');
           setPopupText(popupFloorText);
@@ -117,8 +136,12 @@ jsPsych.plugins['ASRM'] = (function() {
           return false;
         }
 
-        restartResponseTimer();
-        restartCeilingTimer();
+        restartFloorTimer();
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
+
         return true;
       },
       getPopupText: function() {
@@ -242,8 +265,13 @@ jsPsych.plugins['ASRM'] = (function() {
     var timestamp_onload = jsPsych.totalTime();
 
     // timer module init
-    if (trial.type === 'ASRM' && (popup_answer_latency_floor && popup_answer_latency_ceiling)) {
-      timerModule = timerModuleFactory(response, timestamp_onload);
+    if (trial.type === 'ASRM' && (popup_answer_latency_floor || popup_answer_latency_ceiling)) {
+      timerModule = timerModuleFactory(
+        response,
+        timestamp_onload,
+        popup_answer_latency_floor,
+        popup_answer_latency_ceiling
+      );
 
       timerModule.setPopupFloorText(answer_latency_text_floor);
       timerModule.setPopupCeilingText(answer_latency_text_ceiling);
@@ -376,7 +404,7 @@ jsPsych.plugins['ASRM'] = (function() {
     // Modal window content
     var timerModuleModal =
       `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
-          <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+          <div class="modal__overlay" tabindex="-1">
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
               <header class="modal__header">
                 <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>

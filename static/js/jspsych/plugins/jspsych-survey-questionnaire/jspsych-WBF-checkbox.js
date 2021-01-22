@@ -241,8 +241,13 @@ jsPsych.plugins['WBF-checkbox'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
-    if (trial.type === 'WBF-checkbox' && (popup_answer_latency_floor && popup_answer_latency_ceiling)) {
-      timerModule = timerModuleFactory(response, timestamp_onload);
+    if (trial.type === 'WBF-checkbox' && (popup_answer_latency_floor || popup_answer_latency_ceiling)) {
+      timerModule = timerModuleFactory(
+        response,
+        timestamp_onload,
+        popup_answer_latency_floor,
+        popup_answer_latency_ceiling
+      );
 
       timerModule.setPopupFloorText(answer_latency_text_floor);
       timerModule.setPopupCeilingText(answer_latency_text_ceiling);
@@ -392,7 +397,7 @@ jsPsych.plugins['WBF-checkbox'] = (function() {
     // Modal window content
     var timerModuleModal =
       `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
-          <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+          <div class="modal__overlay" tabindex="-1">
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
               <header class="modal__header">
                 <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
