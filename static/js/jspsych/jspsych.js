@@ -3017,6 +3017,10 @@ jsPsych.pluginAPI = (function() {
       setMaxAnswerTime: function(value) {
         maxAnswerTime = value;
       },
+      stopTimerModule: function() {
+        stopTimer(timer);
+        stopTimer(ceilingTimer);
+      },
     };
   };
 
