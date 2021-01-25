@@ -140,7 +140,7 @@ window.jsPsych = (function() {
     opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
     DOM_container = opts.display_element;
     DOM_target = document.querySelector('#jspsych-content');
-    
+
 
     // add tabIndex attribute to scope event listeners
     opts.display_element.tabIndex = 0;
@@ -577,7 +577,7 @@ window.jsPsych = (function() {
         // if progress.current_location is -1, then the timeline variable is being evaluated
         // in a function that runs prior to the trial starting, so we should treat that trial
         // as being the active trial for purposes of finding the value of the timeline variable
-        var loc = Math.max(0, progress.current_location); 
+        var loc = Math.max(0, progress.current_location);
         return timeline_parameters.timeline[loc].timelineVariable(variable_name);
       }
     }
@@ -935,7 +935,7 @@ window.jsPsych = (function() {
             }
           }
         }
-      }      
+      }
       // if it's not nested, checking is much easier and do that here:
       else if(typeof trial[param] == 'undefined' || trial[param] === null){
         if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
@@ -1001,7 +1001,7 @@ window.jsPsych = (function() {
     document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
       '<span>'+
-      msg+ 
+      msg+
       '</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
@@ -1839,7 +1839,7 @@ jsPsych.randomization = (function() {
     if(!Array.isArray(arr)){
       console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
     }
-    
+
     if (size > arr.length) {
       console.error("Cannot take a sample " +
         "larger than the size of the set of items to sample.");
@@ -2021,7 +2021,7 @@ jsPsych.pluginAPI = (function() {
     }
 
     var listener_id;
-    
+
     var listener_function = function(e) {
 
       var key_time;
@@ -2092,7 +2092,7 @@ jsPsych.pluginAPI = (function() {
           }
         };
 
-        $(document).keyup(after_up);        
+        $(document).keyup(after_up);
 
       }
     };
@@ -2792,7 +2792,7 @@ jsPsych.pluginAPI = (function() {
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
     video = video.filter(function(x) { return x != false && x != null})
-    
+
     var total_n = images.length + audio.length + video.length;
 
     var loaded = 0;
@@ -2848,7 +2848,177 @@ jsPsych.pluginAPI = (function() {
 	  module.hardwareConnected = true;
   })
 
+  /**
+   * Timer Module Factory.
+   *
+   * @param {Object} responseStore - Store.
+   * @param {Number} timestamp - Timestamp.
+   * @param {Boolean} isOnFloor - Switch floor popup.
+   * @param {Boolean} isOnCeil - Switch ceil popup.
+   *
+   * @return {Object} timer module.
+   */
+  module.timerModuleFactory = function(responseStore, timestamp, isOnFloor, isOnCeil) {
+    var firstTime = 0;
+    var tmpAnswerTime = 0;
+    var ceilingTime = 0;
+    var wasFirstClick = false;
+    var popupText = '';
+    var popupFloorText = '';
+    var popupCeilingText = '';
+    var minAnswerTime = 4000;
+    var maxAnswerTime = 10000;
+    var ceilingTimer = null;
+    var timer = null;
+    var openEventName = ''
+    var microModalConfig = {
+      onShow: function() {
+        var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
 
+        responseStore.trial_events.push({
+          'event_type': 'error message',
+          'event_raw_details': 'Error message',
+          'event_converted_details': text,
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp
+        });
+      },
+      onClose: function() {
+        if (isOnFloor) {
+          restartFloorTimer();
+        }
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
+
+        responseStore.trial_events.push({
+          'event_type': 'popup closed',
+          'event_raw_details': 'Close',
+          'event_converted_details': '',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp
+        });
+      },
+    };
+
+    if (isOnFloor) {
+      startFloorTimer();
+    }
+
+    if (isOnCeil) {
+      startCeilingTimer();
+    }
+
+    function startFloorTimer() {
+      timer = setInterval(function() {
+        tmpAnswerTime += 10;
+      }, 10);
+    }
+
+    function startCeilingTimer() {
+      ceilingTimer = setInterval(function() {
+        ceilingTime += 10;
+
+        if (ceilingTime >= maxAnswerTime) {
+          setOpenPopupEventText('ceiling');
+          setPopupText(popupCeilingText);
+          showPopup();
+          stopTimer(ceilingTimer);
+        }
+      }, 10);
+    }
+
+    function stopTimer(timer) {
+      clearInterval(timer);
+    }
+
+    function restartFloorTimer() {
+      tmpAnswerTime = 0;
+      clearInterval(timer);
+
+      startFloorTimer();
+      openEventName = '';
+    }
+
+    function restartCeilingTimer() {
+      ceilingTime = 0;
+      clearInterval(ceilingTimer);
+      startCeilingTimer();
+      openEventName = '';
+    }
+
+    function showPopup() {
+      MicroModal.show('modal-2', microModalConfig);
+    }
+
+    function setPopupText(value) {
+      popupText = value;
+      window.document.getElementById('modal-2-content__text').innerText = value;
+    }
+
+    function setOpenPopupEventText(value) {
+      openEventName = value;
+    }
+
+    return {
+      getFirstTime: function() {
+        return firstTime;
+      },
+      check: function() {
+        if (!wasFirstClick) {
+          wasFirstClick = true;
+          firstTime = tmpAnswerTime;
+        }
+
+        if (isOnFloor !== true) {
+
+          if (isOnCeil) {
+            restartCeilingTimer();
+          }
+
+          return true
+        }
+
+        if (tmpAnswerTime < minAnswerTime) {
+          setOpenPopupEventText('floor');
+          setPopupText(popupFloorText);
+          showPopup();
+          stopTimer(timer);
+          stopTimer(ceilingTimer);
+
+          return false;
+        }
+
+        restartFloorTimer();
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
+
+        return true;
+      },
+      getPopupText: function() {
+        return popupText;
+      },
+      setPopupFloorText: function(value) {
+        popupFloorText = value;
+        popupText = value;
+      },
+      setPopupCeilingText: function(value) {
+        popupCeilingText = value;
+      },
+      getMicroModalConfig: function() {
+        return microModalConfig;
+      },
+      setMinAnswerTime: function(value) {
+        minAnswerTime = value;
+      },
+      setMaxAnswerTime: function(value) {
+        maxAnswerTime = value;
+      },
+    };
+  };
 
   return module;
 })();
