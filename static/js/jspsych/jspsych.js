@@ -3024,6 +3024,41 @@ jsPsych.pluginAPI = (function() {
     };
   };
 
+  /**
+   * Checks conditions for starting timers.
+   *
+   * @param {String} currentTestName - Name of current test.
+   * @param {String} testName - Name of test for check.
+   *
+   * @return {Boolean}
+   */
+  module.isNeedToStartTimerModuleInitialization = function(currentTestName, testName) {
+    return currentTestName === testName && (popup_answer_latency_floor || popup_answer_latency_ceiling)
+  }
+
+  /**
+   * Initializes the timer module.
+   *
+   * @param {Object} responseStore - Response store.
+   * @param {Number} timestamp - Timestamp.
+   */
+  module.initializeTimerModule = function(responseStore, timestamp) {
+    var moduleApp = module.timerModuleFactory(
+      responseStore,
+      timestamp,
+      popup_answer_latency_floor,
+      popup_answer_latency_ceiling
+    );
+
+    moduleApp.setPopupFloorText(answer_latency_text_floor);
+    moduleApp.setPopupCeilingText(answer_latency_text_ceiling);
+
+    moduleApp.setMinAnswerTime(answer_latency_floor);
+    moduleApp.setMaxAnswerTime(answer_latency_ceiling);
+
+    return moduleApp;
+  }
+
   return module;
 })();
 
