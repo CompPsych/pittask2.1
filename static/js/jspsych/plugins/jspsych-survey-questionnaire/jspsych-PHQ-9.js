@@ -103,19 +103,9 @@ jsPsych.plugins['PHQ-9'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
-    if (trial.type === 'PHQ-9' && (popup_answer_latency_floor || popup_answer_latency_ceiling)) {
-      timerModule = jsPsych.pluginAPI.timerModuleFactory(
-        response,
-        timestamp_onload,
-        popup_answer_latency_floor,
-        popup_answer_latency_ceiling
-      );
-
-      timerModule.setPopupFloorText(answer_latency_text_floor);
-      timerModule.setPopupCeilingText(answer_latency_text_ceiling);
-
-      timerModule.setMinAnswerTime(answer_latency_floor);
-      timerModule.setMaxAnswerTime(answer_latency_ceiling);
+    // timer module init
+    if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'PHQ-9')) {
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
     }
 
     response.trial_events.push({

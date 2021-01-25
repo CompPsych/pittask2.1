@@ -104,19 +104,8 @@ jsPsych.plugins['ASRM'] = (function() {
     var timestamp_onload = jsPsych.totalTime();
 
     // timer module init
-    if (trial.type === 'ASRM' && (popup_answer_latency_floor || popup_answer_latency_ceiling)) {
-      timerModule = jsPsych.pluginAPI.timerModuleFactory(
-        response,
-        timestamp_onload,
-        popup_answer_latency_floor,
-        popup_answer_latency_ceiling
-      );
-
-      timerModule.setPopupFloorText(answer_latency_text_floor);
-      timerModule.setPopupCeilingText(answer_latency_text_ceiling);
-
-      timerModule.setMinAnswerTime(answer_latency_floor);
-      timerModule.setMaxAnswerTime(answer_latency_ceiling);
+    if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'ASRM')) {
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
     }
 
     response.trial_events.push({
