@@ -377,6 +377,10 @@ jsPsych.plugins['ASRS-5'] = (function() {
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
+
+          // destroy timer module
+          timerModule.stopTimerModule();
+          timerModule = null;
         }
 
         // save data
