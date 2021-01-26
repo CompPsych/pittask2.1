@@ -1376,7 +1376,7 @@ if(isClass(query))
               as.character(as.ITime(formatDateTime(time_ms + events$timestamp[e]))),
               ifelse(is.na(events$timestamp[e]), 'NA', events$timestamp[e]),
               country, timezone, stage_name, commit, version, 
-              ifelse(stage_name != "VOR", block_number, 
+              ifelse(stage_name != "VOR" && stage_name != "transfer1" && stage_name != "transfer2" && stage_name != "transfer3", block_number, 
                 ifelse(!is.na(events$block_number[e]), events$block_number[e], 'NA')
               ),
               ifelse(!is.null(events$interval_number[e]), 

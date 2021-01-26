@@ -405,7 +405,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
       clearTimeout(timer)
 
-      timer = setTimeout(() => {
+      timer = jsPsych.pluginAPI.setTimeout(function() {
         isStoppedTest = true
         MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);
