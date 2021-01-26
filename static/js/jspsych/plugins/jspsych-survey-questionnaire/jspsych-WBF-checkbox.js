@@ -293,7 +293,7 @@ jsPsych.plugins['WBF-checkbox'] = (function() {
 
     // save timestamp on input click
     $('input[type=radio]').on('click change touchstart', function(event) {
-      if (event.type === 'click') {
+      if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;
 
