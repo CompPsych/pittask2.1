@@ -3022,7 +3022,7 @@ jsPsych.pluginAPI = (function() {
         stopTimer(ceilingTimer);
       },
       getPopupHTML: function() {
-        return
+        return '' +
           `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
             <div class="modal__overlay" tabindex="-1">
               <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">

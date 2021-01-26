@@ -298,26 +298,9 @@ jsPsych.plugins['GAD-7'] = (function() {
             </div>
         </div>`;
 
-    // Modal window content
-    var timerModuleModal =
-      `<div class="modal micromodal-slide" id="modal-2" aria-hidden="true">
-          <div class="modal__overlay" tabindex="-1">
-            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-2-title">
-              <header class="modal__header">
-                <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-              </header>
-              <main class="modal__content" id="modal-2-content">
-                <p id="modal-2-content__text"></p>
-              </main>
-              <footer class="modal__footer">
-                <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
-              </footer>
-            </div>
-          </div>
-      </div>`;
-
+    // popup of timer module
     if (timerModule) {
-      html += timerModuleModal;
+      html += timerModule.getPopupHTML();
     }
 
     // render
