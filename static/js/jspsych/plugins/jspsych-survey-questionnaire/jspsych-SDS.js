@@ -390,9 +390,16 @@ jsPsych.plugins['SDS'] = (function() {
       }
     })
 
+    // this is a mechanism for undoing a change
+    var selectedValue;
+
+    $('select').on('click', function() {
+      selectedValue = $(this).val()
+    });
+
     // handle select inputs
     $('select').change(function() {
-      var isSuccess = true;
+      var isSuccess = timerModule ? timerModule.check() : true;
 
       if (isSuccess) {
         var questionNumber = $(this)[0].selectedOptions[0].getAttribute('data-question-number');
@@ -407,9 +414,11 @@ jsPsych.plugins['SDS'] = (function() {
           'timestamp': jsPsych.totalTime(),
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
+      } else {
+        $(this).val(selectedValue)
       }
 
-      return isSuccess;
+      selectedValue = undefined;
     });
 
     // forced click event fix for some laptops touchpad
