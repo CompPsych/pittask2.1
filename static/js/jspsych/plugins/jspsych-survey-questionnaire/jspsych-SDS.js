@@ -483,7 +483,7 @@ jsPsych.plugins['SDS'] = (function() {
           if (match.querySelector('.input-not-working input[type=radio]:checked') !== null) {
             val_not_working = {
               'Not worked/studied':'checked'
-            }
+            };
 
             timestamp_data['Not worked/studied'] = trial.time_stamp['Q1S1'];
             $('#jspsych-survey-multi-choice-0').find('.question-title').removeClass('survey-error-after');
@@ -492,11 +492,11 @@ jsPsych.plugins['SDS'] = (function() {
 
             $(active_item).removeClass('bg-primary');
             obje[name] = 'NA';
-            timestamp_data[name] = 'NA'
+            timestamp_data[name] = 'NA';
           } else {
             val_not_working = {
               'Not worked/studied':'not checked'
-            }
+            };
             timestamp_data['Not worked/studied'] = 'NA';
           }
         }
@@ -537,8 +537,10 @@ jsPsych.plugins['SDS'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
 
           // destroy timer module
-          timerModule.stopTimerModule();
-          timerModule = null;
+          if (timerModule) {
+            timerModule.stopTimerModule();
+            timerModule = null;
+          }
         }
 
         // save data

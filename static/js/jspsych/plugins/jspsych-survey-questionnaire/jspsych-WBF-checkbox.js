@@ -341,9 +341,11 @@ jsPsych.plugins['WBF-checkbox'] = (function() {
         }
         var obje = {};
         var name = id;
+
         if (match.attributes['data-name'].value !== '') {
           name = match.attributes['data-name'].value;
         }
+
         obje[name] = val;
         timestamp_data[name] = trial.time_stamp['Q' + id];
         Object.assign(question_data, obje);
@@ -356,8 +358,10 @@ jsPsych.plugins['WBF-checkbox'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
 
           // destroy timer module
-          timerModule.stopTimerModule();
-          timerModule = null;
+          if (timerModule) {
+            timerModule.stopTimerModule();
+            timerModule = null;
+          }
         }
 
         // save data

@@ -379,8 +379,10 @@ jsPsych.plugins['OCI-R'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
 
           // destroy timer module
-          timerModule.stopTimerModule();
-          timerModule = null;
+          if (timerModule) {
+            timerModule.stopTimerModule();
+            timerModule = null;
+          }
         }
 
         // save data
