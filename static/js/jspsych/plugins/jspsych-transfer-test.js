@@ -401,7 +401,7 @@ jsPsych.plugins["transfer-test"] = (function() {
         response.trial_events.push({
             event_type: "error message",
             event_raw_details: "Error message",
-            event_converted: "popup triggered popup_duration_machine",
+            event_converted_details: "popup triggered popup_duration_machine",
             block_number: $block_number,
             timestamp: jsPsych.totalTime(),
             time_elapsed: jsPsych.totalTime() - timestamp_onload,

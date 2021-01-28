@@ -375,7 +375,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
         response.trial_events.push({
           event_type: 'error message',
           event_raw_details: 'Error message',
-          event_converted: 'popup triggered popup_duration_machine',
+          event_converted_details: 'popup triggered popup_duration_machine',
+          interval_number: 'NA',
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload
         });
@@ -385,6 +386,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
           event_type: 'popup closed',
           event_raw_details: 'Close',
           event_converted_details: 'blank vending machine appears',
+          interval_number: 'NA',
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload
         });
