@@ -434,10 +434,41 @@ var close_instruct_text_thanks =
 /************************************************************
  * Timer Popups
  ************************************************************/
+/* Default */
 var popup_answer_latency_floor = true;
 var answer_latency_floor = 4000;
 var answer_latency_text_floor = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
+
 var popup_answer_latency_ceiling = true;
 var answer_latency_ceiling = 10000;
 var answer_latency_text_ceiling = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
+/* Default */
+
+/* Floor */
+var popup_answer_latency_floor_SI = true;
+var answer_latency_floor_SI = 4000;
+var answer_latency_text_floor_SI = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
+
+var popup_answer_latency_floor_ICAR = true;
+var answer_latency_floor_ICAR = 4000;
+var answer_latency_text_floor_ICAR = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
+
+var popup_answer_latency_floor_SDS = true;
+var answer_latency_floor_SDS = 4000;
+var answer_latency_text_floor_SDS = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
+/* Floor */
+
+/* Ceiling */
+var popup_answer_latency_ceiling_SI = true;
+var answer_latency_ceiling_SI = 10000;
+var answer_latency_text_ceiling_SI = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
+
+var popup_answer_latency_ceiling_ICAR = true;
+var answer_latency_ceiling_ICAR = 10000;
+var answer_latency_text_ceiling_ICAR = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
+
+var popup_answer_latency_ceiling_SDS = true;
+var answer_latency_ceiling_SDS = 10000;
+var answer_latency_text_ceiling_SDS = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
+/* Ceiling */
 
