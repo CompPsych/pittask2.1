@@ -3059,8 +3059,9 @@ jsPsych.pluginAPI = (function() {
    *
    * @param {Object} responseStore - Response store.
    * @param {Number} timestamp - Timestamp.
+   * @param {Number || undefined} testName - Name of test.
    */
-  module.initializeTimerModule = function(responseStore, timestamp) {
+  module.initializeTimerModule = function(responseStore, timestamp, testName) {
     var moduleApp = module.timerModuleFactory(
       responseStore,
       timestamp,
@@ -3068,10 +3069,27 @@ jsPsych.pluginAPI = (function() {
       popup_answer_latency_ceiling
     );
 
+    var latency_floor = '';
+
+    switch (testName) {
+      case 'ICAR':
+        latency_floor = answer_latency_floor_ICAR;
+        break;
+      case 'SDS':
+        latency_floor = answer_latency_floor_SDS;
+        break;
+      case 'Demographics':
+        latency_floor = answer_latency_floor_SI;
+        break;
+      default:
+        latency_floor = answer_latency_floor_SI;
+        break;
+    }
+
     moduleApp.setPopupFloorText(answer_latency_text_floor);
     moduleApp.setPopupCeilingText(answer_latency_text_ceiling);
 
-    moduleApp.setMinAnswerTime(answer_latency_floor);
+    moduleApp.setMinAnswerTime(latency_floor);
     moduleApp.setMaxAnswerTime(answer_latency_ceiling);
 
     return moduleApp;
