@@ -3039,6 +3039,15 @@ jsPsych.pluginAPI = (function() {
             </div>
         </div>`;
       },
+      restartTimerModule: function() {
+        if (isOnFloor) {
+          restartFloorTimer();
+        }
+
+        if (isOnCeil) {
+          restartCeilingTimer();
+        }
+      },
     };
   };
 

@@ -507,6 +507,18 @@ jsPsych.plugins['Demographics'] = (function() {
       }
     });
 
+    $('input[type=text]').on('focus', function() {
+      if (timerModule) {
+        timerModule.stopTimerModule();
+      }
+    });
+
+    $('input[type=text]').on('blur', function() {
+      if (timerModule) {
+        timerModule.restartTimerModule();
+      }
+    });
+
     // form functionality
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
@@ -771,7 +783,7 @@ jsPsych.plugins['Demographics'] = (function() {
     });
 
     // input number activation on radio button
-    $('input:radio').on('click', function() {
+    $('input:radio').on('change', function() {
       if ($(this).data().enable) {
         var inputName = $(this).data().enable;
 
