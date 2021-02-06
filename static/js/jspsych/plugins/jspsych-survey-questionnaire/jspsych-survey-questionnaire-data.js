@@ -19,7 +19,7 @@ var DEMOGRAPHICS_STAGE = {
             horizontal: true
         }, {
             prompt: 'Weight',
-            options: ['kg', 'Pounds'],
+            options: ['kg', 'pounds'],
             horizontal: true
         }, {
             prompt: 'Education level',
@@ -1495,14 +1495,14 @@ var SDS_STAGE = {
     questions: [
         {
             prompt:
-                '<h2 class="question-title question-title-heading">work* / school</h3>' +
+                '<h2 class="question-title question-title-heading">work* / school</h2>' +
                 '<h3>The symptoms have disrupted your work / school work:</h3>',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal: false,
             name: 'WORK*'
         },{
             prompt:
-                '<h2 class="question-title question-title-heading">Social life</h3>' +
+                '<h2 class="question-title question-title-heading">Social life</h2>' +
                 '<h3>The symptoms have disrupted your social life / leisure activities:</h3>',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal: false,

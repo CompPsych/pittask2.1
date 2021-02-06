@@ -78,7 +78,8 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
 
     // store response
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
 
     // outcome src
@@ -244,6 +245,21 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
 
     }
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        scrollX: info.scrollX,
+        scrollY: info.scrollY,
+        viewport_size: info.viewport_size,
+        page_size: info.page_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    };
+
     // function to end trial when it is time
     var end_trial = function() {
 
@@ -254,6 +270,11 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
       if (typeof keyboardListener !== 'undefined') {
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
         jsPsych.pluginAPI.cancelClickResponse(clickListener);
+      }
+
+      // kill mouse listener
+      if (typeof mouseMoveListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
       }
 
       // gather the data to store for the trial
@@ -267,6 +288,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
         correct: vvrIsCorrect ? "y" : "n",
         strength_of_belief: vas_holder,
         events: JSON.stringify(response.trial_events),
+        mouse_events: JSON.stringify(response.mouse_events),
       };
 
       // add VVR stage name if plugin was called by VVR stage
@@ -316,6 +338,58 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function() {
         allow_held_key: false
       });
     }
+
+    // identifiers for mousemove event targets
+    var elementsMapping = [
+      {
+        element: 'vending machine',
+        tag: ['rect', 'path'],
+      },
+      {
+        element: 'outcome image',
+        tag: ['img']
+      },
+      {
+        element: 'submit button',
+        class: ['jspsych-btn']
+      },
+      {
+        element: 'instruction text (a) top',
+        text: [trial.vars.VVR_q_text_a1]
+      },
+      {
+        element: 'instruction text (a) bottom',
+        text: [trial.vars.VVR_q_text_a2]
+      },
+      {
+        element: 'slider',
+        id: ['slider'],
+        class: ['line', 'ui-slider-handle']
+      },
+      {
+        element: 'instruction text (b) top',
+        text: [trial.vars.VVR_q_text_b1]
+      },
+      {
+        element: 'instruction text (b) bottom',
+        class: ['instructions'],
+        tag: ['ul', 'li', 'span']
+      },
+      {
+        element: 'answer left',
+        class: ['description--left']
+      },
+      {
+        element: 'answer right',
+        class: ['description--right']
+      },
+    ];
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+    });
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {

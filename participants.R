@@ -514,6 +514,8 @@ if(isClass(query))
   
   complete_data_size <- 0
   complete_data_index <- 1L
+  complete_mouse_events_index <- 1L
+  complete_mouse_events_data_size <- 0
 
   for(i in 1:recordsCount){
     
@@ -522,9 +524,14 @@ if(isClass(query))
     }
     
     temp_events <- json_data[[i]]$data$trialdata$events[!is.na(json_data[[i]]$data$trialdata$events)]
+    temp_mouse_events <- json_data[[i]]$data$trialdata$mouse_events[!is.na(json_data[[i]]$data$trialdata$mouse_events)]
     
     for(j in 1: length(temp_events)) {
       complete_data_size <- complete_data_size + nrow(fromJSON(temp_events[j]))
+    }
+
+    for (j in 1: length(temp_mouse_events)) {
+      complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
     }
   }
   
@@ -546,6 +553,26 @@ if(isClass(query))
     event_type = character(complete_data_size),
     event_raw = character(complete_data_size),
     event_converted = character(complete_data_size)
+  )
+
+  MouseData <- data.table(
+    PIN = character(complete_mouse_events_data_size),
+    complete = character(complete_mouse_events_data_size),
+    date = character(complete_mouse_events_data_size), 
+    calendar_time = character(complete_mouse_events_data_size),
+    timestamp = character(complete_mouse_events_data_size),
+    location = character(complete_mouse_events_data_size),
+    commit = character(complete_mouse_events_data_size),
+    version = character(complete_mouse_events_data_size),
+    stage = character(complete_mouse_events_data_size),
+    viewport_size = character(complete_mouse_events_data_size),
+    page_size = character(complete_mouse_events_data_size),
+    event_type = character(complete_mouse_events_data_size),
+    x = character(complete_mouse_events_data_size),
+    y = character(complete_mouse_events_data_size),
+    coordinates_converted_details = character(complete_mouse_events_data_size),
+    scroll_position_x = character(complete_mouse_events_data_size),
+    scroll_position_y = character(complete_mouse_events_data_size)
   )
   
   cat("\n  Processing IP addresses . . .\n")
@@ -1349,6 +1376,44 @@ if(isClass(query))
         )))
       }
     }
+
+    # Mouse Data --------------------------------------------------------------
+    mousedata_index <- which(!is.na(trialdata$mouse_events))
+
+    if(length(mousedata_index) != 0){
+      for(j in 1:length(mousedata_index)) {
+
+        mousedata_response <- fromJSON(trialdata$mouse_events[mousedata_index[j]])
+
+        if (NROW(mousedata_response) == 0) next
+
+        date <- format(as.IDate(dateTime[mousedata_index[j]]), "%d-%m-%Y")
+        time <- as.character(as.ITime(dateTime[mousedata_index[j]]))
+        stage_name <- gsub('"', "", trialdata$stage_name[mousedata_index[j]])
+
+        for (k in 1:NROW(mousedata_response)) {
+          if (is.na(mousedata_response$target[k])) next
+
+          target <- mousedata_response$target[k]
+          viewport_size <- mousedata_response$viewport_size[k]
+          page_size <- mousedata_response$page_size[k]
+          type <- mousedata_response$type[k]
+          x <- mousedata_response$x[k]
+          y <- mousedata_response$y[k]
+          scrollX <- mousedata_response$scrollX[k]
+          scrollY <- mousedata_response$scrollY[k]
+
+          set(MouseData,complete_mouse_events_index, 1L:17L, list(
+            PIN, complete, date, time, mousedata_response$timestamp[k],
+            country, commit, version,
+            stage_name, viewport_size, page_size,
+            type, x, y, target, scrollX, scrollY
+          ))
+
+          complete_mouse_events_index <- complete_mouse_events_index + 1L
+        }
+      } 
+    }
     
     # CompleteData ------------------------------------------------------------
     
@@ -1440,6 +1505,7 @@ if(isClass(query))
     "consent_feedback" = ConsentFeedback,
     "pav_con" = PavCondition,
     "recall" = Recall,
+    "mouse_data" = MouseData,
     "complete" = CompleteData,
     "transfer_q" = Transfer_q
   )

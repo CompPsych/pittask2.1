@@ -93,10 +93,14 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
     var plugin_id_name = "jspsych-survey-multi-choice-PC-PTSD-5";
     var isHidden = false;
     var html = "";
+      
+    // identifiers for hover event targets
+    var elementsMapping = [];
 
     // store responses, events
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
     var timestamp_onload = jsPsych.totalTime();
 
@@ -152,7 +156,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
 
     // show preamble text
     if(trial.preamble !== null){
-      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">'+trial.preamble+'</div>';
+      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>'+trial.preamble+'</span></div>';
     }
 
     // form element
@@ -186,7 +190,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       if(i === 0) {
         html += '<div style="margin-bottom: 8rem;" id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left-first"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="padding-top: 3px;">' +  question.prompt 
+        html += '<div class="jspsych-survey-multi-choice-option-left-first"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="padding-top: 3px;"><span>' +  question.prompt 
       
       } else {
         if(i === 1) {
@@ -194,12 +198,12 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         };
         html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+' hidden"  data-name="'+question.name+'">';
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + i + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text">' +  question.prompt 
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + i + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text"><span>' +  question.prompt 
       }
 
   
       // question.required
-      html += '</p></div>';
+      html += '</span></p></div>';
       html += '<div class="jspsych-survey-multi-choice-option-right">';
       html += '<div class="first-right-wrapper">';
       html += '<div class="jspsych-survey-overlay hidden"></div>';
@@ -221,10 +225,19 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         if(j === 0) {
           html += '<span style="position: absolute; padding-top: 9px;">/</span>';
         }
+        elementsMapping.push({
+          element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+          for: [input_id]
+        });
       }
       html += '</div>';
 
       html += '</div></div>';
+      
+      elementsMapping.push({
+        element: 'Q' + (i + 1),
+        text: [(i) + '.', question.prompt]
+      });
     }
     
     // add submit button
@@ -286,6 +299,21 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           "time_elapsed": jsPsych.totalTime() - timestamp_onload
         });
       }
+    }
+
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        scrollX: info.scrollX,
+        scrollY: info.scrollY,
+        viewport_size: info.viewport_size,
+        page_size: info.page_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
     }
 
     // highlight input
@@ -371,6 +399,11 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
+        
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
 
         // save data
         var trial_data = {
@@ -379,7 +412,8 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           "timestamp": JSON.stringify(timestamp_data),
           "time_stamp": JSON.stringify(trial.time_stamp),
           "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events)
         };
 
         // clear the display
@@ -426,6 +460,44 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       rt_method: 'performance',
       persist: true,
       allow_held_key: false
+    });
+    
+    elementsMapping.push(
+      {
+        element: 'submit button',
+        value: [trial.button_label]
+      },
+      {
+        element: 'Q1',
+        class: ['jspsych-survey-multi-choice-option-left-first']
+      },
+      {
+        element: 'Instruction text',
+        text: ['<p>In the past month, have you...</p>']
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
+    );
+    
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+      ignored_tags: ['p', 'ul', 'li'],
     });
   };
 

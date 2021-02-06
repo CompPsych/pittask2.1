@@ -92,10 +92,14 @@ jsPsych.plugins['LSAS'] = (function () {
       var plugin_id_name = "jspsych-survey-multi-choice-LSAS";
   
       var html = "";
+      
+      // identifiers for hover event targets
+      var elementsMapping = [];
   
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
       var timestamp_onload = jsPsych.totalTime();
   
@@ -161,7 +165,7 @@ jsPsych.plugins['LSAS'] = (function () {
   
       // show preamble text
       if (trial.preamble !== null) {
-        html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
+        html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
       }
   
       // form element
@@ -194,6 +198,31 @@ jsPsych.plugins['LSAS'] = (function () {
                 </div>
             </div>
         </div>`;
+
+      var titles = [
+        ['None', 'Mild', 'Moderate', 'Severe'],
+        ['Never (0%)', 'Occasionally (1%-33% of the time)', 'Often (33%-67% of the time)', 'Usually (67%-100% of the time)']
+      ];
+
+      for (var i = 0; i < titles.length; i++) {
+        for (var j = 0; j < titles[i].length; j++) {
+          elementsMapping.push({
+            element: 'G' + (i + 1) + 'A' + (j + 1),
+            text: [titles[i][j]]
+          });
+        }
+      }
+      
+      elementsMapping.push(
+        {
+          element: 'G1',
+          text: ['FEAR OR ANXIETY']
+        },
+        {
+          element: 'G2',
+          text: ['AVOIDANCE']
+        }
+      );
   
       // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
       // so that the data are always associated with the same question regardless of order
@@ -221,9 +250,9 @@ jsPsych.plugins['LSAS'] = (function () {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
   
         // add question text
-        html += '<div style="display: flex; width: 30%; border-right: 3px solid #fff; padding-bottom: 3rem; "><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; width: 100%;">' + question.prompt
+        html += '<div style="display: flex; width: 30%; border-right: 3px solid #fff; padding-bottom: 3rem; "><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; width: 100%;"><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div style="display: flex; width: 70%; justify-content: space-around;">';
   
         // create option radio buttons
@@ -247,11 +276,21 @@ jsPsych.plugins['LSAS'] = (function () {
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="' + timestamp_char[j] + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j][k] + '</label>';
             html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="' + timestamp_char[j] + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j][k] + '" ' + required_attr + '></input>';
             html += '</div>';
+
+            elementsMapping.push({
+              element: 'G' + (j + 1) + 'Q' + (i + 1) + 'A' + (k + 1) + ' input',
+              for: [input_id]
+            });
           }
           html += '</div>';
         }
         
         html += '</div></div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '.', question.prompt]
+        });
       }
   
       // add submit button
@@ -316,6 +355,21 @@ jsPsych.plugins['LSAS'] = (function () {
           });
         }
       };
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          scrollX: info.scrollX,
+          scrollY: info.scrollY,
+          viewport_size: info.viewport_size,
+          page_size: info.page_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
+      }
   
       // highlight input
       $('.jspsych-survey-highlight').click(function () {
@@ -385,6 +439,11 @@ jsPsych.plugins['LSAS'] = (function () {
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             jsPsych.pluginAPI.cancelClickResponse(clickListener);
           }
+        
+          // kill mouse listener
+          if (typeof mouseMoveListener !== 'undefined') {
+            jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+          }
   
           // save data
           var trial_data = {
@@ -393,7 +452,8 @@ jsPsych.plugins['LSAS'] = (function () {
             "timestamp": JSON.stringify(timestamp_data),
             "time_stamp": JSON.stringify(trial.time_stamp),
             "question_order": JSON.stringify(question_order),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
           };
   
           // clear the display
@@ -441,6 +501,40 @@ jsPsych.plugins['LSAS'] = (function () {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+    
+      elementsMapping.push(
+        {
+          element: 'submit button',
+          value: [trial.button_label]
+        },
+        {
+          element: 'instruction text',
+          text: [trial.preamble]
+        },
+        {
+            element: 'cross close button',
+            class: ['modal__close'],
+        },
+        {
+            element: 'close button',
+            class: ['modal__btn'],
+        },
+        {
+            element: 'modal background',
+            class: ['modal__container', 'modal__header', 'modal__footer'],
+        },
+        {
+            element: 'modal text',
+            class: ['modal__content'],
+        },
+      );
+    
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
+        ignored_tags: ['p', 'ul', 'li'],
       });
     };
   

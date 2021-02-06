@@ -64,7 +64,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
     // store response
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
 
     if (vvr_timer <= 0) {
@@ -295,6 +296,21 @@ jsPsych.plugins['survey-vvr'] = (function() {
       }
     }
 
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        scrollX: info.scrollX,
+        scrollY: info.scrollY,
+        viewport_size: info.viewport_size,
+        page_size: info.page_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
+    };
+
     // function to end trial when it is time
     var end_trial = function() {
       // clear popup timer
@@ -329,12 +345,18 @@ jsPsych.plugins['survey-vvr'] = (function() {
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
       }
 
+      // kill mouse listener
+      if (typeof mouseMoveListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+      }
+
       // gather the data to store for the trial
       var trial_data = {
         stage_name: trial.stage_name,
         stimulus: trial.stimulus,
         block_number: loop_node_counter_vvr,
-        events: JSON.stringify(response.trial_events)
+        events: JSON.stringify(response.trial_events),
+        mouse_events: JSON.stringify(response.mouse_events),
       };
 
       // clear the display
@@ -362,6 +384,41 @@ jsPsych.plugins['survey-vvr'] = (function() {
         allow_held_key: false
       });
     }
+
+    // identifiers for hover event targets: tag, id, class, text
+    var elementsMapping = [
+      {
+        element: 'vending machine',
+        tag: ['rect', 'path'],
+      },
+      {
+        element: 'outcome image',
+        tag: ['img']
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
+    ];
+
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+      ignored_tags: ['p']
+    });
 
      // end trial if trial_duration is set
     if (trial.trial_duration !== null) {

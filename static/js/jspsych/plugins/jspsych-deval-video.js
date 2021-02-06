@@ -100,7 +100,8 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
       var timestamp_onload = jsPsych.totalTime();
 
@@ -204,11 +205,17 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
+
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
   
         // gather the data to store for the trial
         var trial_data = {
           "stage_name": JSON.stringify(trial.stage_name),
-          "events": JSON.stringify(response.trial_events)
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events),
         };
   
         // clear the display
@@ -243,6 +250,21 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
           end_trial();
         }
       };
+
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          scrollX: info.scrollX,
+          scrollY: info.scrollY,
+          viewport_size: info.viewport_size,
+          page_size: info.page_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
+      };
   
       // start the response listener
       if (trial.choices != jsPsych.NO_KEYS) {
@@ -262,6 +284,20 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
           allow_held_key: false
         });
       }
+
+      // identifiers for hover event targets: tag, id, class, text
+      var elementsMapping = [
+        {
+          element: 'video',
+          tag: ['video'],
+        },
+      ];
+
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
+      });
 
       var video_duration_real = trial.trial_duration;
 
