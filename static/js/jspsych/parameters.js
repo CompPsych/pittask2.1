@@ -435,34 +435,30 @@ var close_instruct_text_thanks =
  * Timer Popups
  ************************************************************/
 /* Default */
-var popup_answer_latency_floor = true;
-var answer_latency_floor = 4000;
 var answer_latency_text_floor = 'Please read the questions carefully before answering. Click the ‘x’ to continue.';
-
-var popup_answer_latency_ceiling = true;
-var answer_latency_ceiling = 10000;
 var answer_latency_text_ceiling = 'There are no incorrect answers in this questionnaire. Please select the most correct statement that applies to you. Press the ‘x’ to continue.';
 /* Default */
 
-/* Floor */
+/* _SI */
 var popup_answer_latency_floor_SI = true;
 var answer_latency_floor_SI = 4000;
 
-var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 4000;
-
-var popup_answer_latency_floor_SDS = true;
-var answer_latency_floor_SDS = 4000;
-/* Floor */
-
-/* Ceiling */
 var popup_answer_latency_ceiling_SI = true;
 var answer_latency_ceiling_SI = 10000;
+/* _SI */
 
-var popup_answer_latency_ceiling_ICAR = true;
-var answer_latency_ceiling_ICAR = 10000;
+/* _SDS */
+var popup_answer_latency_floor_SDS = true;
+var answer_latency_floor_SDS = 4000;
 
 var popup_answer_latency_ceiling_SDS = true;
 var answer_latency_ceiling_SDS = 10000;
-/* Ceiling */
+/* _SDS */
 
+/* _ICAR */
+var popup_answer_latency_floor_ICAR = true;
+var answer_latency_floor_ICAR = 4000;
+
+var popup_answer_latency_ceiling_ICAR = true;
+var answer_latency_ceiling_ICAR = 10000;
+/* _ICAR */
