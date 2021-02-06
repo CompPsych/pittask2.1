@@ -2849,6 +2849,43 @@ jsPsych.pluginAPI = (function() {
   })
 
   /**
+   * Get params by name of test.
+   *
+   * @param {String} testName
+   *
+   * @return {Object}
+   */
+  function getTimerModuleParamsByTestName(testName) {
+    var params = {
+      textFloor: answer_latency_text_floor,
+      textCeiling: answer_latency_text_ceiling,
+      popupFloor: popup_answer_latency_floor_SI,
+      popupCeiling: popup_answer_latency_ceiling_SI,
+      timeFloor: answer_latency_floor_SI,
+      timeCeiling: answer_latency_ceiling_SI,
+    };
+
+    switch (testName) {
+      case 'ICAR':
+        params.popupFloor = popup_answer_latency_floor_ICAR;
+        params.popupCeiling = popup_answer_latency_ceiling_ICAR;
+        params.timeFloor = answer_latency_floor_ICAR;
+        params.timeCeiling = answer_latency_ceiling_ICAR;
+        break;
+      case 'SDS':
+        params.popupFloor = popup_answer_latency_floor_SDS;
+        params.popupCeiling = popup_answer_latency_ceiling_SDS;
+        params.timeFloor = answer_latency_floor_SDS;
+        params.timeCeiling = answer_latency_ceiling_SDS;
+        break;
+      default:
+        break;
+    }
+
+    return params;
+  }
+
+  /**
    * Timer Module Factory.
    *
    * @param {Object} responseStore - Store.
@@ -3060,7 +3097,9 @@ jsPsych.pluginAPI = (function() {
    * @return {Boolean}
    */
   module.isNeedToStartTimerModuleInitialization = function(currentTestName, testName) {
-    return currentTestName === testName && (popup_answer_latency_floor || popup_answer_latency_ceiling)
+    var params = getTimerModuleParamsByTestName(testName);
+
+    return currentTestName === testName && (params.popupFloor|| params.popupCeiling);
   }
 
   /**
@@ -3071,35 +3110,20 @@ jsPsych.pluginAPI = (function() {
    * @param {Number || undefined} testName - Name of test.
    */
   module.initializeTimerModule = function(responseStore, timestamp, testName) {
+    var params = getTimerModuleParamsByTestName(testName);
+
     var moduleApp = module.timerModuleFactory(
       responseStore,
       timestamp,
-      popup_answer_latency_floor,
-      popup_answer_latency_ceiling
+      params.popupFloor,
+      params.popupCeiling
     );
 
-    var latency_floor = '';
+    moduleApp.setPopupFloorText(params.textFloor);
+    moduleApp.setPopupCeilingText(params.textCeiling);
 
-    switch (testName) {
-      case 'ICAR':
-        latency_floor = answer_latency_floor_ICAR;
-        break;
-      case 'SDS':
-        latency_floor = answer_latency_floor_SDS;
-        break;
-      case 'Demographics':
-        latency_floor = answer_latency_floor_SI;
-        break;
-      default:
-        latency_floor = answer_latency_floor_SI;
-        break;
-    }
-
-    moduleApp.setPopupFloorText(answer_latency_text_floor);
-    moduleApp.setPopupCeilingText(answer_latency_text_ceiling);
-
-    moduleApp.setMinAnswerTime(latency_floor);
-    moduleApp.setMaxAnswerTime(answer_latency_ceiling);
+    moduleApp.setMinAnswerTime(params.timeFloor);
+    moduleApp.setMaxAnswerTime(params.timeCeiling);
 
     return moduleApp;
   }
