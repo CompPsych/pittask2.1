@@ -239,11 +239,13 @@ jsPsych.plugins["vor"] = (function() {
         };
 
         var after_mousemove = function(info) {
-            console.log('target: ', info.target)
             response.mouse_events.push({
-                x: info.x,
-                y: info.y,
+                x: info.x, 
+                y: info.y, 
+                scrollX: info.scrollX,
+                scrollY: info.scrollY,
                 viewport_size: info.viewport_size,
+                page_size: info.page_size,
                 type: info.type,
                 target: info.target,
                 timestamp: jsPsych.totalTime(),

@@ -566,10 +566,13 @@ if(isClass(query))
     version = character(complete_mouse_events_data_size),
     stage = character(complete_mouse_events_data_size),
     viewport_size = character(complete_mouse_events_data_size),
+    page_size = character(complete_mouse_events_data_size),
     event_type = character(complete_mouse_events_data_size),
     x = character(complete_mouse_events_data_size),
     y = character(complete_mouse_events_data_size),
-    coordinates_details = character(complete_mouse_events_data_size)
+    coordinates_converted_details = character(complete_mouse_events_data_size),
+    scroll_position_x = character(complete_mouse_events_data_size),
+    scroll_position_y = character(complete_mouse_events_data_size)
   )
   
   cat("\n  Processing IP addresses . . .\n")
@@ -1393,12 +1396,18 @@ if(isClass(query))
 
           target <- mousedata_response$target[k]
           viewport_size <- mousedata_response$viewport_size[k]
+          page_size <- mousedata_response$page_size[k]
+          type <- mousedata_response$type[k]
+          x <- mousedata_response$x[k]
+          y <- mousedata_response$y[k]
+          scrollX <- mousedata_response$scrollX[k]
+          scrollY <- mousedata_response$scrollY[k]
 
-          set(MouseData,complete_mouse_events_index, 1L:14L, list(
+          set(MouseData,complete_mouse_events_index, 1L:17L, list(
             PIN, complete, date, time, mousedata_response$timestamp[k],
             country, commit, version,
-            stage_name, viewport_size,
-            mousedata_response$type[k],mousedata_response$x[k], mousedata_response$y[k], target
+            stage_name, viewport_size, page_size,
+            type, x, y, target, scrollX, scrollY
           ))
 
           complete_mouse_events_index <- complete_mouse_events_index + 1L

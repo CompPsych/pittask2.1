@@ -284,11 +284,13 @@ jsPsych.plugins['Smoking-Status'] = (function () {
 
       // function to handle mouse hovering UI elements
       var after_mousemove = function(info) {
-        console.log('target: ', info.target)
         response.mouse_events.push({
           x: info.x, 
           y: info.y, 
+          scrollX: info.scrollX,
+          scrollY: info.scrollY,
           viewport_size: info.viewport_size,
+          page_size: info.page_size,
           type: info.type,
           target: info.target,
           timestamp: jsPsych.totalTime(),

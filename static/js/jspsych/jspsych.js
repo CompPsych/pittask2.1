@@ -2283,8 +2283,10 @@ jsPsych.pluginAPI = (function() {
     var mousemove_listener_id;
 
     var mousemove_listener_function = function(e) {
-        var w = $(document).width();
-        var h = $(document).height();
+        var windowWidth = $(window).width();
+        var windowHight = $(window).height();
+        var documentWidth = $(document).width();
+        var documentHeight = $(document).height();
         var types = {
           mousemove: 'Cursor hover',
           mouseup: 'Click',
@@ -2303,10 +2305,13 @@ jsPsych.pluginAPI = (function() {
         };
         target = identifyTarget(parameters.elements_mapping, target);
         parameters.callback_function({ 
-          x: e.clientX, 
-          y: e.clientY, 
+          x: e.pageX, 
+          y: e.pageY, 
+          scrollX: window.pageXOffset,
+          scrollY: window.pageYOffset,
           target: target,
-          viewport_size: w + 'x' + h,
+          viewport_size: windowWidth + 'x' + windowHight,
+          page_size: documentWidth + 'x' + documentHeight,
           type: types[e.type]
         });
     };
