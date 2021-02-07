@@ -92,10 +92,14 @@ jsPsych.plugins['AUDIT'] = (function () {
       var plugin_id_name = "jspsych-survey-multi-choice-AUDIT";
   
       var html = "";
+
+      // identifiers for hover event targets
+      var elementsMapping = [];
   
       // store responses, events
       var response = {
-        trial_events: []
+        trial_events: [],
+        mouse_events: [],
       };
       var timestamp_onload = jsPsych.totalTime();
   
@@ -180,7 +184,15 @@ jsPsych.plugins['AUDIT'] = (function () {
               <li><div>4 or more times a week</div></li>
             </ul>
         </div>`
-  
+
+      var titles = ['Never', 'Monthly or less', '2-4 times a month', '2-3 times a week', '4 or more times a week']
+
+      for (var i = 0; i < titles.length; i++) {
+        elementsMapping.push({
+          element: 'Q1A' + (i + 1) + ' label',
+          text: [titles[i]]
+        });
+      }
   
       // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
       // so that the data are always associated with the same question regardless of order
@@ -208,9 +220,9 @@ jsPsych.plugins['AUDIT'] = (function () {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (i + 1) + '">';
   
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;">' + question.prompt
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;"><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div class="jspsych-survey-multi-choice-option-right">';
   
         // create option radio buttons
@@ -227,10 +239,20 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight hidden" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '<input hidden type="radio" name="' + input_name + '"  data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            id: [input_id]
+          });
         }
   
         html += '</div>';
         html += '</div>';
+
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '.', question.prompt]
+        });
       }
 
       // add title questions
@@ -258,7 +280,7 @@ jsPsych.plugins['AUDIT'] = (function () {
         // create option radio buttons
         for (var j = 0; j < questionsTitle.length; j++) {
           // add label and question text
-          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j + "-header";
           var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
           var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
           
@@ -266,6 +288,11 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
           html += '<p>' + questionsTitle[j] + '</p>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 2) + 'A' + (j + 1) + ' label',
+            id: [option_id_name]
+          });
         }
   
         html += '</div>';
@@ -287,9 +314,9 @@ jsPsych.plugins['AUDIT'] = (function () {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (i + 1) + '">';
   
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;">' + question.prompt
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;"><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div class="jspsych-survey-multi-choice-option-right">';
   
         // create option radio buttons
@@ -306,10 +333,20 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight hidden" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '<input hidden type="radio" name="' + input_name + '"  data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            id: [input_id]
+          });
         }
   
         html += '</div>';
         html += '</div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '.', question.prompt]
+        });
       }
 
 
@@ -337,7 +374,7 @@ jsPsych.plugins['AUDIT'] = (function () {
         // create option radio buttons
         for (var j = 0; j < questionsTitle.length; j++) {
           // add label and question text
-          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j + "-header";
           var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
           var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
           
@@ -345,6 +382,11 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
           html += '<p>' + questionsTitle[j] + '</p>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 2) + 'A' + (j + 1) + ' label',
+            id: [option_id_name]
+          });
         }
   
         html += '</div>';
@@ -366,9 +408,9 @@ jsPsych.plugins['AUDIT'] = (function () {
         html += '<div style="border-top: 1px solid #fff; " id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (i + 1) + '">';
   
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;">' + question.prompt
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;"><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div class="jspsych-survey-multi-choice-option-right">';
   
         // create option radio buttons
@@ -385,10 +427,20 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight hidden" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '<input hidden type="radio" name="' + input_name + '"  data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            id: [input_id]
+          });
         }
   
         html += '</div>';
         html += '</div>';
+
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '.', question.prompt]
+        });
       }
 
 
@@ -416,7 +468,7 @@ jsPsych.plugins['AUDIT'] = (function () {
         // create option radio buttons
         for (var j = 0; j < questionsTitle.length; j++) {
           // add label and question text
-          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+          var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j + "-header";
           var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
           var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
           
@@ -424,6 +476,11 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
           html += '<p>' + questionsTitle[j] + '</p>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 2) + 'A' + (j + 1) + ' label',
+            id: [option_id_name]
+          });
         }
   
         html += '</div>';
@@ -445,9 +502,9 @@ jsPsych.plugins['AUDIT'] = (function () {
         html += '<div style="border-top: 1px solid #fff;" id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (i + 1) + '">';
   
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;">' + question.prompt
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + (i + 1) + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding: 0 7px; width: 100%;"><span>' + question.prompt
         // question.required
-        html += '</p></div>';
+        html += '</span></p></div>';
         html += '<div class="jspsych-survey-multi-choice-option-right">';
   
         // create option radio buttons
@@ -464,10 +521,20 @@ jsPsych.plugins['AUDIT'] = (function () {
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight hidden" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '<input hidden type="radio" name="' + input_name + '"  data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
           html += '</div>';
+          
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            id: [input_id]
+          });
         }
   
         html += '</div>';
         html += '</div>';
+        
+        elementsMapping.push({
+          element: 'Q' + (i + 1),
+          text: [(i + 1) + '. ', question.prompt]
+        });
       }
 
       html += '</div>';
@@ -536,6 +603,21 @@ jsPsych.plugins['AUDIT'] = (function () {
         }
       };
 
+      // function to handle mouse hovering UI elements
+      var after_mousemove = function(info) {
+        response.mouse_events.push({
+          x: info.x, 
+          y: info.y, 
+          scrollX: info.scrollX,
+          scrollY: info.scrollY,
+          viewport_size: info.viewport_size,
+          page_size: info.page_size,
+          type: info.type,
+          target: info.target,
+          timestamp: jsPsych.totalTime(),
+        });
+      }
+
        // save timestamp on input click
       $("input[type=radio]").on("click change touchstart",function(){
         var time_stamp_key = $(this).data('time-stamp'); 
@@ -596,6 +678,11 @@ jsPsych.plugins['AUDIT'] = (function () {
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             jsPsych.pluginAPI.cancelClickResponse(clickListener);
           }
+        
+          // kill mouse listener
+          if (typeof mouseMoveListener !== 'undefined') {
+            jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+          }
   
           // save data
           var trial_data = {
@@ -604,7 +691,8 @@ jsPsych.plugins['AUDIT'] = (function () {
             "timestamp": JSON.stringify(timestamp_data),
             "time_stamp": JSON.stringify(trial.time_stamp),
             "question_order": JSON.stringify(question_order),
-            "events": JSON.stringify(response.trial_events)
+            "events": JSON.stringify(response.trial_events),
+            "mouse_events": JSON.stringify(response.mouse_events)
           };
   
           // clear the display
@@ -652,6 +740,44 @@ jsPsych.plugins['AUDIT'] = (function () {
         rt_method: 'performance',
         persist: true,
         allow_held_key: false
+      });
+    
+      elementsMapping.push(
+        {
+          element: 'submit button',
+          value: [trial.button_label]
+        },
+        {
+          element: 'image',
+          tag: ['img']
+        },
+        {
+          element: 'instruction text',
+          class: ['jspsych-survey-multi-choice-preamble']
+        },
+        {
+            element: 'cross close button',
+            class: ['modal__close'],
+        },
+        {
+            element: 'close button',
+            class: ['modal__btn'],
+        },
+        {
+            element: 'modal background',
+            class: ['modal__container', 'modal__header', 'modal__footer'],
+        },
+        {
+            element: 'modal text',
+            class: ['modal__content'],
+        },
+      );
+    
+      // start mouse move listener
+      var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+        callback_function: after_mousemove,
+        elements_mapping: elementsMapping,
+        ignored_tags: ['p'],
       });
     };
   

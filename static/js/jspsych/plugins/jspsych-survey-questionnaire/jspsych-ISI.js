@@ -92,10 +92,14 @@ jsPsych.plugins['ISI'] = (function () {
 
     var plugin_id_name = "jspsych-survey-multi-choice-ISI";
     var html = "";
+      
+    // identifiers for hover event targets
+    var elementsMapping = [];
 
     // store responses, events
     var response = {
-      trial_events: []
+      trial_events: [],
+      mouse_events: [],
     };
     var timestamp_onload = jsPsych.totalTime();
 
@@ -153,7 +157,7 @@ jsPsych.plugins['ISI'] = (function () {
 
     // show preamble text
     if (trial.preamble !== null) {
-      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' + trial.preamble + '</div>';
+      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
     }
 
     // form element
@@ -192,9 +196,9 @@ jsPsych.plugins['ISI'] = (function () {
       }
 
       // add question text
-      html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">'+ (i + 1) +'.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question">' + question.prompt
+      html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">'+ (i + 1) +'.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question"><span>' + question.prompt
       // question.required
-      html += '</p></div>';
+      html += '</span></p></div>';
 
       i !== 0 ? html += '<div class="jspsych-survey-multi-choice-option-right">': html += '<div>';
 
@@ -204,7 +208,12 @@ jsPsych.plugins['ISI'] = (function () {
           if (j === 0) {
             html += '<div style="display: flex;"><div class="jspsych-survey-multi-choice-left"></div><div class="jspsych-survey-multi-choice-right-top-main">';
             for (var index = 0; index < question.title.length; index++) {
-              html += '<div>' + question.title[index] + '</div>';
+              html += '<div id="Q' + i + 'A' + index + '">' + question.title[index] + '</div>';
+              
+              elementsMapping.push({
+                element: 'Q' + (i + 1) + 'A' + (index + 1) + ' label',
+                id: ['Q' + i + 'A' + index]
+              });
             }
             html += '</div>';
           }
@@ -213,11 +222,15 @@ jsPsych.plugins['ISI'] = (function () {
           if (j === 0) {
             html += '<div style="display: flex;"><div style="width: 100%; display: flex; justify-content: space-around;">';
             for (var index = 0; index < question.title.length; index++) {
-              html += '<div style="display: flex; justify-content: center; align-items: center; width: 100px; text-align: center;">' + question.title[index] + '</div>';
+              html += '<div style="display: flex; justify-content: center; align-items: center; width: 100px; text-align: center;" id="Q' + i + 'A' + index + '">' + question.title[index] + '</div>';
+
+              elementsMapping.push({
+                element: 'Q' + (i + 1) + 'A' + (index + 1) + ' label',
+                id: ['Q' + i + 'A' + index]
+              });
             }
             html += '</div>';
           }
-
         }
       }
       html += '</div>';
@@ -234,6 +247,11 @@ jsPsych.plugins['ISI'] = (function () {
           html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="' + input_id + '">' + question.options[j] + '</label>';
           html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j] + '"></input>';
           html += '</div>';
+
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'A' + (j + 1) + ' input',
+            for: [input_id]
+          });
         }
 
       }
@@ -241,7 +259,7 @@ jsPsych.plugins['ISI'] = (function () {
       html += '</div>';
       for (var j = 0; j < question.options.length; j++) {
         if (question_id === 0) {
-          html += '<div style="display: flex;" id="jspsych-survey-multi-choice-1-' + j + '"><div class="jspsych-survey-multi-choice-left jspsych-survey-multi-choice-left-top jspsych-survey-multi-choice-question"><p>' + question.options[j].prompt + '</p></div>';
+          html += '<div style="display: flex;" id="jspsych-survey-multi-choice-1-' + j + '"><div class="jspsych-survey-multi-choice-left jspsych-survey-multi-choice-left-top jspsych-survey-multi-choice-question"><p><span id="Q1S' + j + '">' + question.options[j].prompt + '</span></p></div>';
           html += '<div class="jspsych-survey-multi-choice-right-top">';
           for (var k = 0; k < question.options[j].options.length; k++) {
             var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j + '-' + k;
@@ -251,15 +269,30 @@ jsPsych.plugins['ISI'] = (function () {
             html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
             html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight" data-time-stamp="Q' + (i+1) + 'S' + (j+1) + '" data-question-number="Q' + (i+1) + 'S' + (j+1) + 'A' + (k+1) +'" for="' + input_id + '">' + question.options[j].options[k] + '</label>';
             html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j].options[k] + '"></input></div>';
+            
+            elementsMapping.push({
+              element: 'Q' + (i + 1) + 'S' + (j + 1) + 'A' + (k + 1) + ' input',
+              for: [input_id]
+            });
           }
           html += '</div>'
           html += '</div>'
+
+          elementsMapping.push({
+            element: 'Q' + (i + 1) + 'S' + (j + 1),
+            id: ['Q1S' + j]
+          });
         }
 
       }
       html += '</div>';
       html += '</div>';
       html += '</div>';
+
+      elementsMapping.push({
+        element: 'Q' + (i + 1),
+        text: [(i + 1) + '.', question.prompt]
+      });
     }
 
     // add submit button
@@ -324,6 +357,21 @@ jsPsych.plugins['ISI'] = (function () {
           "time_elapsed": jsPsych.totalTime() - timestamp_onload
         });
       }
+    }
+
+    // function to handle mouse hovering UI elements
+    var after_mousemove = function(info) {
+      response.mouse_events.push({
+        x: info.x, 
+        y: info.y, 
+        scrollX: info.scrollX,
+        scrollY: info.scrollY,
+        viewport_size: info.viewport_size,
+        page_size: info.page_size,
+        type: info.type,
+        target: info.target,
+        timestamp: jsPsych.totalTime(),
+      });
     }
 
     $('.jspsych-survey-question').parent().css('border-top', '1px solid')
@@ -422,6 +470,11 @@ jsPsych.plugins['ISI'] = (function () {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
         }
+        
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
 
         // save data
         var trial_data = {
@@ -430,7 +483,8 @@ jsPsych.plugins['ISI'] = (function () {
           "timestamp": JSON.stringify(timestamp_data),
           "time_stamp": JSON.stringify(trial.time_stamp),
           "question_order": JSON.stringify(question_order),
-          "events": JSON.stringify(response.trial_events)
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events)
         };
 
         // clear the display
@@ -479,6 +533,40 @@ jsPsych.plugins['ISI'] = (function () {
       rt_method: 'performance',
       persist: true,
       allow_held_key: false
+    });
+    
+    elementsMapping.push(
+      {
+        element: 'submit button',
+        value: [trial.button_label]
+      },
+      {
+        element: 'instruction text',
+        text: [trial.preamble]
+      },
+      {
+          element: 'cross close button',
+          class: ['modal__close'],
+      },
+      {
+          element: 'close button',
+          class: ['modal__btn'],
+      },
+      {
+          element: 'modal background',
+          class: ['modal__container', 'modal__header', 'modal__footer'],
+      },
+      {
+          element: 'modal text',
+          class: ['modal__content'],
+      },
+    );
+    
+    // start mouse move listener
+    var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
+      callback_function: after_mousemove,
+      elements_mapping: elementsMapping,
+      ignored_tags: ['p'],
     });
   };
 
