@@ -605,7 +605,7 @@ jsPsych.plugins['AUDIT'] = (function() {
         obje[name] = val;
         timestamp_data[name] = trial.time_stamp['Q' + id];
 
-        if(trial.time_stamp['Q' + id] === undefined) {
+        if (trial.time_stamp['Q' + id] === undefined) {
           timestamp_data[id] = 'NA';
         }
 

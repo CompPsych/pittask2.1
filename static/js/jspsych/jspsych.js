@@ -3107,7 +3107,7 @@ jsPsych.pluginAPI = (function() {
    *
    * @param {Object} responseStore - Response store.
    * @param {Number} timestamp - Timestamp.
-   * @param {Number || undefined} testName - Name of test.
+   * @param {String || undefined} testName - Name of test.
    */
   module.initializeTimerModule = function(responseStore, timestamp, testName) {
     var params = getTimerModuleParamsByTestName(testName);
