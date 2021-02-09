@@ -105,7 +105,7 @@ jsPsych.plugins['ASRS-5'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'ASRS-5')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -315,7 +315,7 @@ jsPsych.plugins['ASRS-5'] = (function() {
     });
 
     // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',
@@ -335,10 +335,12 @@ jsPsych.plugins['ASRS-5'] = (function() {
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
           var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
         } else {
           var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
         }

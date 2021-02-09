@@ -94,7 +94,7 @@ jsPsych.plugins['ASRM'] = (function() {
     }
   };
 
-  plugin.trial = function (display_element, trial) {
+  plugin.trial = function(display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-ASRM';
     var html = '';
     // store responses, events
@@ -105,7 +105,7 @@ jsPsych.plugins['ASRM'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'ASRM')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({

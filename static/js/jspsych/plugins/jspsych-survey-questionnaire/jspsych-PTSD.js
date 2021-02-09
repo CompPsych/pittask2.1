@@ -106,7 +106,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'PC-PTSD-5')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -172,7 +172,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
 
-    for(var i=0; i<trial.questions.length; i++){
+    for (var i = 0; i < trial.questions.length; i++) {
       question_order.push(i);
     }
 
@@ -301,7 +301,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
@@ -392,7 +392,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         var obje = {};
         var name = id;
 
-        if (match.attributes['data-name'].value !== ''){
+        if (match.attributes['data-name'].value !== '') {
           name = match.attributes['data-name'].value;
         }
 

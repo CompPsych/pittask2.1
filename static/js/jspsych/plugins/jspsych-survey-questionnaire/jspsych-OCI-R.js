@@ -105,7 +105,7 @@ jsPsych.plugins['OCI-R'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'OCI-R')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -307,7 +307,7 @@ jsPsych.plugins['OCI-R'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
@@ -344,8 +344,8 @@ jsPsych.plugins['OCI-R'] = (function() {
       var question_data = {};
       var timestamp_data = {};
 
-      for (var i=0; i<trial.questions.length; i++) {
-        var match = display_element.querySelector('#jspsych-survey-multi-choice-'+i);
+      for (var i = 0; i < trial.questions.length; i++) {
+        var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = i + 1;
 
         if (match.querySelector('input[type=radio]:checked') !== null) {

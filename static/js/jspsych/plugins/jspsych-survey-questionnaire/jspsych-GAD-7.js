@@ -189,7 +189,7 @@ jsPsych.plugins['GAD-7'] = (function() {
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
 
-    for (var i=0; i<trial.questions.length; i++){
+    for (var i = 0; i < trial.questions.length; i++) {
       question_order.push(i);
     }
 
@@ -240,7 +240,7 @@ jsPsych.plugins['GAD-7'] = (function() {
 
     var checkbox_order = [];
 
-    for (var i=0; i<trial.checkboxes.length; i++) {
+    for (var i = 0; i < trial.checkboxes.length; i++) {
       checkbox_order.push(i);
     }
 
@@ -253,7 +253,6 @@ jsPsych.plugins['GAD-7'] = (function() {
       // add question text
       html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice" style="padding: 4rem 0; text-align: left">' + checkbox.prompt + '</p>'
       html += '<div style="display: flex; justify-content: space-around; height: 150px; align-items: baseline; font-size: 18px;">';
-
 
       for (var j = 0; j < checkbox.options.length; j++) {
         // add label and question text
@@ -288,7 +287,7 @@ jsPsych.plugins['GAD-7'] = (function() {
                 </header>
                 <main class="modal__content" id="modal-1-content">
                   <p>
-                  ${popup_text_WBF}
+                  ${ popup_text_WBF }
                   </p>
                 </main>
                 <footer class="modal__footer">
@@ -341,7 +340,7 @@ jsPsych.plugins['GAD-7'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
@@ -384,9 +383,11 @@ jsPsych.plugins['GAD-7'] = (function() {
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
           var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error');
         } else {
           var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error');
         }
 
@@ -407,7 +408,7 @@ jsPsych.plugins['GAD-7'] = (function() {
         var id = 'last';
         var val;
 
-        if(match.querySelector('input[type=radio]:checked') !== null){
+        if (match.querySelector('input[type=radio]:checked') !== null) {
           val = match.querySelector('input[type=radio]:checked').value;
           timestamp_data[id] = trial.time_stamp['Q8'];
         } else {

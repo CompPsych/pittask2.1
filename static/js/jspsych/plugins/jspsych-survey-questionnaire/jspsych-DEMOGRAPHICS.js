@@ -478,19 +478,10 @@ jsPsych.plugins['Demographics'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
-
-    // forced click event fix for some laptops touchpad
-    // $('label').on('click', function() {
-    //   var labelID = $(this).attr('for');
-    //
-    //   if ('labelID') {
-    //     $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-    //   }
-    // });
+    };
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
+    $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;
@@ -503,7 +494,7 @@ jsPsych.plugins['Demographics'] = (function() {
           }
         }
 
-        return isSuccess
+        return isSuccess;
       }
     });
 
@@ -540,6 +531,7 @@ jsPsych.plugins['Demographics'] = (function() {
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
           var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
         } else {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
@@ -580,7 +572,7 @@ jsPsych.plugins['Demographics'] = (function() {
           $('.jspsych-survey-multi-choice-question-age').addClass('survey-error-after');
           $(label).addClass('survey-error-after');
 
-          if (!$('.moda__age-incomplete').length ) {
+          if (!$('.moda__age-incomplete').length) {
             $('.modal__content').append('<p class="moda__age-incomplete">You have entered an age that falls outside the expected range. <br/> Please enter your age.</p>')
           }
         }
@@ -692,7 +684,7 @@ jsPsych.plugins['Demographics'] = (function() {
           $('.jspsych-survey-multi-choice-question-weight').addClass('survey-error-after');
           $(label).addClass('survey-error-after');
 
-          if (!$('.moda__weight-incomplete').length ) {
+          if (!$('.moda__weight-incomplete').length) {
             $('.modal__content').append('<p class="moda__weight-incomplete">You have entered a weight that falls outside the expected range. <br/> Please enter your weight.</p>')
           }
         }
@@ -704,6 +696,7 @@ jsPsych.plugins['Demographics'] = (function() {
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
           var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
         } else {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');

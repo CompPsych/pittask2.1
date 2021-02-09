@@ -3009,19 +3009,20 @@ jsPsych.pluginAPI = (function() {
         }
 
         if (isOnFloor !== true) {
-
           if (isOnCeil) {
             restartCeilingTimer();
           }
 
-          return true
+          return true;
         }
+
+        // Stop timer before check
+        stopTimer(timer);
 
         if (tmpAnswerTime < minAnswerTime) {
           setOpenPopupEventText('floor');
           setPopupText(popupFloorText);
           showPopup();
-          stopTimer(timer);
           stopTimer(ceilingTimer);
 
           return false;

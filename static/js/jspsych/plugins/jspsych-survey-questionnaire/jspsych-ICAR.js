@@ -252,7 +252,7 @@ jsPsych.plugins['ICAR'] = (function() {
         html += '</div></div>';
       }
       // Matrix reasoning
-      else if(question.name === 'matrix_reasoning') {
+      else if (question.name === 'matrix_reasoning') {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '" style="display: none;"  data-name="' + question.number + '">';
 
         html += '<p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;">' + question.prompt + '</p>';
@@ -280,7 +280,7 @@ jsPsych.plugins['ICAR'] = (function() {
       }
 
       // Three Dimensional Rotate
-      else if(question.name === 'three_dimensional_rotate') {
+      else if (question.name === 'three_dimensional_rotate') {
         html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  style="display: none;" data-name="' + question.number + '">';
 
         // add question image
@@ -325,7 +325,7 @@ jsPsych.plugins['ICAR'] = (function() {
               </header>
               <main class="modal__content" id="modal-1-content">
                 <p>
-                ${popup_text_WBF}
+                ${ popup_text_WBF }
                 </p>
               </main>
               <footer class="modal__footer">
@@ -378,7 +378,7 @@ jsPsych.plugins['ICAR'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // Display first question on page load
     $('#jspsych-survey-multi-choice-0').show();
@@ -447,28 +447,8 @@ jsPsych.plugins['ICAR'] = (function() {
       }
     });
 
-    // add active class on click for images overlay
-    $('input').on('click', function() {
-      if ($(this)[0].dataset.matrixReasoning) {
-        $('.matrix-reasoning-wrap ul li').removeClass('active');
-        $(this).parent('li').addClass('active');
-      } else if($(this)[0].dataset.threeDimensionalRotate) {
-        $('.three-dimensional-rotate-wrap ul li').removeClass('active');
-        $(this).parent('li').addClass('active');
-      }
-    });
-
-    // forced click event fix for some laptops touchpad
-    $('label').on('click', function() {
-      var labelID = $(this).attr('for');
-
-      if ('labelID') {
-        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-      }
-    });
-
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
+    $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;
@@ -479,13 +459,21 @@ jsPsych.plugins['ICAR'] = (function() {
           if (time_stamp_key) {
             trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
           }
+
+          if ($(this)[0].dataset.matrixReasoning) {
+            $('.matrix-reasoning-wrap ul li').removeClass('active');
+            $(this).parent('li').addClass('active');
+          } else if ($(this)[0].dataset.threeDimensionalRotate) {
+            $('.three-dimensional-rotate-wrap ul li').removeClass('active');
+            $(this).parent('li').addClass('active');
+          }
         }
 
-        return isSuccess
+        return isSuccess;
       }
     });
 
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',

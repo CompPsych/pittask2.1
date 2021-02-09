@@ -105,7 +105,7 @@ jsPsych.plugins['AUDIT'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'AUDIT')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -549,7 +549,7 @@ jsPsych.plugins['AUDIT'] = (function() {
     };
 
      // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
+    $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;

@@ -105,7 +105,7 @@ jsPsych.plugins['Smoking-Status'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'Smoking-Status')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -275,7 +275,7 @@ jsPsych.plugins['Smoking-Status'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click', function() {
@@ -293,7 +293,7 @@ jsPsych.plugins['Smoking-Status'] = (function() {
     });
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
+    $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;
@@ -306,7 +306,7 @@ jsPsych.plugins['Smoking-Status'] = (function() {
           }
         }
 
-        return isSuccess
+        return isSuccess;
       }
     });
 

@@ -105,7 +105,7 @@ jsPsych.plugins['PRIME-R'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'PRIME-R')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -305,7 +305,7 @@ jsPsych.plugins['PRIME-R'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
@@ -328,7 +328,7 @@ jsPsych.plugins['PRIME-R'] = (function() {
     });
 
     // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',

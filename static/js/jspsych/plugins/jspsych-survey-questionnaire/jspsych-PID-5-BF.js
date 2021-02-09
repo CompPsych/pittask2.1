@@ -105,7 +105,7 @@ jsPsych.plugins['PID-5-BF'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'PID-5-BF')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -169,7 +169,7 @@ jsPsych.plugins['PID-5-BF'] = (function() {
             <li><div>Sometimes or Somewhat True</div></li>
             <li><div>Very True or Often True</div></li>
           </ul>
-      </div>`
+      </div>`;
 
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -290,7 +290,7 @@ jsPsych.plugins['PID-5-BF'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {

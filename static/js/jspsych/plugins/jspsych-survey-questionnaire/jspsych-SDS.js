@@ -194,7 +194,7 @@ jsPsych.plugins['SDS'] = (function() {
       html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question_name + '">';
 
       // add question text
-      html += '<div>' + question.prompt
+      html += '<div>' + question.prompt;
 
       // question.required
       html += '</div>';
@@ -394,7 +394,7 @@ jsPsych.plugins['SDS'] = (function() {
     var selectedValue;
 
     $('select').on('click', function() {
-      selectedValue = $(this).val()
+      selectedValue = $(this).val();
     });
 
     // handle select inputs
@@ -415,7 +415,7 @@ jsPsych.plugins['SDS'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       } else {
-        $(this).val(selectedValue)
+        $(this).val(selectedValue);
       }
 
       selectedValue = undefined;
@@ -449,7 +449,7 @@ jsPsych.plugins['SDS'] = (function() {
     // });
 
     // from functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',

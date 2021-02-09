@@ -94,7 +94,7 @@ jsPsych.plugins['ISI'] = (function() {
     }
   };
 
-  plugin.trial = function (display_element, trial) {
+  plugin.trial = function(display_element, trial) {
     var plugin_id_name = 'jspsych-survey-multi-choice-ISI';
     var html = '';
 
@@ -106,7 +106,7 @@ jsPsych.plugins['ISI'] = (function() {
 
     // timer module init
     if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'ISI')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload);
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
     }
 
     response.trial_events.push({
@@ -269,8 +269,8 @@ jsPsych.plugins['ISI'] = (function() {
             html += '<input hidden type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + i + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="' + question.options[j].options[k] + '"></input></div>';
           }
 
-          html += '</div>'
-          html += '</div>'
+          html += '</div>';
+          html += '</div>';
         }
       }
 
@@ -346,9 +346,9 @@ jsPsych.plugins['ISI'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
-    $('.jspsych-survey-question').parent().css('border-top', '1px solid')
+    $('.jspsych-survey-question').parent().css('border-top', '1px solid');
 
     // highlight input
     $('.jspsych-survey-highlight').on('click touchstart', function() {
@@ -434,9 +434,9 @@ jsPsych.plugins['ISI'] = (function() {
         }
 
         if (display_element.querySelector('#jspsych-survey-multi-choice-1-' + 0).querySelector('input[type=radio]:checked') === null ||
-            display_element.querySelector('#jspsych-survey-multi-choice-1-' + 1).querySelector('input[type=radio]:checked') === null) {
-            $(match_first).find('.jspsych-survey-multi-choice-option-left .jspsych-survey-multi-choice-text').addClass('survey-error-after');
-            $(match_first).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
+          display_element.querySelector('#jspsych-survey-multi-choice-1-' + 1).querySelector('input[type=radio]:checked') === null) {
+          $(match_first).find('.jspsych-survey-multi-choice-option-left .jspsych-survey-multi-choice-text').addClass('survey-error-after');
+          $(match_first).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
         }
 
         var obje = {};

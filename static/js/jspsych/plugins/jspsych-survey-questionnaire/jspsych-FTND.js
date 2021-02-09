@@ -239,7 +239,7 @@ jsPsych.plugins['FTND'] = (function() {
                 </header>
                 <main class="modal__content" id="modal-1-content">
                   <p>
-                  ${popup_text_WBF}
+                  ${ popup_text_WBF }
                   </p>
                 </main>
                 <footer class="modal__footer">
@@ -292,7 +292,7 @@ jsPsych.plugins['FTND'] = (function() {
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // highlight input
     $('.jspsych-survey-highlight').on('click', function() {
@@ -310,7 +310,7 @@ jsPsych.plugins['FTND'] = (function() {
     });
 
     // save timestamp on input click
-    $('input[type=radio]').on('click change touchstart', function(event) {
+    $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
         var isSuccess = timerModule ? timerModule.check() : true;
         var time_stamp_key;
@@ -328,7 +328,7 @@ jsPsych.plugins['FTND'] = (function() {
     });
 
     // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',
@@ -348,9 +348,11 @@ jsPsych.plugins['FTND'] = (function() {
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
           var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
         } else {
           var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
         }
 
@@ -445,7 +447,7 @@ jsPsych.plugins['FTND'] = (function() {
         5: 'NA',
         6: 'NA',
       };
-      timestamp_data = question_data;
+      var timestamp_data = question_data;
       // kill keyboard listeners
       if (typeof keyboardListener !== 'undefined') {
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
