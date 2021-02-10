@@ -395,10 +395,17 @@ jsPsych.plugins['SDS'] = (function() {
 
     $('select').on('click', function() {
       selectedValue = $(this).val();
+
+      // fix for default value
+      if (selectedValue === null) {
+        $(this).val('None');
+        selectedValue = 'None'
+      }
     });
 
+
     // handle select inputs
-    $('select').change(function() {
+    $('select').on('change', function() {
       var isSuccess = timerModule ? timerModule.check() : true;
 
       if (isSuccess) {
@@ -417,36 +424,7 @@ jsPsych.plugins['SDS'] = (function() {
       } else {
         $(this).val(selectedValue);
       }
-
-      selectedValue = undefined;
     });
-
-    // forced click event fix for some laptops touchpad
-    // $('label').on('click', function() {
-    //   var labelID = $(this).attr('for');
-    //
-    //   if ('labelID') {
-    //     $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-    //   }
-    // });
-    //
-    // // save timestamp on input click
-    // $('input[type=radio]').on('click change touchstart', function(event) {
-    //   if (event.type === 'click') {
-    //     var isSuccess = timerModule.check();
-    //     var time_stamp_key;
-    //
-    //     if (isSuccess) {
-    //       time_stamp_key = $(this).data('time-stamp');
-    //
-    //       if (time_stamp_key) {
-    //         trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-    //       }
-    //     }
-    //
-    //     return isSuccess
-    //   }
-    // });
 
     // from functionality
     document.querySelector('form').addEventListener('submit', function(event) {

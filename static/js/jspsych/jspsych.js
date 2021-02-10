@@ -2909,6 +2909,7 @@ jsPsych.pluginAPI = (function() {
     var timer = null;
     var openEventName = ''
     var microModalConfig = {
+      disableScroll: true,
       onShow: function() {
         var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
 
