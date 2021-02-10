@@ -277,21 +277,6 @@ jsPsych.plugins['Smoking-Status'] = (function() {
       }
     };
 
-    // highlight input
-    $('.jspsych-survey-highlight').on('click', function() {
-      $(this).addClass('bg-primary');
-      $(this).next('input').prop('checked', true);
-    });
-
-    // forced click event fix for some laptops touchpad
-    $('label').on('click', function() {
-      var labelID = $(this).attr('for');
-
-      if ('labelID') {
-        $('#' + labelID).prop('checked', true).trigger('click').trigger('change');
-      }
-    });
-
     // save timestamp on input click
     $('input[type=radio]').on('click touchstart', function(event) {
       if (event.type === 'click' || event.type === 'touchstart') {
