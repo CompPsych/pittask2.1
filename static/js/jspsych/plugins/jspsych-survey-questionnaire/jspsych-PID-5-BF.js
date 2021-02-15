@@ -313,7 +313,7 @@ jsPsych.plugins['PID-5-BF'] = (function() {
     });
 
     // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
+    document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       response.trial_events.push({
         'event_type': 'button clicked',

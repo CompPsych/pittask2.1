@@ -378,9 +378,8 @@ jsPsych.plugins['SDS'] = (function() {
       var time_stamp_key;
 
       if (isSuccess) {
-        $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary'); // remove previous bg-primary items
+        $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
         $(this).addClass('bg-primary');
-        $(this).next('input').prop('checked', true);
 
         time_stamp_key = $(this).data('time-stamp');
 
@@ -388,6 +387,8 @@ jsPsych.plugins['SDS'] = (function() {
           trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
         }
       }
+
+      return isSuccess;
     })
 
     // this is a mechanism for undoing a change
@@ -402,7 +403,6 @@ jsPsych.plugins['SDS'] = (function() {
         selectedValue = 'None'
       }
     });
-
 
     // handle select inputs
     $('select').on('change', function() {
