@@ -1,4 +1,4 @@
-jsPsych.plugins["vor"] = (function() {
+jsPsych.plugins["vor"] = (function () {
     var plugin = {};
 
     plugin.info = {
@@ -32,7 +32,7 @@ jsPsych.plugins["vor"] = (function() {
         },
     };
 
-    plugin.trial = function(display_element, trial) {
+    plugin.trial = function (display_element, trial) {
 
         var extinct_lockout = false;
         var block_number = 0;
@@ -112,7 +112,7 @@ jsPsych.plugins["vor"] = (function() {
                 time_elapsed: jsPsych.totalTime() - timestamp_onload,
             });
 
-            jsPsych.pluginAPI.setTimeout(function() {
+            jsPsych.pluginAPI.setTimeout(function () {
 
                 // clear outcome container
                 $outcome_container.html("");
@@ -139,7 +139,7 @@ jsPsych.plugins["vor"] = (function() {
                 ]);
             }
 
-            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function() {
+            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
                 // terminate VOR stage
                 if (block_number === VOR_block_num) {
                     clearTimeout(OI_interval_timer);
@@ -158,7 +158,7 @@ jsPsych.plugins["vor"] = (function() {
             OI_threshold_timer = jsPsych.totalTime();
             clearTimeout(OI_interval_timer);
 
-            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function() {
+            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
                 if (block_number === VOR_block_num) {
                     clearTimeout(OI_interval_timer);
                     end_trial();
@@ -172,7 +172,7 @@ jsPsych.plugins["vor"] = (function() {
 
             clearTimeout(OI_threshold_interval);
 
-            OI_threshold_interval = jsPsych.pluginAPI.setTimeout(function() {
+            OI_threshold_interval = jsPsych.pluginAPI.setTimeout(function () {
 
                 OI_duration = OI_duration_B;
 
@@ -181,7 +181,7 @@ jsPsych.plugins["vor"] = (function() {
                     start_OI();
                 } else {
                     clearTimeout(OI_interval_timer);
-                    OI_interval_timer = jsPsych.pluginAPI.setTimeout(function() {
+                    OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
                         if (block_number === VOR_block_num) {
                             clearTimeout(OI_interval_timer);
                             end_trial();
@@ -199,7 +199,7 @@ jsPsych.plugins["vor"] = (function() {
             clearTimeout(OI_interval);
 
             if (!extinct_lockout) {
-                OI_interval = jsPsych.pluginAPI.setTimeout(function() {
+                OI_interval = jsPsych.pluginAPI.setTimeout(function () {
                     extinct_lockout = true;
                     start_OI();
                     threshold_interval();
@@ -211,7 +211,7 @@ jsPsych.plugins["vor"] = (function() {
 
 
         // function to handle responses by the subject
-        var after_response = function(info) {
+        var after_response = function (info) {
 
             if (info.key_release === undefined) {
                 response.trial_events.push({
@@ -238,10 +238,10 @@ jsPsych.plugins["vor"] = (function() {
             }
         };
 
-        var after_mousemove = function(info) {
+        var after_mousemove = function (info) {
             response.mouse_events.push({
-                x: info.x, 
-                y: info.y, 
+                x: info.x,
+                y: info.y,
                 scrollX: info.scrollX,
                 scrollY: info.scrollY,
                 viewport_size: info.viewport_size,
@@ -260,7 +260,7 @@ jsPsych.plugins["vor"] = (function() {
                     transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)",
                 });
 
-                jsPsych.pluginAPI.setTimeout(function() {
+                jsPsych.pluginAPI.setTimeout(function () {
                     $(".vending-machine").css({
                         transform: "rotate(0deg) translateX(0%)",
                         transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)",
@@ -283,7 +283,7 @@ jsPsych.plugins["vor"] = (function() {
                     transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)",
                 });
 
-                jsPsych.pluginAPI.setTimeout(function() {
+                jsPsych.pluginAPI.setTimeout(function () {
                     $(".vending-machine").css({
                         transform: "rotate(0deg) translateX(0%)",
                         transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)",
@@ -311,7 +311,7 @@ jsPsych.plugins["vor"] = (function() {
         }
 
         // function to end trial when it is time
-        var end_trial = function() {
+        var end_trial = function () {
 
             // kill any remaining setTimeout handlers
             jsPsych.pluginAPI.clearAllTimeouts();
@@ -363,13 +363,13 @@ jsPsych.plugins["vor"] = (function() {
 
         // identifiers for hover event targets
         var elementsMapping = [{
-                element: 'vending machine',
-                tag: ['rect', 'path'],
-            },
-            {
-                element: 'outcome image',
-                tag: ['img']
-            }
+            element: 'vending machine',
+            tag: ['rect', 'path'],
+        },
+        {
+            element: 'outcome image',
+            tag: ['img']
+        }
         ];
 
         // start mouse move listener
@@ -380,7 +380,7 @@ jsPsych.plugins["vor"] = (function() {
 
         // end trial if trial_duration is set
         if (trial.trial_duration !== null) {
-            jsPsych.pluginAPI.setTimeout(function() {
+            jsPsych.pluginAPI.setTimeout(function () {
                 end_trial();
             }, trial.trial_duration);
         }

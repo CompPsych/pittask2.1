@@ -1,5 +1,10 @@
-jsPsych.plugins['PC-PTSD-5'] = (function() {
+jsPsych.plugins['PC-PTSD-5'] = (function () {
   var plugin = {};
+
+  /**
+   * Timer module.
+   */
+  var timerModule = null;
 
   plugin.info = {
     name: 'PC-PTSD-5',
@@ -59,7 +64,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default:  'Continue',
+        default: 'Continue',
         description: 'Label of the button.'
       },
       time_stamp: {
@@ -87,13 +92,13 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         description: 'Event converted details'
       }
     }
-  }
-  plugin.trial = function(display_element, trial) {
-    
-    var plugin_id_name = "jspsych-survey-multi-choice-PC-PTSD-5";
+  };
+
+  plugin.trial = function (display_element, trial) {
+    var plugin_id_name = 'jspsych-survey-multi-choice-PC-PTSD-5';
     var isHidden = false;
     var html = "";
-      
+
     // identifiers for hover event targets
     var elementsMapping = [];
 
@@ -104,21 +109,26 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
     };
     var timestamp_onload = jsPsych.totalTime();
 
+    // timer module init
+    if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'PC-PTSD-5')) {
+      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
+    }
+
     response.trial_events.push({
-      "event_type": trial.event_type,
-      "event_raw_details": trial.event_raw_details,
-      "event_converted_details": trial.event_converted_details,
-      "timestamp": jsPsych.totalTime(),
-      "time_elapsed": jsPsych.totalTime() - timestamp_onload
+      'event_type': trial.event_type,
+      'event_raw_details': trial.event_raw_details,
+      'event_converted_details': trial.event_converted_details,
+      'timestamp': jsPsych.totalTime(),
+      'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
-    html += ".jspsych-survey-multi-choice-question { display: flex; margin-top: 1em; margin-bottom: 1em; text-align: left; justify-content: space-between; }"+
-      ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: left;}"+
-      ".jspsych-survey-multi-choice-option { line-height: 2; padding: 0; }"+
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em; }"+
+    html += ".jspsych-survey-multi-choice-question { display: flex; margin-top: 1em; margin-bottom: 1em; text-align: left; justify-content: space-between; }" +
+      ".jspsych-survey-multi-choice-text span.required {color: darkred;}" +
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: left;}" +
+      ".jspsych-survey-multi-choice-option { line-height: 2; padding: 0; }" +
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em; }" +
       ".jspsych-survey-multi-choice-form { max-width: 1000px; }" +
       ".jspsych-survey-multi-choice-option-left-first  { width: 90%; display: block; border-right: 0; padding-right: 10%; padding-bottom: 0; }" +
       ".jspsych-survey-multi-choice-option-left  { width: 90%; border-right: 0; padding-right: 10%; display: flex; padding-bottom: 0; }" +
@@ -133,17 +143,17 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       ".jspsych-survey-multi-choice-preamble {width: 800px; text-align: left; border-bottom: 1px solid;} .jspsych-survey-multi-choice-preamble h2 {text-align: center} .preamble-wrapper {display: flex;} .preamble-wrapper p {padding-left: 2rem;}" +
       "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}" +
       "@media (max-width: 1060px) {" +
-          ".jspsych-survey-multi-choice-option-right  { width: 20%;  }" +
+      ".jspsych-survey-multi-choice-option-right  { width: 20%;  }" +
       "}" +
       "@media (max-width: 650px) {" +
-          ".jspsych-survey-multi-choice-option-left-first  { width: 70%; padding-right: 10%;  }" +
-          ".jspsych-survey-multi-choice-option-left  { width: 70%; padding-right: 10%;  }" +
-          ".jspsych-survey-multi-choice-option-right  { width: 30%;  }" +
+      ".jspsych-survey-multi-choice-option-left-first  { width: 70%; padding-right: 10%;  }" +
+      ".jspsych-survey-multi-choice-option-left  { width: 70%; padding-right: 10%;  }" +
+      ".jspsych-survey-multi-choice-option-right  { width: 30%;  }" +
       "}"
     html += '</style>';
 
     // fixed heder
-    html += 
+    html +=
       '<header>' +
       '<nav class="navbar navbar-inverse navbar-fixed-top">' +
       '<div class="container-fluid">' +
@@ -155,53 +165,54 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       '</header>';
 
     // show preamble text
-    if(trial.preamble !== null){
-      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>'+trial.preamble+'</span></div>';
+    if (trial.preamble !== null) {
+      html += '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble"><span>' + trial.preamble + '</span></div>';
     }
 
     // form element
     html += '<div id="' + plugin_id_name + '">';
     html += '<form id="jspsych-survey-multi-choice-form">';
-    
+
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
-    for(var i=0; i<trial.questions.length; i++){
+
+    for (var i = 0; i < trial.questions.length; i++) {
       question_order.push(i);
     }
-    if(trial.randomize_question_order){
+
+    if (trial.randomize_question_order) {
       question_order = jsPsych.randomization.shuffle(question_order);
     }
-    
+
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
-      
       // get question based on question_order
       var question = trial.questions[question_order[i]];
       var question_id = question_order[i];
-      
+
       // create question container
       var question_classes = ['jspsych-survey-multi-choice-question'];
+
       if (question.horizontal) {
         question_classes.push('jspsych-survey-multi-choice-horizontal');
       }
 
-      
-      if(i === 0) {
-        html += '<div style="margin-bottom: 8rem;" id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
+      if (i === 0) {
+        html += '<div style="margin-bottom: 8rem;" id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left-first"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="padding-top: 3px;"><span>' +  question.prompt 
-      
+        html += '<div class="jspsych-survey-multi-choice-option-left-first"><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="padding-top: 3px;"><span>' + question.prompt
+
       } else {
-        if(i === 1) {
-          html += '<div class="'+question_classes.join(' ')+' hidden"  data-name="'+question.name+'"><p>In the past month, have you...</p></div>';
-        };
-        html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+' hidden"  data-name="'+question.name+'">';
+        if (i === 1) {
+          html += '<div class="' + question_classes.join(' ') + ' hidden"  data-name="' + question.name + '"><p>In the past month, have you...</p></div>';
+        }
+
+        html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + ' hidden"  data-name="' + question.name + '">';
         // add question text
-        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + i + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text"><span>' +  question.prompt 
+        html += '<div class="jspsych-survey-multi-choice-option-left"><span class="jspsych-survey-multi-choice-number">' + i + '.</span><p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text"><span>' + question.prompt
       }
 
-  
       // question.required
       html += '</span></p></div>';
       html += '<div class="jspsych-survey-multi-choice-option-right">';
@@ -211,18 +222,18 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
         // add label and question text
-        var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+j;
-        var input_name = 'jspsych-survey-multi-choice-response-'+question_id;
-        var input_id = 'jspsych-survey-multi-choice-response-'+question_id+'-'+j;
-
+        var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j;
+        var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
+        var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
         var required_attr = question.required ? 'required' : '';
 
         // add radio button container
-        html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
-        html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight ' + input_id + ' " data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" for="'+input_id+'">' +question.options[j]+'</label>';
-        html += '<input hidden type="radio" name="'+input_name+'" id="'+input_id+'" data-time-stamp="Q' + (i+1) + '" data-question-number="Q' + (i+1) +'A' + (j+1) +'" value="'+question.options[j]+'" '+required_attr+'></input>';
+        html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
+        html += '<label class="jspsych-survey-multi-choice-text jspsych-survey-highlight ' + input_id + ' " data-time-stamp="Q' + (i + 1) + '" data-question-number="Q' + (i + 1) + 'A' + (j + 1) + '" for="' + input_id + '">' + question.options[j] + '</label>';
+        html += '<input style="display:none;" type="radio" name="' + input_name + '" id="' + input_id + '" data-time-stamp="Q' + (i + 1) + '" data-question-number="Q' + (i + 1) + 'A' + (j + 1) + '" value="' + question.options[j] + '" ' + required_attr + '>';
         html += '</div>';
-        if(j === 0) {
+
+        if (j === 0) {
           html += '<span style="position: absolute; padding-top: 9px;">/</span>';
         }
         elementsMapping.push({
@@ -230,18 +241,18 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           for: [input_id]
         });
       }
-      html += '</div>';
 
+      html += '</div>';
       html += '</div></div>';
-      
+
       elementsMapping.push({
         element: 'Q' + (i + 1),
         text: [(i) + '.', question.prompt]
       });
     }
-    
+
     // add submit button
-    html += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"' + (trial.button_label ? ' value="'+trial.button_label + '"': '') + '></input>';
+    html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '>';
     html += '</form>';
 
     // add modal
@@ -262,6 +273,11 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
           </div>
       </div>`;
 
+    // popup of timer module
+    if (timerModule) {
+      html += timerModule.getPopupHTML();
+    }
+
     // render
     display_element.innerHTML = html;
 
@@ -269,43 +285,44 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
     var after_response = function (info) {
       if (info.key_release === undefined) {
         response.trial_events.push({
-          "event_type": "key press",
-          "event_raw_details": info.key,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key press',
+          'event_raw_details': info.key,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
 
-        if(info.el) {
-          if(info.el.dataset.timeStamp) {
+        if (info.el) {
+          if (info.el.dataset.timeStamp) {
             trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
           }
-          if(info.el.dataset.questionNumber) {
+
+          if (info.el.dataset.questionNumber) {
             response.trial_events.push({
-              "event_type": "answer displayed",
-              "event_raw_details": info.el.dataset.questionNumber,
-              "event_converted_details": info.el.dataset.questionNumber + ' answer displayed',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'answer displayed',
+              'event_raw_details': info.el.dataset.questionNumber,
+              'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         }
       } else {
         response.trial_events.push({
-          "event_type": "key release",
-          "event_raw_details": info.key_release,
-          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-          "timestamp": jsPsych.totalTime(),
-          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          'event_type': 'key release',
+          'event_raw_details': info.key_release,
+          'event_converted_details': jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
+          'timestamp': jsPsych.totalTime(),
+          'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
       }
-    }
+    };
 
     // function to handle mouse hovering UI elements
-    var after_mousemove = function(info) {
+    var after_mousemove = function (info) {
       response.mouse_events.push({
-        x: info.x, 
-        y: info.y, 
+        x: info.x,
+        y: info.y,
         scrollX: info.scrollX,
         scrollY: info.scrollY,
         viewport_size: info.viewport_size,
@@ -317,89 +334,116 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
     }
 
     // highlight input
-    $('.jspsych-survey-highlight').click(function () {
-      $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
-      $(this).addClass('bg-primary');
+    $('.jspsych-survey-highlight').on('click touchstart', function () {
+      if ($(this).hasClass('disabled')) {
+        return false;
+      }
+
+      var time_stamp_key;
+      var isSuccess = timerModule ? timerModule.check() : true;
+
+      if (isSuccess) {
+        if ($(this).hasClass('jspsych-survey-multi-choice-response-0-0')) {
+          showSecondForm($(this));
+        }
+
+        if ($(this).hasClass('jspsych-survey-multi-choice-response-0-1')) {
+          $(this).parent().parent().find('.jspsych-survey-multi-choice-response-0-0').addClass('disabled');
+          $(this).addClass('disabled');
+        }
+
+        $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
+        $(this).addClass('bg-primary');
+
+        // save timestamp on input click
+        time_stamp_key = $(this).parent().find('input[type=radio]');
+
+        if (time_stamp_key) {
+          trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+        }
+      }
+
+      return isSuccess;
     });
 
-    // forced click event fix for some laptops touchpad
-    $("label").on("click",function(){
-      var labelID = $(this).attr('for');
-      if('labelID') {
-        $("#" + labelID).prop('checked', true).trigger('click').trigger('change');
-      };
-    });
-
-    // save timestamp on input click
-    $("input[type=radio]").on("click change touchstart",function(){
-      var time_stamp_key = $(this).data('time-stamp'); 
-      if(time_stamp_key) {
-        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
-      };
-    });
-
-    // disable inputs on 1st response was made
-    $('.jspsych-survey-multi-choice-response-0-0').click(function() {
+    function showSecondForm($element) {
       isHidden = true;
       $('.jspsych-survey-multi-choice-horizontal').removeClass('hidden');
-      $(this).parent().parent().find('.jspsych-survey-overlay').removeClass('hidden');
-      $('#jspsych-survey-multi-choice-response-0-0').prop('disabled', true);
-      $('#jspsych-survey-multi-choice-response-0-1').prop('disabled', true);
-    })
+      $element.parent().parent().find('.jspsych-survey-overlay').removeClass('hidden');
+    }
+
+    // disable inputs on 1st response was made
+    // $('.jspsych-survey-multi-choice-response-0-0').on('click', function() {
+    //   isHidden = true;
+    //   $('.jspsych-survey-multi-choice-horizontal').removeClass('hidden');
+    //   $(this).parent().parent().find('.jspsych-survey-overlay').removeClass('hidden');
+    //   $('#jspsych-survey-multi-choice-response-0-0').prop('disabled', true);
+    //   $('#jspsych-survey-multi-choice-response-0-1').prop('disabled', true);
+    // })
 
     // form functionality
-    document.querySelector('form').addEventListener('submit', function(event) {
+    document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
       response.trial_events.push({
-        "event_type": "button clicked",
-        "event_raw_details": 'Submit',
-        "event_converted_details": '"Submit" selected',
-        "timestamp": jsPsych.totalTime(),
-        "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
       });
 
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
-      for(var i=0; i<trial.questions.length; i++){
-        var match = display_element.querySelector('#jspsych-survey-multi-choice-'+i);
+
+      for (var i = 0; i < trial.questions.length; i++) {
+        var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = i;
 
-        if(match.querySelector("input[type=radio]:checked") !== null){
-          var val = match.querySelector("input[type=radio]:checked").value;
+        if (match.querySelector('input[type=radio]:checked') !== null) {
+          var val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
         } else {
-          var val = "";
+          var val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
         }
 
-        if(i === 0) {
+        if (i === 0) {
           id = 'screen';
-        } else if(i != 0 && !isHidden) {
+        } else if (i != 0 && !isHidden) {
           val = 'NA';
           $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
         }
-       
+
         var obje = {};
         var name = id;
-        if(match.attributes['data-name'].value !== ''){
+
+        if (match.attributes['data-name'].value !== '') {
           name = match.attributes['data-name'].value;
         }
 
-        timestamp_data[name] = val === 'NA' ? val : trial.time_stamp['Q' + (i+1)];
-        obje[name] = val; 
+        timestamp_data[name] = val === 'NA' ? val : trial.time_stamp['Q' + (i + 1)];
+        obje[name] = val;
         Object.assign(question_data, obje);
       }
 
-      if ($(".survey-error-after").length < 1) {
+      if ($('.survey-error-after').length < 1) {
         // kill keyboard listeners
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
           jsPsych.pluginAPI.cancelClickResponse(clickListener);
+
+          // destroy timer module
+          if (timerModule) {
+            timerModule.stopTimerModule();
+            timerModule = null;
+          }
         }
-        
+
         // kill mouse listener
         if (typeof mouseMoveListener !== 'undefined') {
           jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
@@ -425,25 +469,24 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         MicroModal.show('modal-1', {
           onShow() {
             response.trial_events.push({
-              "event_type": "error message",
-              "event_raw_details": 'Error message',
-              "event_converted_details": 'popup triggered by incomplete WBF question',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'error message',
+              'event_raw_details': 'Error message',
+              'event_converted_details': 'popup triggered by incomplete WBF question',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           },
           onClose() {
             response.trial_events.push({
-              "event_type": "popup closed",
-              "event_raw_details": 'Close',
-              "event_converted_details": trial.event_converted_details,
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
+              'event_type': 'popup closed',
+              'event_raw_details': 'Close',
+              'event_converted_details': trial.event_converted_details,
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
           }
         });
       }
-
     });
 
     // start the response listener
@@ -454,6 +497,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       persist: true,
       allow_held_key: false
     });
+
     var clickListener = jsPsych.pluginAPI.getMouseResponse({
       callback_function: after_response,
       valid_responses: jsPsych.ALL_KEYS,
@@ -461,7 +505,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
       persist: true,
       allow_held_key: false
     });
-    
+
     elementsMapping.push(
       {
         element: 'submit button',
@@ -476,23 +520,23 @@ jsPsych.plugins['PC-PTSD-5'] = (function() {
         text: ['<p>In the past month, have you...</p>']
       },
       {
-          element: 'cross close button',
-          class: ['modal__close'],
+        element: 'cross close button',
+        class: ['modal__close'],
       },
       {
-          element: 'close button',
-          class: ['modal__btn'],
+        element: 'close button',
+        class: ['modal__btn'],
       },
       {
-          element: 'modal background',
-          class: ['modal__container', 'modal__header', 'modal__footer'],
+        element: 'modal background',
+        class: ['modal__container', 'modal__header', 'modal__footer'],
       },
       {
-          element: 'modal text',
-          class: ['modal__content'],
+        element: 'modal text',
+        class: ['modal__content'],
       },
     );
-    
+
     // start mouse move listener
     var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
       callback_function: after_mousemove,
