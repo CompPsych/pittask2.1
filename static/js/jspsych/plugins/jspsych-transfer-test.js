@@ -1,4 +1,4 @@
-jsPsych.plugins["transfer-test"] = (function() {
+jsPsych.plugins["transfer-test"] = (function () {
   var plugin = {};
 
   plugin.info = {
@@ -76,16 +76,16 @@ jsPsych.plugins["transfer-test"] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
+  plugin.trial = function (display_element, trial) {
 
     // plugin used for transfer_test and deva_test stages
     var html = "";
     var timer;
     var isStoppedTest = false;
     var popupConfig = {
-        isShow: trial.popup_machine,
-        duration: trial.popup_machine_duration * 1000,
-        text: trial.popup_machine_text,
+      isShow: trial.popup_machine,
+      duration: trial.popup_machine_duration * 1000,
+      text: trial.popup_machine_text,
     };
     var devalTestDuration = 0;
     var devalTestLoop;
@@ -120,7 +120,7 @@ jsPsych.plugins["transfer-test"] = (function() {
                   </header>
                   <main class="modal__content" id="modal-1-content">
                     <p>
-                      ${ popupConfig.text }
+                      ${popupConfig.text}
                     </p>
                   </main>
                   <footer class="modal__footer">
@@ -167,7 +167,7 @@ jsPsych.plugins["transfer-test"] = (function() {
       });
 
       // add to the end of array blank vending machine
-      if(reps_counter === trial.sequence_reps - 1) {
+      if (reps_counter === trial.sequence_reps - 1) {
         notes.push({
           color: '#000',
           color_name: 'blank'
@@ -191,17 +191,17 @@ jsPsych.plugins["transfer-test"] = (function() {
 
           latestSavedColor = notes[i].color_name;
 
-          $('.vending-machine rect').css({fill: color});
+          $('.vending-machine rect').css({ fill: color });
 
           duration = trial.transfer_test_color_duration;
 
           response.trial_events.push({
-              event_type: "image appears",
-              event_raw_details: color_name + " vending machine",
-              event_converted_details: color_name + " vending machine appears",
-              block_number: $block_number,
-              timestamp: jsPsych.totalTime(),
-              time_elapsed: jsPsych.totalTime() - timestamp_onload,
+            event_type: "image appears",
+            event_raw_details: color_name + " vending machine",
+            event_converted_details: color_name + " vending machine appears",
+            block_number: $block_number,
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
           });
 
           i++;
@@ -221,24 +221,24 @@ jsPsych.plugins["transfer-test"] = (function() {
     }
 
     // used to determine relevantly stage
-    if(trial.stage_name !== 'deval_test') {
+    if (trial.stage_name !== 'deval_test') {
       $block_number = 1;
       change_colors();
     } else if (trial.stage_name === 'deval_test') {
       devalTestDuration = trial.trial_duration;
       response.trial_events.push({
-          event_type: "image appears",
-          event_raw_details: "blank vending machine",
-          event_converted_details: "blank vending machine appears",
-          timestamp: jsPsych.totalTime(),
-          time_elapsed: jsPsych.totalTime() - timestamp_onload,
+        event_type: "image appears",
+        event_raw_details: "blank vending machine",
+        event_converted_details: "blank vending machine appears",
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp_onload,
       });
     }
 
     setModalShowTimer();
 
     // function to end trial when it is time
-    var end_trial = function() {
+    var end_trial = function () {
       // clear popup timer
       clearTimeout(timer)
       // kill any remaining setTimeout handlers
@@ -249,7 +249,7 @@ jsPsych.plugins["transfer-test"] = (function() {
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
         jsPsych.pluginAPI.cancelClickResponse(clickListener);
       }
-      
+
       // kill mouse listener
       if (typeof mouseMoveListener !== 'undefined') {
         jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
@@ -257,9 +257,9 @@ jsPsych.plugins["transfer-test"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-          stage_name: JSON.stringify(trial.stage_name),
-          events: JSON.stringify(response.trial_events),
-          mouse_events: JSON.stringify(response.mouse_events)
+        stage_name: JSON.stringify(trial.stage_name),
+        events: JSON.stringify(response.trial_events),
+        mouse_events: JSON.stringify(response.mouse_events)
       };
 
       // clear the display
@@ -270,10 +270,10 @@ jsPsych.plugins["transfer-test"] = (function() {
     };
 
     // function to handle responses by the subject
-    var after_response = function(info) {
+    var after_response = function (info) {
 
       var $vending_machine = $(".vending-machine");
-      
+
       if (!isStoppedTest) {
         setModalShowTimer();
       }
@@ -286,7 +286,7 @@ jsPsych.plugins["transfer-test"] = (function() {
             transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
 
-          jsPsych.pluginAPI.setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function () {
             $vending_machine.css({
               transform: "rotate(0deg) translateX(0%)",
               transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
@@ -315,24 +315,24 @@ jsPsych.plugins["transfer-test"] = (function() {
           }, shake_return_time);
 
           response.trial_events.push({
-              event_type: "right tilt",
-              event_raw_details: shake_right_translateX + "%, " + shake_right_rotate + "deg",
-              event_converted_details: "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
-              block_number: $block_number,
-              timestamp: jsPsych.totalTime(),
-              time_elapsed: jsPsych.totalTime() - timestamp_onload,
+            event_type: "right tilt",
+            event_raw_details: shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            event_converted_details: "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            block_number: $block_number,
+            timestamp: jsPsych.totalTime(),
+            time_elapsed: jsPsych.totalTime() - timestamp_onload,
           });
         }
       }
 
       if (info.key_release === undefined) {
         response.trial_events.push({
-            event_type: "key press",
-            event_raw_details: info.key,
-            event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + " key pressed",
-            block_number: $block_number,
-            timestamp: jsPsych.totalTime(),
-            time_elapsed: jsPsych.totalTime() - timestamp_onload,
+          event_type: "key press",
+          event_raw_details: info.key,
+          event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + " key pressed",
+          block_number: $block_number,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
         if (!isStoppedTest) {
@@ -340,12 +340,12 @@ jsPsych.plugins["transfer-test"] = (function() {
         }
       } else {
         response.trial_events.push({
-            event_type: "key release",
-            event_raw_details: info.key_release,
-            event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + " key released",
-            block_number: $block_number,
-            timestamp: jsPsych.totalTime(),
-            time_elapsed: jsPsych.totalTime() - timestamp_onload,
+          event_type: "key release",
+          event_raw_details: info.key_release,
+          event_converted_details: jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + " key released",
+          block_number: $block_number,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
         if (trial.response_ends_trial) {
@@ -355,10 +355,10 @@ jsPsych.plugins["transfer-test"] = (function() {
     };
 
     // function to handle mouse hovering UI elements
-    var after_mousemove = function(info) {
+    var after_mousemove = function (info) {
       response.mouse_events.push({
-        x: info.x, 
-        y: info.y, 
+        x: info.x,
+        y: info.y,
         scrollX: info.scrollX,
         scrollY: info.scrollY,
         viewport_size: info.viewport_size,
@@ -391,27 +391,27 @@ jsPsych.plugins["transfer-test"] = (function() {
     // identifiers for hover event targets
     var elementsMapping = [
       {
-          element: 'vending machine',
-          tag: ['rect', 'path'],
+        element: 'vending machine',
+        tag: ['rect', 'path'],
       },
       {
-          element: 'cross close button',
-          class: ['modal__close'],
+        element: 'cross close button',
+        class: ['modal__close'],
       },
       {
-          element: 'close button',
-          class: ['modal__btn'],
+        element: 'close button',
+        class: ['modal__btn'],
       },
       {
-          element: 'modal background',
-          class: ['modal__container', 'modal__header', 'modal__footer'],
+        element: 'modal background',
+        class: ['modal__container', 'modal__header', 'modal__footer'],
       },
       {
-          element: 'modal text',
-          class: ['modal__content'],
+        element: 'modal text',
+        class: ['modal__content'],
       },
     ];
-    
+
     // start mouse move listener
     var mouseMoveListener = jsPsych.pluginAPI.getMouseMoveResponse({
       callback_function: after_mousemove,
@@ -421,7 +421,7 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         display_element
           .querySelector('#jspsych-html-keyboard-response-stimulus')
           .style.visibility = 'hidden';
@@ -430,7 +430,7 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      devalTestLoop = setInterval(function() {
+      devalTestLoop = setInterval(function () {
         if (!isStoppedTest) {
           devalTestDuration -= 1000
 
@@ -444,30 +444,30 @@ jsPsych.plugins["transfer-test"] = (function() {
 
     // end trial if trial_duration is set
     if (trial.trial_latency !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         trial.response_ends_trial = true;
       }, trial.trial_latency);
     }
 
     var microModalConfig = {
-      onShow: function() {
+      onShow: function () {
         response.trial_events.push({
-            event_type: "error message",
-            event_raw_details: "Error message",
-            event_converted_details: "popup triggered popup_duration_machine",
-            block_number: $block_number,
-            timestamp: jsPsych.totalTime(),
-            time_elapsed: jsPsych.totalTime() - timestamp_onload,
+          event_type: "error message",
+          event_raw_details: "Error message",
+          event_converted_details: "popup triggered popup_duration_machine",
+          block_number: $block_number,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       },
-      onClose: function() {
+      onClose: function () {
         response.trial_events.push({
-            event_type: "popup closed",
-            event_raw_details: "Close",
-            event_converted_details: latestSavedColor + " vending machine appears",
-            block_number: $block_number,
-            timestamp: jsPsych.totalTime(),
-            time_elapsed: jsPsych.totalTime() - timestamp_onload,
+          event_type: "popup closed",
+          event_raw_details: "Close",
+          event_converted_details: latestSavedColor + " vending machine appears",
+          block_number: $block_number,
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
         isStoppedTest = false;
@@ -486,7 +486,7 @@ jsPsych.plugins["transfer-test"] = (function() {
 
       clearTimeout(timer)
 
-      timer = jsPsych.pluginAPI.setTimeout(function() {
+      timer = jsPsych.pluginAPI.setTimeout(function () {
         isStoppedTest = true
         MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);

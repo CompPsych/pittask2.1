@@ -1,4 +1,4 @@
-jsPsych.plugins['survey-vvr'] = (function() {
+jsPsych.plugins['survey-vvr'] = (function () {
   var plugin = {};
 
   plugin.info = {
@@ -32,21 +32,21 @@ jsPsych.plugins['survey-vvr'] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
+  plugin.trial = function (display_element, trial) {
     var _trial$variables = trial.variables,
-        VVR_INTERVAL_DURATION = _trial$variables.VVR_INTERVAL_DURATION,
-        VVR_INTERVAL_NUM = _trial$variables.VVR_INTERVAL_NUM,
-        VVR_OUTCOME_DURATION = _trial$variables.VVR_OUTCOME_DURATION,
-        VVR_DEGRAD_PATTERN = _trial$variables.VVR_DEGRAD_PATTERN,
-        VVR_PROB_VALUE = _trial$variables.VVR_PROB_VALUE;
+      VVR_INTERVAL_DURATION = _trial$variables.VVR_INTERVAL_DURATION,
+      VVR_INTERVAL_NUM = _trial$variables.VVR_INTERVAL_NUM,
+      VVR_OUTCOME_DURATION = _trial$variables.VVR_OUTCOME_DURATION,
+      VVR_DEGRAD_PATTERN = _trial$variables.VVR_DEGRAD_PATTERN,
+      VVR_PROB_VALUE = _trial$variables.VVR_PROB_VALUE;
 
     var interval_number_holder = 1;
     var interval_holder_key_press = {};
     item_id = 0;
     var OUTCOME = {
-      MM:'/static/images/MM.png',
-      TT:'/static/images/TT.png',
-      BBQ:'/static/images/BBQ.png',
+      MM: '/static/images/MM.png',
+      TT: '/static/images/TT.png',
+      BBQ: '/static/images/BBQ.png',
     };
 
     var degradation_pattern_condition = VVR_DEGRAD_PATTERN[degrad_pattern_loop_counter]; // Default condition degradation pattern
@@ -74,7 +74,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
     var timestamp_onload = vvr_timer;
 
-    var new_html = 
+    var new_html =
       '<div id="jspsych-stimulus" class="vvr_stage">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
       '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
@@ -91,7 +91,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
       <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
       </header>
       <main class="modal__content" id="modal-1-content">
-      <p>${ popupConfig.text }</p>
+      <p>${popupConfig.text}</p>
       </main>
       <footer class="modal__footer">
       <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
@@ -115,7 +115,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
     var $vending_machine = $(".vending-machine");
 
     // outcome presentation logic
-    (function() {
+    (function () {
       var x = 0;
       var random_boolean = Math.random() < probability_value;
       var outcome_present = DEGRAD_PATTERN[condition_outcome][degradation_pattern_condition];
@@ -148,7 +148,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
         x += 1;
 
         if (random_boolean && outcome_present) {
-          $outcome_container.html('<img class="outcome" src="'+ OUTCOME[counter_balancing[0][outcome_present]] +'"/>');
+          $outcome_container.html('<img class="outcome" src="' + OUTCOME[counter_balancing[0][outcome_present]] + '"/>');
 
           response.trial_events.push({
             timestamp: jsPsych.totalTime(),
@@ -161,14 +161,14 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
           // terminate stage
           if (x === VVR_INTERVAL_NUM) {
-            jsPsych.pluginAPI.setTimeout(function() {
+            jsPsych.pluginAPI.setTimeout(function () {
               clearTimeout(timerId);
               end_trial();
             }, VVR_OUTCOME_DURATION);
           }
 
           // clear outcome
-          jsPsych.pluginAPI.setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function () {
             $outcome_container.html('');
           }, VVR_OUTCOME_DURATION);
 
@@ -199,16 +199,16 @@ jsPsych.plugins['survey-vvr'] = (function() {
           interval_number_holder += 1;
         }
 
-         // reset degrad pattern
-         condition_outcome = 'A0';
-         condition_outcome_handler = false;
+        // reset degrad pattern
+        condition_outcome = 'A0';
+        condition_outcome_handler = false;
       }, VVR_INTERVAL_DURATION);
     }());
 
     setModalShowTimer()
 
     // function to handle responses by the subject
-    var after_response = function(info) {
+    var after_response = function (info) {
       if (!isStoppedTest) {
         setModalShowTimer();
       }
@@ -216,13 +216,13 @@ jsPsych.plugins['survey-vvr'] = (function() {
       function machine_tilt() {
         if (info.key === left_tilt) {
           $vending_machine.css({
-            transform:  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            transform: "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
             transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
 
-          jsPsych.pluginAPI.setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function () {
             $vending_machine.css({
-              transform:  "rotate(0deg) translateX(0%)",
+              transform: "rotate(0deg) translateX(0%)",
               transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
             });
           }, shake_return_time);
@@ -241,15 +241,15 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
         } else if (info.key === right_tilt) {
           $vending_machine.css({
-            transform:  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            transform: "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
             transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
           });
 
-          jsPsych.pluginAPI.setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function () {
             $vending_machine.css({
-                transform: "rotate(0deg) translateX(0%)",
-                transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              });
+              transform: "rotate(0deg) translateX(0%)",
+              transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            });
           }, shake_return_time);
 
           response.trial_events.push({
@@ -263,11 +263,11 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
           condition_outcome = 'A2';
           condition_outcome_handler = true;
-          } else {
-            if (!condition_outcome_handler) {
-              condition_outcome = 'A0';
-            }
+        } else {
+          if (!condition_outcome_handler) {
+            condition_outcome = 'A0';
           }
+        }
       }
 
       if (info.key_release === undefined) {
@@ -297,10 +297,10 @@ jsPsych.plugins['survey-vvr'] = (function() {
     }
 
     // function to handle mouse hovering UI elements
-    var after_mousemove = function(info) {
+    var after_mousemove = function (info) {
       response.mouse_events.push({
-        x: info.x, 
-        y: info.y, 
+        x: info.x,
+        y: info.y,
         scrollX: info.scrollX,
         scrollY: info.scrollY,
         viewport_size: info.viewport_size,
@@ -312,7 +312,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
     };
 
     // function to end trial when it is time
-    var end_trial = function() {
+    var end_trial = function () {
       // clear popup timer
       clearTimeout(timer)
 
@@ -321,9 +321,9 @@ jsPsych.plugins['survey-vvr'] = (function() {
       loop_node_counter_vvr_determination++;
 
       if ((VVR_DEGRAD_PATTERN.length - 1) === degrad_pattern_loop_counter) {
-          degrad_pattern_loop_counter = 0;
+        degrad_pattern_loop_counter = 0;
       } else {
-          degrad_pattern_loop_counter++;
+        degrad_pattern_loop_counter++;
       }
 
       if ((VVR_PROB_VALUE.length - 1) === prob_value_loop_counter) {
@@ -341,8 +341,8 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
       // kill keyboard listeners
       if (typeof keyboardListener !== 'undefined') {
-          jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-          jsPsych.pluginAPI.cancelClickResponse(clickListener);
+        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+        jsPsych.pluginAPI.cancelClickResponse(clickListener);
       }
 
       // kill mouse listener
@@ -396,20 +396,20 @@ jsPsych.plugins['survey-vvr'] = (function() {
         tag: ['img']
       },
       {
-          element: 'cross close button',
-          class: ['modal__close'],
+        element: 'cross close button',
+        class: ['modal__close'],
       },
       {
-          element: 'close button',
-          class: ['modal__btn'],
+        element: 'close button',
+        class: ['modal__btn'],
       },
       {
-          element: 'modal background',
-          class: ['modal__container', 'modal__header', 'modal__footer'],
+        element: 'modal background',
+        class: ['modal__container', 'modal__header', 'modal__footer'],
       },
       {
-          element: 'modal text',
-          class: ['modal__content'],
+        element: 'modal text',
+        class: ['modal__content'],
       },
     ];
 
@@ -420,15 +420,15 @@ jsPsych.plugins['survey-vvr'] = (function() {
       ignored_tags: ['p']
     });
 
-     // end trial if trial_duration is set
+    // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         end_trial();
       }, trial.trial_duration);
     }
 
     var microModalConfig = {
-      onShow: function() {
+      onShow: function () {
         response.trial_events.push({
           event_type: 'error message',
           event_raw_details: 'Error message',
@@ -438,7 +438,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
           time_elapsed: jsPsych.totalTime() - timestamp_onload
         });
       },
-      onClose: function() {
+      onClose: function () {
         response.trial_events.push({
           event_type: 'popup closed',
           event_raw_details: 'Close',
@@ -464,7 +464,7 @@ jsPsych.plugins['survey-vvr'] = (function() {
 
       clearTimeout(timer)
 
-      timer = jsPsych.pluginAPI.setTimeout(function() {
+      timer = jsPsych.pluginAPI.setTimeout(function () {
         isStoppedTest = true
         MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);

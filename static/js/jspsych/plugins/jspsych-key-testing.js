@@ -1,4 +1,4 @@
-jsPsych.plugins["key-testing"] = (function() {
+jsPsych.plugins["key-testing"] = (function () {
 
   var plugin = {};
 
@@ -77,7 +77,7 @@ jsPsych.plugins["key-testing"] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
+  plugin.trial = function (display_element, trial) {
 
     var html = "";
     var isLeftTilted = false;
@@ -98,14 +98,14 @@ jsPsych.plugins["key-testing"] = (function() {
     html += '<style id="key-testing">';
     html += ".key-testing-text { margin: 50px; }";
     html += '</style>';
-    
+
     // blank vending machine
-    html += '<div id="jspsych-stimulus"><p class="key-testing-text">Press the left arrow to tip the vending machine left.</p>'+
-    '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    html += '<div id="jspsych-stimulus"><p class="key-testing-text">Press the left arrow to tip the vending machine left.</p>' +
+      '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
       '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
       '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
-    '</svg>' +
-    '</div>';
+      '</svg>' +
+      '</div>';
 
     // save blank vending machine appearance
     response.trial_events.push({
@@ -120,7 +120,7 @@ jsPsych.plugins["key-testing"] = (function() {
     display_element.innerHTML = html;
 
     // function to end trial when it is time
-    var end_trial = function() {
+    var end_trial = function () {
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -151,99 +151,103 @@ jsPsych.plugins["key-testing"] = (function() {
     };
 
     // function to handle responses by the subject
-    var after_response = function(info) {
-    
+    var after_response = function (info) {
+
       // function to handle vending machine animation (tilting left/right)
       function machine_tilt() {
-          if(info.key === left_tilt) {
-              $(".vending-machine").css({
-                  "transform":  "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
-                  "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              });
+        if (info.key === left_tilt) {
+          $(".vending-machine").css({
+            "transform": "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
 
-              jsPsych.pluginAPI.setTimeout(function(){ $(".vending-machine").css({
-                "transform":  "rotate(0deg) translateX(0%)",
-                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              }); }, shake_return_time);
-              
-              response.trial_events.push({
-                "event_type": "left tilt",
-                "event_raw_details": shake_left_translateX + "%, " + shake_left_rotate + "deg",
-                "event_converted_details": "vending machine was tilted left " + shake_left_translateX + "%, " + shake_left_rotate + "deg",
-                "timestamp": jsPsych.totalTime(),
-                "time_elapsed": jsPsych.totalTime() - timestamp_onload
-              });
-
-              if(!isLeftTilted) {
-                setTimeout( function() {
-                  $(".key-testing-text").fadeOut(function() {
-                    $(this).text("Press the right arrow to tip the vending machine right.").fadeIn();
-                  });
-                }, 300);
-              }
-        
-              isLeftTilted = true;
-          } else if (info.key === right_tilt) {
-              $(".vending-machine").css({
-                  "transform":  "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
-                  "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              });
-
-              jsPsych.pluginAPI.setTimeout(function(){ $(".vending-machine").css({
-                "transform": "rotate(0deg) translateX(0%)",
-                "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
-              }); }, shake_return_time);
-              
-              response.trial_events.push({
-                "event_type": "right tilt",
-                "event_raw_details": shake_right_translateX + "%, " + shake_right_rotate + "deg",
-                "event_converted_details": "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
-                "timestamp": jsPsych.totalTime(),
-                "time_elapsed": jsPsych.totalTime() - timestamp_onload
-              });
-
-              if(isLeftTilted) {
-                if(!timeoutLock) {
-                  setTimeout( function() {
-                    end_trial();
-                  }, 700);
-                }
-                timeoutLock = true;
-              }
-          }
-      }
-      
-      // save interaction event
-      if(info.key_release === undefined) {
-          machine_tilt();
+          jsPsych.pluginAPI.setTimeout(function () {
+            $(".vending-machine").css({
+              "transform": "rotate(0deg) translateX(0%)",
+              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            });
+          }, shake_return_time);
 
           response.trial_events.push({
-            "event_type": "key press",
-            "event_raw_details": info.key,
-            "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
+            "event_type": "left tilt",
+            "event_raw_details": shake_left_translateX + "%, " + shake_left_rotate + "deg",
+            "event_converted_details": "vending machine was tilted left " + shake_left_translateX + "%, " + shake_left_rotate + "deg",
             "timestamp": jsPsych.totalTime(),
             "time_elapsed": jsPsych.totalTime() - timestamp_onload
           });
-      } else {
-            response.trial_events.push({
-              "event_type": "key release",
-              "event_raw_details": info.key_release,
-              "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
-              "timestamp": jsPsych.totalTime(),
-              "time_elapsed": jsPsych.totalTime() - timestamp_onload
-            });
 
-            if (trial.response_ends_trial) {
-              end_trial();
+          if (!isLeftTilted) {
+            setTimeout(function () {
+              $(".key-testing-text").fadeOut(function () {
+                $(this).text("Press the right arrow to tip the vending machine right.").fadeIn();
+              });
+            }, 300);
+          }
+
+          isLeftTilted = true;
+        } else if (info.key === right_tilt) {
+          $(".vending-machine").css({
+            "transform": "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
+            "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+          });
+
+          jsPsych.pluginAPI.setTimeout(function () {
+            $(".vending-machine").css({
+              "transform": "rotate(0deg) translateX(0%)",
+              "transition": "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
+            });
+          }, shake_return_time);
+
+          response.trial_events.push({
+            "event_type": "right tilt",
+            "event_raw_details": shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            "event_converted_details": "vending machine was tilted right " + shake_right_translateX + "%, " + shake_right_rotate + "deg",
+            "timestamp": jsPsych.totalTime(),
+            "time_elapsed": jsPsych.totalTime() - timestamp_onload
+          });
+
+          if (isLeftTilted) {
+            if (!timeoutLock) {
+              setTimeout(function () {
+                end_trial();
+              }, 700);
             }
+            timeoutLock = true;
+          }
+        }
+      }
+
+      // save interaction event
+      if (info.key_release === undefined) {
+        machine_tilt();
+
+        response.trial_events.push({
+          "event_type": "key press",
+          "event_raw_details": info.key,
+          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) + ' key pressed',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+      } else {
+        response.trial_events.push({
+          "event_type": "key release",
+          "event_raw_details": info.key_release,
+          "event_converted_details": jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key_release) + ' key released',
+          "timestamp": jsPsych.totalTime(),
+          "time_elapsed": jsPsych.totalTime() - timestamp_onload
+        });
+
+        if (trial.response_ends_trial) {
+          end_trial();
+        }
       }
     };
 
     // function to handle mouse hovering UI elements
-    var after_mousemove = function(info) {
+    var after_mousemove = function (info) {
       response.mouse_events.push({
-        x: info.x, 
-        y: info.y, 
+        x: info.x,
+        y: info.y,
         scrollX: info.scrollX,
         scrollY: info.scrollY,
         viewport_size: info.viewport_size,
@@ -256,23 +260,23 @@ jsPsych.plugins["key-testing"] = (function() {
 
     // start the response listener
     if (trial.choices != jsPsych.NO_KEYS) {
-        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'performance',
-          persist: true,
-          allow_held_key: false
-        });
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'performance',
+        persist: true,
+        allow_held_key: false
+      });
 
-        var clickListener = jsPsych.pluginAPI.getMouseResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'date',
-          persist: true,
-          allow_held_key: false
-        });
+      var clickListener = jsPsych.pluginAPI.getMouseResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: false
+      });
     }
-    
+
     // identifiers for hover event targets
     var elementsMapping = [
       {
@@ -293,21 +297,21 @@ jsPsych.plugins["key-testing"] = (function() {
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         display_element.querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         end_trial();
       }, trial.trial_duration);
     }
 
     // end trial if trial_duration is set
     if (trial.trial_latency !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         trial.response_ends_trial = true;
       }, trial.trial_latency);
     }

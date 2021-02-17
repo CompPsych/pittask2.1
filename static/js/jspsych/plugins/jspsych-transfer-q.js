@@ -1,4 +1,4 @@
-jsPsych.plugins['transfer-q'] = (function() {
+jsPsych.plugins['transfer-q'] = (function () {
   var plugin = {};
 
   plugin.info = {
@@ -19,7 +19,7 @@ jsPsych.plugins['transfer-q'] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
+  plugin.trial = function (display_element, trial) {
     // store response
     var response = {
       trial_events: [],
@@ -169,7 +169,7 @@ jsPsych.plugins['transfer-q'] = (function() {
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
-    
+
       },
     });
 
@@ -199,10 +199,10 @@ jsPsych.plugins['transfer-q'] = (function() {
     };
 
     // function to handle mouse hovering UI elements
-    var after_mousemove = function(info) {
+    var after_mousemove = function (info) {
       response.mouse_events.push({
-        x: info.x, 
-        y: info.y, 
+        x: info.x,
+        y: info.y,
         scrollX: info.scrollX,
         scrollY: info.scrollY,
         viewport_size: info.viewport_size,
@@ -298,7 +298,7 @@ jsPsych.plugins['transfer-q'] = (function() {
         allow_held_key: false,
       });
     }
-    
+
     // identifiers for hover event targets
     var elementsMapping = [
       {
