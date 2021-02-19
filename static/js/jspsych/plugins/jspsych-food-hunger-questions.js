@@ -119,7 +119,7 @@ jsPsych.plugins["food-and-hunger-questions"] = (function () {
 
     // all FHQ (exception Hunger) contain stimuli images
     if (trial.stimulus !== 'hunger') {
-      html += '<img src=' + IMAGE_SRC + '/>';
+      html += '<img alt="outcome" src="' + IMAGE_SRC + '">';
       html += '<p>' + bottom_txt + '</p>';
     }
 
