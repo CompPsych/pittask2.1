@@ -1857,6 +1857,9 @@ var THANKS = {
     event_converted_details: "thanks text appears"
 };
 
+/************************************************************
+ * Preload required images, video.
+ ***********************************************************/
 var preload_images = ['/static/images/BBQ.png', '/static/images/TT.png', '/static/images/MM.png', '/static/images/EMPTY.png', '/static/images/audit_image.jpg'];
 var preload_video = [counter_balancing[0].video + '.mp4'];
 
