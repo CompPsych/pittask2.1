@@ -1537,7 +1537,7 @@ var SDS_STAGE = {
 // ICAR
 var three_dimensional_rotate = [];
 for ( i = 1; i <= 66 ; i++ ) {
-    var pathNum = i < 10 ? ("0" + i.toString()) : i.toString()
+    var pathNum = i < 10 ? ("0" + i.toString()) : i.toString();
     three_dimensional_rotate.push(
         {
             prompt: 'All the cubes below have a different image on each side. Select the choice that could represent a rotation of the cube labeled X',
@@ -1555,7 +1555,7 @@ var matrix_reasoning_numbers = [
 ]
 var matrix_reasoning = [];
 for ( i = 0; i < matrix_reasoning_numbers.length ; i++ ) {
-    var pathNum = matrix_reasoning_numbers[i]
+    var pathNum = matrix_reasoning_numbers[i];
     matrix_reasoning.push(
         {
             prompt: 'Please indicate which is the best answer to complete the figure below.',
