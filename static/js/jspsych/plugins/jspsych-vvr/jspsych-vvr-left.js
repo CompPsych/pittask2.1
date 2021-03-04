@@ -129,6 +129,8 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function () {
       </div>
       </div>`;
 
+    new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     var timestamp_onload = vvr_timer;
     var question_number = item_id + 1;
 
@@ -260,24 +262,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function () {
       });
     };
 
-    // function to end trial when it is time
-    var end_trial = function () {
-
-      // kill any remaining setTimeout handlers
-      jsPsych.pluginAPI.clearAllTimeouts();
-
-      // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-        jsPsych.pluginAPI.cancelClickResponse(clickListener);
-      }
-
-      // kill mouse listener
-      if (typeof mouseMoveListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
-      }
-
-      // gather the data to store for the trial
+    function proccessDataBeforeSubmit() {
       var trial_data = {
         stage_name: JSON.stringify(trial.stage_name),
         stimulus: trial.stimulus,
@@ -299,6 +284,30 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function () {
         // required for Recall stage
         trial_data.block_number = trial.stage_type;
       }
+
+      return trial_data;
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
+    // function to end trial when it is time
+    var end_trial = function () {
+
+      // kill any remaining setTimeout handlers
+      jsPsych.pluginAPI.clearAllTimeouts();
+
+      // kill keyboard listeners
+      if (typeof keyboardListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+        jsPsych.pluginAPI.cancelClickResponse(clickListener);
+      }
+
+      // kill mouse listener
+      if (typeof mouseMoveListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
+      }
+
+      var trial_data = proccessDataBeforeSubmit();
 
       // clear the display
       display_element.innerHTML = '';

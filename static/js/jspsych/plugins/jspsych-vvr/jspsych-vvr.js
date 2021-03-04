@@ -100,6 +100,8 @@ jsPsych.plugins['survey-vvr'] = (function () {
       </div>
       </div>`;
 
+    new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     display_element.innerHTML = new_html;
 
     response.trial_events.push({
@@ -311,11 +313,8 @@ jsPsych.plugins['survey-vvr'] = (function () {
       });
     };
 
-    // function to end trial when it is time
-    var end_trial = function () {
-      // clear popup timer
-      clearTimeout(timer)
 
+    function proccessDataBeforeSubmit() {
       // increase counter
       loop_node_counter_vvr++;
       loop_node_counter_vvr_determination++;
@@ -331,6 +330,24 @@ jsPsych.plugins['survey-vvr'] = (function () {
       } else {
         prob_value_loop_counter++;
       }
+
+      return {
+        stage_name: trial.stage_name,
+        stimulus: trial.stimulus,
+        block_number: loop_node_counter_vvr,
+        events: JSON.stringify(response.trial_events),
+        mouse_events: JSON.stringify(response.mouse_events),
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
+    // function to end trial when it is time
+    var end_trial = function () {
+      // clear popup timer
+      clearTimeout(timer);
+
+      var trial_data = proccessDataBeforeSubmit();
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -349,15 +366,6 @@ jsPsych.plugins['survey-vvr'] = (function () {
       if (typeof mouseMoveListener !== 'undefined') {
         jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
       }
-
-      // gather the data to store for the trial
-      var trial_data = {
-        stage_name: trial.stage_name,
-        stimulus: trial.stimulus,
-        block_number: loop_node_counter_vvr,
-        events: JSON.stringify(response.trial_events),
-        mouse_events: JSON.stringify(response.mouse_events),
-      };
 
       // clear the display
       display_element.innerHTML = '';

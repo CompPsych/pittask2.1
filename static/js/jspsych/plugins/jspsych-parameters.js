@@ -1,4 +1,4 @@
-jsPsych.plugins['parameters'] = (function(){
+jsPsych.plugins['parameters'] = (function () {
 
     var plugin = {};
 
@@ -21,7 +21,7 @@ jsPsych.plugins['parameters'] = (function(){
     }
 
     // plugin for saving parameters from parameters.js
-    plugin.trial = function(display_element, trial){
+    plugin.trial = function (display_element, trial) {
         var parameters = {
             re_captcha: re_captcha,
             re_captcha_duration: re_captcha_duration,
@@ -41,6 +41,14 @@ jsPsych.plugins['parameters'] = (function(){
             feedback_duration: feedback_duration,
             popup_text_behav: popup_text_behav,
             popup_text_WBF: popup_text_WBF,
+            popup_browser: popup_browser,
+            popup_text_browser: popup_text_browser,
+            browser_inactivated_duration: browser_inactivated_duration,
+            browser_inactivated_num: browser_inactivated_num,
+            popup_exit: popup_exit,
+            popup_text_exit: popup_text_exit,
+            browser_inactivated_notif: browser_inactivated_notif,
+            browser_inactivated_notif_text: browser_inactivated_notif_text,
 
             shake_right_rotate: shake_right_rotate,
             shake_right_translateX: shake_right_translateX,
@@ -182,7 +190,7 @@ jsPsych.plugins['parameters'] = (function(){
             close_instruct_text_recall: close_instruct_text_recall,
 
             close_instruct_text_close_HIT_q: close_instruct_text_close_HIT_q,
-            
+
             popup_machine_VVR1: popup_machine_VVR1,
             popup_duration_machine_VVR1: popup_duration_machine_VVR1,
             popup_text_machine_VVR1: popup_text_machine_VVR1,
@@ -247,16 +255,16 @@ jsPsych.plugins['parameters'] = (function(){
         };
 
         // copy symptom inventory array
-        symptom_inventory.forEach(function(element, index) {
-            if(element.type) {
+        symptom_inventory.forEach(function (element, index) {
+            if (element.type) {
                 index === 0 ? parameters['symptom_inventory'] += element.type : parameters['symptom_inventory'] += ', ' + element.type;
-            } else if(element.timeline) {
+            } else if (element.timeline) {
                 parameters['symptom_inventory'] += ', SMOKING STATUS';
             }
         });
 
         function array_extraction(arr, str) {
-            arr.forEach(function(element, index) {
+            arr.forEach(function (element, index) {
                 index === 0 ? parameters[str] += element : parameters[str] += ', ' + element;
             });
         };

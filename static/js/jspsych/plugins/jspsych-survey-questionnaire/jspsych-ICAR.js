@@ -395,6 +395,8 @@ jsPsych.plugins['ICAR'] = (function () {
             </div>
         </div>`;
 
+    html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // popup of timer module
     if (timerModule) {
       html += timerModule.getPopupHTML();
@@ -547,16 +549,7 @@ jsPsych.plugins['ICAR'] = (function () {
       }
     });
 
-    document.querySelector('form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      response.trial_events.push({
-        'event_type': 'button clicked',
-        'event_raw_details': 'Submit',
-        'event_converted_details': '"Submit" selected',
-        'timestamp': jsPsych.totalTime(),
-        'time_elapsed': jsPsych.totalTime() - timestamp_onload
-      });
-
+    function proccessDataBeforeSubmit(validate = false) {
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
@@ -565,15 +558,16 @@ jsPsych.plugins['ICAR'] = (function () {
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = i;
+        var val = '';
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
-          var val = match.querySelector('input[type=radio]:checked').value;
+          val = match.querySelector('input[type=radio]:checked').value;
 
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error');
           var val_id = match.querySelector('input[type=radio]:checked').attributes['data-response-id'].value;
-        } else {
+        } else if (validate) {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error');
-          var val = '';
+          val = '';
         }
 
         var obje = {};
@@ -590,6 +584,32 @@ jsPsych.plugins['ICAR'] = (function () {
         Object.assign(question_data, obje);
         Object.assign(response_id, obj);
       }
+
+      return {
+        'stage_name': JSON.stringify(plugin.info.stage_name),
+        'responses': JSON.stringify(question_data),
+        'timestamp': JSON.stringify(timestamp_data),
+        'responseId': JSON.stringify(response_id),
+        'time_stamp': JSON.stringify(trial.time_stamp),
+        'question_order': JSON.stringify(question_order),
+        'events': JSON.stringify(response.trial_events),
+        'mouse_events': JSON.stringify(response.mouse_events)
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, timerModule);
+
+    document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      response.trial_events.push({
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
+      });
+
+      var trial_data = proccessDataBeforeSubmit(true);
 
       if ($('.survey-error').length < 1) {
         // kill keyboard listeners
@@ -608,17 +628,6 @@ jsPsych.plugins['ICAR'] = (function () {
         if (typeof mouseMoveListener !== 'undefined') {
           jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
         }
-
-        // save data
-        var trial_data = {
-          'stage_name': JSON.stringify(plugin.info.stage_name),
-          'responses': JSON.stringify(question_data),
-          'responseId': JSON.stringify(response_id),
-          'timestamp': JSON.stringify(timestamp_data),
-          'time_stamp': JSON.stringify(trial.time_stamp),
-          'question_order': JSON.stringify(question_order),
-          'events': JSON.stringify(response.trial_events)
-        };
 
         // clear the display
         display_element.innerHTML = '';

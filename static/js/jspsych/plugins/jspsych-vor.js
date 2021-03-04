@@ -82,6 +82,8 @@ jsPsych.plugins["vor"] = (function () {
             '<div class="outcome-container"></div>' +
             "</div>";
 
+        new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
         // render
         display_element.innerHTML = new_html;
 
@@ -209,7 +211,6 @@ jsPsych.plugins["vor"] = (function () {
         // call extinction interval
         extinct_interval();
 
-
         // function to handle responses by the subject
         var after_response = function (info) {
 
@@ -310,6 +311,18 @@ jsPsych.plugins["vor"] = (function () {
             }
         }
 
+
+        function proccessDataBeforeSubmit() {
+            return {
+                stage_name: trial.stage_name,
+                stimulus: trial.stimulus,
+                events: JSON.stringify(response.trial_events),
+                mouse_events: JSON.stringify(response.mouse_events)
+            };
+        }
+
+        jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
         // function to end trial when it is time
         var end_trial = function () {
 
@@ -328,12 +341,7 @@ jsPsych.plugins["vor"] = (function () {
             }
 
             // gather the data to store for the trial
-            var trial_data = {
-                stage_name: trial.stage_name,
-                stimulus: trial.stimulus,
-                events: JSON.stringify(response.trial_events),
-                mouse_events: JSON.stringify(response.mouse_events)
-            };
+            var trial_data = proccessDataBeforeSubmit();
 
             // clear the display
             display_element.innerHTML = "";

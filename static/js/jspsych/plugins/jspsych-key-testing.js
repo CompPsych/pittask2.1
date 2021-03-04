@@ -107,6 +107,8 @@ jsPsych.plugins["key-testing"] = (function () {
       '</svg>' +
       '</div>';
 
+    html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // save blank vending machine appearance
     response.trial_events.push({
       "event_type": trial.event_type,
@@ -118,6 +120,16 @@ jsPsych.plugins["key-testing"] = (function () {
 
     // render
     display_element.innerHTML = html;
+
+    function proccessDataBeforeSubmit() {
+      return {
+        "stage_name": JSON.stringify(trial.stage_name),
+        "events": JSON.stringify(response.trial_events),
+        "mouse_events": JSON.stringify(response.mouse_events)
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
 
     // function to end trial when it is time
     var end_trial = function () {
@@ -137,11 +149,7 @@ jsPsych.plugins["key-testing"] = (function () {
       }
 
       // gather the data to store for the trial
-      var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "events": JSON.stringify(response.trial_events),
-        "mouse_events": JSON.stringify(response.mouse_events)
-      };
+      var trial_data = proccessDataBeforeSubmit();
 
       // clear the display
       display_element.innerHTML = '';
