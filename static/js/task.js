@@ -9,13 +9,19 @@ jsPsych.data.reset();
 
 // adding beforeunload listener which will minimize
 // page reloading during the experiment
-/*$(window).on("beforeunload", function (event) {
+$(window).on("beforeunload", function (event) {
+    psiTurk.saveData();
+    $.ajax("quitter", {
+        type: "POST",
+        data: { uniqueId: uniqueId }
+    });
+
     if (popup_exit) {
         event.preventDefault();
         event.returnValue = popup_text_exit
         return popup_text_exit;
     }
-});*/
+});
 
 // determining the presence of outcome for VVR stage
 var DEGRAD_PATTERN = {
@@ -1966,18 +1972,4 @@ jsPsych.init({
             psiTurk.recordTrialData(data);
             psiTurk.saveData();
     },
-    on_close: function(event) {
-        psiTurk.saveData();
-        $.ajax("quitter", {
-            type: "POST",
-            data: { uniqueId: uniqueId }
         });
-
-        if (popup_exit) {
-            event.preventDefault();
-            event.returnValue = popup_text_exit
-            return popup_text_exit;
-        }
-    },
-    }
-);
