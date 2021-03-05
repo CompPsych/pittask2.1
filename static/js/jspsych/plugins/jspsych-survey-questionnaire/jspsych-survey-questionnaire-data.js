@@ -7,34 +7,42 @@ var DEMOGRAPHICS_STAGE = {
     questions: [
         {
             prompt: 'Gender',
+            name: 'Gender',
             options: ['Male', 'Female', 'Other'],
             horizontal: true
         }, {
             prompt: 'Age',
+            name: 'Age',
             options: ['Years'],
             horizontal: true
         }, {
             prompt: 'Height',
+            name: 'Height',
             options: ['cm', 'inches'],
             horizontal: true
         }, {
             prompt: 'Weight',
+            name: 'Weight',
             options: ['kg', 'pounds'],
             horizontal: true
         }, {
             prompt: 'Education level',
+            name: 'Education level',
             options: ['Primary', 'Secondary', 'Associate or vocational education', 'Bachelor', 'Masters or above'],
             horizontal: true
         }, {
             prompt: 'Marital status',
+            name: 'Marital status',
             options: ['Married', 'Separated', 'Divorced', 'Widowed', 'Never married'],
             horizontal: true
         }, {
             prompt: 'Employment status',
+            name: 'Employment status',
             options: ['Employed (full-time)', 'Employed (part-time)', 'Self-employed', 'Student', 'Unemployed', 'Retired'],
             horizontal: true
         }, {
             prompt: 'Gross annual household income (US dollars)',
+            name: 'Gross annual household income (US dollars)',
             options: ['< $15,000', '$15,000 - $24,999', '$25,000 - $74,999', '> $75,000'],
             horizontal: true
         }
