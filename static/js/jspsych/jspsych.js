@@ -338,6 +338,17 @@ window.jsPsych = (function() {
     DOM_target.innerHTML = message;
   }
 
+  core.interruptExperiment = function (end_message) {
+    core.pauseExperiment();
+    DOM_target.innerHTML = end_message;
+    $(document).off('click');
+    $(document).off('mousedown');
+    $(document).off('mouseup');
+    $(document).off('keyup');
+    $(document).off('keydown');
+    jsPsych.pluginAPI.clearAllTimeouts();
+  }
+
   function TimelineNode(parameters, parent, relativeID) {
 
     // a unique ID for this node, relative to the parent
@@ -3337,9 +3348,19 @@ jsPsych.pluginAPI = (function() {
     }
 
     function stopExperiment() {
+      if (browser_inactivated_notif) {
+        responseStore.trial_events.push({
+          event_type: 'text appears',
+          event_raw_details: 'browser_inactivated_notif_text',
+          event_converted_details: 'browser_inactivated_notif_text appears',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp,
+        });
+      }
+
       var trial_data = dataProccess();
       jsPsych.finishTrial(trial_data);
-      jsPsych.endExperiment(browser_inactivated_notif && browser_inactivated_notif_text);
+      jsPsych.interruptExperiment(browser_inactivated_notif && browser_inactivated_notif_text || '');
     }
 
     function checkAbsenceTime() {
@@ -3374,7 +3395,6 @@ jsPsych.pluginAPI = (function() {
 
     function onWindowBlur() {
       if (isTimerActive) return;
-      console.log('store', responseStore)
       responseStore.trial_events.push({
         event_type: 'window change',
         event_raw_details: 'window deactivated',
@@ -3386,7 +3406,6 @@ jsPsych.pluginAPI = (function() {
       numberOfWindowSwitches += 1;
 
       if (numberOfWindowSwitches >= browser_inactivated_num) {
-        //console.log('number', numberOfWindowSwitches, browser_inactivated_num)
         stopExperiment();
         return;
       }
