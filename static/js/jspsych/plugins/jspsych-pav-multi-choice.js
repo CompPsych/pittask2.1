@@ -243,6 +243,8 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function () {
       '</div>' +
       '</div>';
 
+    html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // render
     display_element.innerHTML = html;
 
@@ -315,16 +317,15 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function () {
       });
     };
 
-    // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
-      event.preventDefault();
+
+    function proccessDataBeforeSubmit(validate) {
 
       var color_value = pav_multi_choice_array[pav_multi_choice_counter].value;
       var color_response_submitted = pav_multi_choice_array[pav_multi_choice_counter].response;
 
       // create object to hold responses
       var question_data = {};
-      var val;
+      var val = '';
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = "Q" + i;
@@ -352,7 +353,42 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function () {
         Object.assign(question_data, obje);
       };
 
-      if (val === '') {
+      if (validate && !val) {
+        return {
+          val: val
+        };
+      }
+
+      var trial_data = {
+        stage_name: JSON.stringify(trial.stage_name),
+        stage_type: JSON.stringify(trial.stage_type),
+        response: JSON.stringify(color_value),
+        response_submitted: JSON.stringify(color_response_submitted),
+        timestamp: JSON.stringify(jsPsych.totalTime()),
+        responses: JSON.stringify(question_data),
+        question_order: JSON.stringify(question_order),
+        correct: pav_is_correct ? "y" : "n",
+        events: JSON.stringify(response.trial_events),
+        mouse_events: JSON.stringify(response.mouse_events),
+      };
+
+
+      if (trial.stage_name === "recall") {
+        trial_data.block_number = trial.stage_type
+      }
+
+      return trial_data;
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
+    // form functionality
+    document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var trial_data = proccessDataBeforeSubmit();
+
+      if (trial_data.val === '') {
         // show modal, register events
         MicroModal.show('modal-1', {
           onShow() {
@@ -375,23 +411,6 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function () {
           }
         });
       } else {
-        // save data
-        var trial_data = {
-          stage_name: JSON.stringify(trial.stage_name),
-          stage_type: JSON.stringify(trial.stage_type),
-          response: JSON.stringify(color_value),
-          response_submitted: JSON.stringify(color_response_submitted),
-          timestamp: JSON.stringify(jsPsych.totalTime()),
-          responses: JSON.stringify(question_data),
-          question_order: JSON.stringify(question_order),
-          correct: pav_is_correct ? "y" : "n",
-          events: JSON.stringify(response.trial_events),
-          mouse_events: JSON.stringify(response.mouse_events),
-        };
-
-        if (trial.stage_name === "recall") {
-          trial_data.block_number = trial.stage_type
-        }
 
         // clear the display
         display_element.innerHTML = '';
@@ -410,8 +429,6 @@ jsPsych.plugins['survey-pav-multi-choice'] = (function () {
         // next trial
         jsPsych.finishTrial(trial_data);
       }
-
-
     });
 
     // start the response listener

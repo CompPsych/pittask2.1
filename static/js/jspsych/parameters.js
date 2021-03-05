@@ -33,6 +33,14 @@ var open_instruct_latency = 1500;
 var close_instruct_latency = 500;
 var popup_text_behav = "Please provide your answer prior to submission.";
 var popup_text_WBF = "Sorry, all questions need to be answered prior to submission.";
+var popup_browser = true;
+var popup_text_browser = "Please focus on the experiment by keeping the application active in your browser.";
+var browser_inactivated_duration = 120;
+var browser_inactivated_num = 10;
+var popup_exit = true;
+var popup_text_exit = "Are you sure you want to leave the experiment?";
+var browser_inactivated_notif = true;
+var browser_inactivated_notif_text = "The experiment has ended because you were absent for too long.";
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================

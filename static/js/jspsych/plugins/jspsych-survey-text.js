@@ -1,4 +1,4 @@
-jsPsych.plugins["survey-feedback"] = (function() {
+jsPsych.plugins["survey-feedback"] = (function () {
 
   var plugin = {};
 
@@ -77,41 +77,52 @@ jsPsych.plugins["survey-feedback"] = (function() {
     }
   }
 
-  plugin.trial = function(display_element, trial) {
+  plugin.trial = function (display_element, trial) {
 
     // store responses, events
     var response = {
       trial_events: []
     };
-    
+
     var timestamp_onload = jsPsych.totalTime();
-    
+
     // used for VVR stages in correct/incorrect response
     // for simulating continuous timer
-    if(trial.vvr_timer) {
+    if (trial.vvr_timer) {
       timestamp_onload = vvr_timer;
     };
 
-    var new_html = '<div id="jspsych-survey-feedback" class="jspsych-survey-feedback">'+trial.stimulus+'</div>';
+    var new_html = '<div id="jspsych-survey-feedback" class="jspsych-survey-feedback">' + trial.stimulus + '</div>';
 
-    if(trial.id) {
-      new_html = '<div id="jspsych-survey-feedback" class="' + trial.id  +'">'+trial.stimulus+'</div>';
+    if (trial.id) {
+      new_html = '<div id="jspsych-survey-feedback" class="' + trial.id + '">' + trial.stimulus + '</div>';
     }
 
+    new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
 
     response.trial_events.push({
-        event_type: trial.event_type,
-        event_raw_details: trial.event_raw_details,
-        event_converted_details: trial.event_converted_details,
-        timestamp: jsPsych.totalTime(),
-        time_elapsed: jsPsych.totalTime() - timestamp_onload,
+      event_type: trial.event_type,
+      event_raw_details: trial.event_raw_details,
+      event_converted_details: trial.event_converted_details,
+      timestamp: jsPsych.totalTime(),
+      time_elapsed: jsPsych.totalTime() - timestamp_onload,
     });
 
     // render
     display_element.innerHTML = new_html;
 
+    function proccessDataBeforeSubmit() {
+      return {
+        "stage_name": JSON.stringify(trial.stage_name),
+        "events": JSON.stringify(response.trial_events),
+        "mouse_events": JSON.stringify(response.mouse_events)
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
     // function to end trial when it is time
-    var end_trial = function() {
+    var end_trial = function () {
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -123,10 +134,7 @@ jsPsych.plugins["survey-feedback"] = (function() {
       }
 
       // gather the data to store for the trial
-      var trial_data = {
-          stage_name: JSON.stringify(trial.stage_name),
-          events: JSON.stringify(response.trial_events),
-      };
+      var trial_data = proccessDataBeforeSubmit();
 
       // clear the display
       display_element.innerHTML = '';
@@ -136,69 +144,69 @@ jsPsych.plugins["survey-feedback"] = (function() {
     };
 
     // function to handle responses by the subject
-    var after_response = function(info) {
-      if(info.key_release === undefined) {
+    var after_response = function (info) {
+      if (info.key_release === undefined) {
         response.trial_events.push({
-            event_type: "key press",
-            event_raw_details: info.key,
-            event_converted_details:
-                jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
-                " key pressed",
-            timestamp: jsPsych.totalTime(),
-            time_elapsed: jsPsych.totalTime() - timestamp_onload,
+          event_type: "key press",
+          event_raw_details: info.key,
+          event_converted_details:
+            jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(info.key) +
+            " key pressed",
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
       } else {
-          response.trial_events.push({
-              event_type: "key release",
-              event_raw_details: info.key_release,
-              event_converted_details:
-                  jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
-                      info.key_release
-                  ) + " key released",
-              timestamp: jsPsych.totalTime(),
-              time_elapsed: jsPsych.totalTime() - timestamp_onload,
-          });
-          if (trial.response_ends_trial) {
-            end_trial();
-          }
+        response.trial_events.push({
+          event_type: "key release",
+          event_raw_details: info.key_release,
+          event_converted_details:
+            jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(
+              info.key_release
+            ) + " key released",
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp_onload,
+        });
+        if (trial.response_ends_trial) {
+          end_trial();
+        }
       }
     };
 
     // start the response listener
     if (trial.choices != jsPsych.NO_KEYS) {
-        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'performance',
-          persist: true,
-          allow_held_key: false
-        });
-        var clickListener = jsPsych.pluginAPI.getMouseResponse({
-          callback_function: after_response,
-          valid_responses: trial.choices,
-          rt_method: 'date',
-          persist: true,
-          allow_held_key: false
-        });
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'performance',
+        persist: true,
+        allow_held_key: false
+      });
+      var clickListener = jsPsych.pluginAPI.getMouseResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: false
+      });
     }
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         display_element.querySelector('#jspsych-survey-feedback').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         end_trial();
       }, trial.trial_duration);
     }
 
     // end trial if trial_duration is set
     if (trial.trial_latency !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function () {
         trial.response_ends_trial = true;
       }, trial.trial_latency);
     }

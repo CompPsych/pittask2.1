@@ -97,35 +97,37 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
         // add question
         var new_html =
             `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-right'>
-      <div class='vvr-question-a'>
-      <p>${trial.vars.VVR_q_text_a1}</p>
-      <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
-      <p class="answer_latency" style='padding:2rem 0'>${trial.vars.VVR_q_text_a2}</p>
-      <svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="27" y="20" width="203" height="359" fill="#000"/>
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>
-      </svg>
-      </div>
-      <div class='vvr-question-b' style='display: none'>
-      <div>
-      <p style="padding-bottom: 5rem;">${trial.vars.VVR_q_text_b1}</p>
-      <div class="votes-container">
-      <div class="description">
-      <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
-      <div class="description--center"></div>
-      <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
-      </div>
-      <div id="slider"><span class="line"></span></div>
-      </div>
-      </div>
-      <div>
-      <button class="jspsych-btn" style="margin-bottom: 3rem;">Submit answer</button>
-      <div class="instructions-wrap">
-      <ul class="instructions">${trial.vars.VVR_q_text_b4}</ul>
-      </div>
-      </div>
-      </div>
-      </div>`;
+            <div class='vvr-question-a'>
+            <p>${trial.vars.VVR_q_text_a1}</p>
+            <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
+            <p class="answer_latency" style='padding:2rem 0'>${trial.vars.VVR_q_text_a2}</p>
+            <svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="27" y="20" width="203" height="359" fill="#000"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>
+            </svg>
+            </div>
+            <div class='vvr-question-b' style='display: none'>
+            <div>
+            <p style="padding-bottom: 5rem;">${trial.vars.VVR_q_text_b1}</p>
+            <div class="votes-container">
+            <div class="description">
+            <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
+            <div class="description--center"></div>
+            <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
+            </div>
+            <div id="slider"><span class="line"></span></div>
+            </div>
+            </div>
+            <div>
+            <button class="jspsych-btn" style="margin-bottom: 3rem;">Submit answer</button>
+            <div class="instructions-wrap">
+            <ul class="instructions">${trial.vars.VVR_q_text_b4}</ul>
+            </div>
+            </div>
+            </div>
+            </div>`;
+
+        new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
 
         var timestamp_onload = vvr_timer;
         var question_number = item_id + 1;
@@ -140,6 +142,8 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
 
         // render
         display_element.innerHTML = new_html;
+
+        jsPsych.pluginAPI.initializeWindowChangeListeners(trial.stage_name, response, timestamp_onload);
 
         var $button = $('.jspsych-btn');
         var $vending_machine = $(".vending-machine");
@@ -262,24 +266,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
             });
         };
 
-        // function to end trial when it is time
-        var end_trial = function () {
-
-            // kill any remaining setTimeout handlers
-            jsPsych.pluginAPI.clearAllTimeouts();
-
-            // kill keyboard listeners
-            if (typeof keyboardListener !== 'undefined') {
-                jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-                jsPsych.pluginAPI.cancelClickResponse(clickListener);
-            }
-
-            // kill mouse listener
-            if (typeof mouseMoveListener !== 'undefined') {
-                jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
-            }
-
-            // gather the data to store for the trial
+        function proccessDataBeforeSubmit() {
             var trial_data = {
                 stage_name: JSON.stringify(trial.stage_name),
                 stimulus: trial.stimulus,
@@ -301,6 +288,29 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
                 // required for Recall stage
                 trial_data.block_number = trial.stage_type;
             }
+
+            return trial_data;
+        }
+
+        jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+        // function to end trial when it is time
+        var end_trial = function () {
+
+            // kill any remaining setTimeout handlers
+            jsPsych.pluginAPI.clearAllTimeouts();
+
+            // kill keyboard listeners
+            if (typeof keyboardListener !== 'undefined') {
+                jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+                jsPsych.pluginAPI.cancelClickResponse(clickListener);
+            }
+
+            // kill mouse listener
+            if (typeof mouseMoveListener !== 'undefined') {
+                jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener)
+            }
+
+            var trial_data = proccessDataBeforeSubmit();
 
             // clear the display
             display_element.innerHTML = '';

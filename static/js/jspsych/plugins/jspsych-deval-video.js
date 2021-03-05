@@ -158,6 +158,8 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
       video_html += trial.prompt;
     }
 
+    video_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // render
     display_element.innerHTML = video_html;
 
@@ -194,6 +196,16 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
       });
     }
 
+    function proccessDataBeforeSubmit() {
+      return {
+        "stage_name": JSON.stringify(trial.stage_name),
+        "events": JSON.stringify(response.trial_events),
+        "mouse_events": JSON.stringify(response.mouse_events)
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
     // function to end trial when it is time
     function end_trial() {
 
@@ -212,11 +224,7 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
       }
 
       // gather the data to store for the trial
-      var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "events": JSON.stringify(response.trial_events),
-        "mouse_events": JSON.stringify(response.mouse_events),
-      };
+      var trial_data = proccessDataBeforeSubmit();
 
       // clear the display
       display_element.innerHTML = '';
