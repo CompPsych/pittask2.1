@@ -575,6 +575,8 @@ jsPsych.plugins['AUDIT'] = (function () {
               </div>
           </div>`;
 
+    html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // popup of timer module
     if (timerModule) {
       html += timerModule.getPopupHTML();
@@ -653,17 +655,7 @@ jsPsych.plugins['AUDIT'] = (function () {
       }
     });
 
-    // form functionality
-    document.querySelector('form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      response.trial_events.push({
-        'event_type': 'button clicked',
-        'event_raw_details': 'Submit',
-        'event_converted_details': '"Submit" selected',
-        'timestamp': jsPsych.totalTime(),
-        'time_elapsed': jsPsych.totalTime() - timestamp_onload
-      });
-
+    function proccessDataBeforeSubmit(validate = false) {
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
@@ -671,13 +663,16 @@ jsPsych.plugins['AUDIT'] = (function () {
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = i + 1;
+        var val = '';
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
-          var val = match.querySelector("input[type=radio]:checked").value;
+          val = match.querySelector('input[type=radio]:checked').value;
+
           $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
-        } else if (i < 8) {
-          var val = '';
+        } else if (validate && i < 8) {
+          val = '';
+
           $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
           $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
         }
@@ -699,9 +694,33 @@ jsPsych.plugins['AUDIT'] = (function () {
         Object.assign(question_data, obje);
       }
 
-      var match_first = display_element.querySelector('#jspsych-survey-multi-choice-option-0-0');
+      return {
+        'stage_name': JSON.stringify(plugin.info.stage_name),
+        'responses': JSON.stringify(question_data),
+        'timestamp': JSON.stringify(timestamp_data),
+        'time_stamp': JSON.stringify(trial.time_stamp),
+        'question_order': JSON.stringify(question_order),
+        'events': JSON.stringify(response.trial_events),
+        'mouse_events': JSON.stringify(response.mouse_events)
+      };
+    }
 
-      if (match_first.querySelector('input[type=radio]:checked') !== null || $('.survey-error-after').length < 1) {
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, timerModule);
+
+    // form functionality
+    document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      response.trial_events.push({
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
+      });
+
+      var trial_data = proccessDataBeforeSubmit(true);
+
+      if ($('.survey-error-after').length < 1) {
         // kill keyboard listeners
         if (typeof keyboardListener !== 'undefined') {
           jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -718,17 +737,6 @@ jsPsych.plugins['AUDIT'] = (function () {
         if (typeof mouseMoveListener !== 'undefined') {
           jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
         }
-
-        // save data
-        var trial_data = {
-          'stage_name': JSON.stringify(plugin.info.stage_name),
-          'responses': JSON.stringify(question_data),
-          'timestamp': JSON.stringify(timestamp_data),
-          'time_stamp': JSON.stringify(trial.time_stamp),
-          'question_order': JSON.stringify(question_order),
-          'events': JSON.stringify(response.trial_events),
-          'mouse_events': JSON.stringify(response.mouse_events)
-        };
 
         // clear the display
         display_element.innerHTML = '';

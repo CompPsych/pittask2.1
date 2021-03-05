@@ -530,6 +530,8 @@ jsPsych.plugins['Demographics'] = (function () {
             </div>
         </div>`;
 
+    html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+
     // popup of timer module
     if (timerModule) {
       html += timerModule.getPopupHTML();
@@ -620,17 +622,7 @@ jsPsych.plugins['Demographics'] = (function () {
       }
     });
 
-    // form functionality 
-    document.querySelector('form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      response.trial_events.push({
-        'event_type': 'button clicked',
-        'event_raw_details': 'Submit',
-        'event_converted_details': '"Submit" selected',
-        'timestamp': jsPsych.totalTime(),
-        'time_elapsed': jsPsych.totalTime() - timestamp_onload
-      });
-
+    function proccessDataBeforeSubmit(validateInputs = false) {
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
@@ -638,14 +630,15 @@ jsPsych.plugins['Demographics'] = (function () {
       for (var i = 0; i < 1; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = $(match).find('.jspsych-survey-multi-choice-question').text();
+        var val = '';
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
-          var val = match.querySelector('input[type=radio]:checked').value;
+          val = match.querySelector('input[type=radio]:checked').value;
 
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
-        } else {
+        } else if (validateInputs) {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
-          var val = '';
+          val = '';
         }
 
         var obje = {};
@@ -665,9 +658,7 @@ jsPsych.plugins['Demographics'] = (function () {
         var year_input_value = $('.input-year').val();
         var label = $('#jspsych-survey-multi-choice-response-1-0').prop('labels');
 
-        if (year_input_value === '') {
-          $('.jspsych-survey-multi-choice-question-age').addClass('survey-error-after');
-        } else if (year_input_value >= 18 && year_input_value <= 100) {
+        if (!validateInputs || (year_input_value !== '' && year_input_value >= 18 && year_input_value <= 100)) {
           $('.jspsych-survey-multi-choice-question-age').removeClass('survey-error-after');
           $('.moda__age-incomplete').remove();
           $(label).removeClass('survey-error-after');
@@ -680,10 +671,13 @@ jsPsych.plugins['Demographics'] = (function () {
           Object.assign(question_data, object2a);
         } else {
           $('.jspsych-survey-multi-choice-question-age').addClass('survey-error-after');
-          $(label).addClass('survey-error-after');
 
-          if (!$('.moda__age-incomplete').length) {
-            $('.modal__content').append('<p class="moda__age-incomplete">You have entered an age that falls outside the expected range. <br/> Please enter your age.</p>')
+          if (year_input_value !== '') {
+            $(label).addClass('survey-error-after');
+
+            if (!$('.moda__age-incomplete').length) {
+              $('.modal__content').append('<p class="moda__age-incomplete">You have entered an age that falls outside the expected range. <br/> Please enter your age.</p>')
+            }
           }
         }
       })();
@@ -713,41 +707,35 @@ jsPsych.plugins['Demographics'] = (function () {
           label = label_feet;
         }
 
-        if (height_input_value === '') {
+        if (!validateInputs || (height_input_value !== ''
+          && height_input_value >= height_min && height_input_value <= height_max
+          && !(height_input_value == 8 && height_input_value_inches >= 4))) {
+          $('.jspsych-survey-multi-choice-question-height').removeClass('survey-error-after');
+          $('.moda__height-incomplete').remove();
+          $(label).removeClass('survey-error-after');
+
+          var object3a = {
+            '3a. Height (cm)': $("input[name='3a. Height (cm)']").val() ? $("input[name='3a. Height (cm)']").val() : 'NA'
+          };
+          var object3b = {
+            '3b. Height (feet)': $('input[name="3b. Height (feet)"]').val() ? $('input[name="3b. Height (feet)"]').val() : 'NA'
+          };
+          var object3c = {
+            '3c. Height (inches)': $('input[name="3c. Height (inches)"]').val() ? $('input[name="3c. Height (inches)"]').val() : 'NA'
+          };
+
+          timestamp_data['3a. Height (cm)'] = $('input[name="3a. Height (cm)"]').val() ? trial.time_stamp['Q3'] : 'NA';
+          timestamp_data['3b. Height (feet)'] = $('input[name="3b. Height (feet)"]').val() ? trial.time_stamp['Q3'] : 'NA';
+          timestamp_data['3c. Height (inches)'] = $('input[name="3c. Height (inches)"]').val() ? trial.time_stamp['Q3'] : 'NA';
+          Object.assign(question_data, object3a, object3b, object3c);
+        } else {
           $('.jspsych-survey-multi-choice-question-height').addClass('survey-error-after');
-        } else if (height_input_value >= height_min && height_input_value <= height_max) {
-          if (height_input_value == 8 && height_input_value_inches >= 4) {
-            $('.jspsych-survey-multi-choice-question-height').addClass('survey-error-after');
+          if (height_input_value !== '') {
+            $(label).addClass('survey-error-after');
 
             if (!$('.moda__height-incomplete').length) {
               $('.modal__content').append('<p class="moda__height-incomplete">You have entered a height that falls outside the expected range. <br/> Please enter your height.</p>');
             }
-          } else {
-            $('.jspsych-survey-multi-choice-question-height').removeClass('survey-error-after');
-            $('.moda__height-incomplete').remove();
-            $(label).removeClass('survey-error-after');
-
-            var object3a = {
-              '3a. Height (cm)': $("input[name='3a. Height (cm)']").val() ? $("input[name='3a. Height (cm)']").val() : 'NA'
-            };
-            var object3b = {
-              '3b. Height (feet)': $('input[name="3b. Height (feet)"]').val() ? $('input[name="3b. Height (feet)"]').val() : 'NA'
-            };
-            var object3c = {
-              '3c. Height (inches)': $('input[name="3c. Height (inches)"]').val() ? $('input[name="3c. Height (inches)"]').val() : 'NA'
-            };
-
-            timestamp_data['3a. Height (cm)'] = $('input[name="3a. Height (cm)"]').val() ? trial.time_stamp['Q3'] : 'NA';
-            timestamp_data['3b. Height (feet)'] = $('input[name="3b. Height (feet)"]').val() ? trial.time_stamp['Q3'] : 'NA';
-            timestamp_data['3c. Height (inches)'] = $('input[name="3c. Height (inches)"]').val() ? trial.time_stamp['Q3'] : 'NA';
-            Object.assign(question_data, object3a, object3b, object3c);
-          }
-        } else {
-          $('.jspsych-survey-multi-choice-question-height').addClass('survey-error-after');
-          $(label).addClass('survey-error-after');
-
-          if (!$('.moda__height-incomplete').length) {
-            $('.modal__content').append('<p class="moda__height-incomplete">You have entered a height that falls outside the expected range. <br/> Please enter your height.</p>');
           }
         }
       })();
@@ -771,9 +759,7 @@ jsPsych.plugins['Demographics'] = (function () {
           label = label_kg;
         }
 
-        if (weight_input_value === '') {
-          $('.jspsych-survey-multi-choice-question-weight').addClass('survey-error-after');
-        } else if (weight_input_value >= weight_min && weight_input_value <= weight_max) {
+        if (!validateInputs || (weight_input_value >= weight_min && weight_input_value <= weight_max)) {
           $('.jspsych-survey-multi-choice-question-weight').removeClass('survey-error-after');
           $('.moda__weight-incomplete').remove();
           $(label).removeClass('survey-error-after');
@@ -792,10 +778,12 @@ jsPsych.plugins['Demographics'] = (function () {
           Object.assign(question_data, object4a, object4b);
         } else {
           $('.jspsych-survey-multi-choice-question-weight').addClass('survey-error-after');
-          $(label).addClass('survey-error-after');
+          if (weight_input_value !== '') {
+            $(label).addClass('survey-error-after');
 
-          if (!$('.moda__weight-incomplete').length) {
-            $('.modal__content').append('<p class="moda__weight-incomplete">You have entered a weight that falls outside the expected range. <br/> Please enter your weight.</p>')
+            if (!$('.moda__weight-incomplete').length) {
+              $('.modal__content').append('<p class="moda__weight-incomplete">You have entered a weight that falls outside the expected range. <br/> Please enter your weight.</p>')
+            }
           }
         }
       })();
@@ -803,14 +791,15 @@ jsPsych.plugins['Demographics'] = (function () {
       for (var i = 4; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = $(match).find('.jspsych-survey-multi-choice-question').text();
+        var val = '';
 
         if (match.querySelector('input[type=radio]:checked') !== null) {
-          var val = match.querySelector('input[type=radio]:checked').value;
+          val = match.querySelector('input[type=radio]:checked').value;
 
           $(match).find('.jspsych-survey-multi-choice-question').removeClass('survey-error-after');
-        } else {
+        } else if (validateInputs) {
           $(match).find('.jspsych-survey-multi-choice-question').addClass('survey-error-after');
-          var val = '';
+          val = '';
         }
 
         var obje = {};
@@ -824,6 +813,32 @@ jsPsych.plugins['Demographics'] = (function () {
         obje[name] = val;
         Object.assign(question_data, obje);
       }
+
+      return {
+        'stage_name': JSON.stringify(plugin.info.stage_name),
+        'responses': JSON.stringify(question_data),
+        'timestamp': JSON.stringify(timestamp_data),
+        'time_stamp': JSON.stringify(trial.time_stamp),
+        'question_order': JSON.stringify(question_order),
+        'events': JSON.stringify(response.trial_events),
+        'mouse_events': JSON.stringify(response.mouse_events)
+      };
+    }
+
+    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, timerModule);
+
+    // form functionality 
+    document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      response.trial_events.push({
+        'event_type': 'button clicked',
+        'event_raw_details': 'Submit',
+        'event_converted_details': '"Submit" selected',
+        'timestamp': jsPsych.totalTime(),
+        'time_elapsed': jsPsych.totalTime() - timestamp_onload
+      });
+
+      const trial_data = proccessDataBeforeSubmit(true);
 
       if ($('.survey-error-after').length < 1) {
         // kill keyboard listeners
@@ -843,16 +858,6 @@ jsPsych.plugins['Demographics'] = (function () {
           jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
         }
 
-        // save data
-        var trial_data = {
-          'stage_name': JSON.stringify(plugin.info.stage_name),
-          'responses': JSON.stringify(question_data),
-          'timestamp': JSON.stringify(timestamp_data),
-          'time_stamp': JSON.stringify(trial.time_stamp),
-          'question_order': JSON.stringify(question_order),
-          'events': JSON.stringify(response.trial_events),
-          'mouse_events': JSON.stringify(response.mouse_events)
-        };
 
         // clear the display
         display_element.innerHTML = '';

@@ -9,9 +9,13 @@ jsPsych.data.reset();
 
 // adding beforeunload listener which will minimize
 // page reloading during the experiment
-$(window).on("beforeunload", function(){
-    return 'Changes you made may not be saved';
-});
+/*$(window).on("beforeunload", function (event) {
+    if (popup_exit) {
+        event.preventDefault();
+        event.returnValue = popup_text_exit
+        return popup_text_exit;
+    }
+});*/
 
 // determining the presence of outcome for VVR stage
 var DEGRAD_PATTERN = {
@@ -1949,18 +1953,31 @@ jsPsych.init({
         //     $(window).off("beforeunload");
         //     jsPsych.data.displayData(); 
         // }, 
-        on_finish: function() {
+    on_finish: function() {
             psiTurk.saveData({
-                success: function() {
+            success: function() {
                     $(window).off("beforeunload");
                     psiTurk.completeHIT();
                 },
                 error: prompt_resubmit
             });
         }, 
-        on_data_update: function(data) {
+    on_data_update: function(data) {
             psiTurk.recordTrialData(data);
             psiTurk.saveData();
+    },
+    on_close: function(event) {
+        psiTurk.saveData();
+        $.ajax("quitter", {
+            type: "POST",
+            data: { uniqueId: uniqueId }
+        });
+
+        if (popup_exit) {
+            event.preventDefault();
+            event.returnValue = popup_text_exit
+            return popup_text_exit;
         }
+    },
     }
 );

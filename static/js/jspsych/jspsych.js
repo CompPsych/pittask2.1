@@ -259,6 +259,8 @@ window.jsPsych = (function() {
     // data object that just went through the trial's finish handlers.
     opts.on_data_update(trial_data_values);
 
+    jsPsych.pluginAPI.cancelAllWindowChangeListeners();
+
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
       if (opts.default_iti > 0) {
@@ -334,6 +336,17 @@ window.jsPsych = (function() {
     message = message || '<p>The experiment failed to load.</p>';
     loadfail = true;
     DOM_target.innerHTML = message;
+  }
+
+  core.interruptExperiment = function (end_message) {
+    core.pauseExperiment();
+    DOM_target.innerHTML = end_message;
+    $(document).off('click');
+    $(document).off('mousedown');
+    $(document).off('mouseup');
+    $(document).off('keyup');
+    $(document).off('keydown');
+    jsPsych.pluginAPI.clearAllTimeouts();
   }
 
   function TimelineNode(parameters, parent, relativeID) {
@@ -1977,6 +1990,7 @@ jsPsych.pluginAPI = (function() {
   var keyboard_listeners = [];
   var click_listeners = [];
   var mousemove_listeners = [];
+  var focus_listeners = [];
 
   var held_keys = {};
 
@@ -3265,6 +3279,183 @@ jsPsych.pluginAPI = (function() {
     moduleApp.setMaxAnswerTime(params.timeCeiling);
 
     return moduleApp;
+  }
+
+  /**
+   * Returns html for modal
+   * 
+   * @param {string} modalId - id of modal
+   * @param {string} modalText - text contents of modal
+   * @return {string}
+   */
+  module.getPopupHTML = function(modalId, modalText) {
+      return '<div class="modal micromodal-slide" id="' + modalId + '" aria-hidden="true">' +
+        '<div class="modal__overlay" tabindex="-1">' +
+        '<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="' + modalId + '-title">' +
+        '<header class="modal__header">' +
+        '<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>' +
+        '</header>' +
+        '<main class="modal__content" id="' + modalId + '-content">' +
+        '<p>' + modalText + '</p>' +
+        '</main>' +
+        '<footer class="modal__footer">' +
+        '<button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>' +
+        '</footer>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+  }
+
+  /**
+   * Shows modal with specified id
+   * 
+   * @param {string} modalId - id of modal
+   * @param {object} config - modal config
+   */
+  module.showModal = function (modalId, config) {
+    MicroModal.show(modalId, config);
+  }
+
+  var absenceTime = 0;
+  var numberOfWindowSwitches = 0;
+  var isTimerActive = false;
+  var timeCheckInterval = null;
+
+  /**
+   * Handles window focus/blur events
+   * 
+   * @param {object} responseStore - data storage
+   * @param {array} responseStore.trial_events - array of trial events
+   * @param {date} timestamp - time of current experiment load
+   * @param {function} dataProccess - get trial data that needs to be saved before the end
+   * @param {object} timerModule - jsPsych.pluginAPI.timerModule
+   */
+  module.initializeWindowChangeListeners = function(responseStore, timestamp, dataProccess, timerModule = null) {
+
+    if (timeCheckInterval) {
+      clearInterval(timeCheckInterval);
+    }
+
+    var modalConfig = {
+      onShow() {
+        if (!timerModule) return;
+        timerModule.stopTimerModule();
+      },
+      onClose() {
+        if (!timerModule) return;
+        timerModule.restartTimerModule();
+      }
+    }
+
+    function stopExperiment() {
+      if (browser_inactivated_notif) {
+        responseStore.trial_events.push({
+          event_type: 'text appears',
+          event_raw_details: 'browser_inactivated_notif_text',
+          event_converted_details: 'browser_inactivated_notif_text appears',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp,
+        });
+      }
+
+      var trial_data = dataProccess();
+      jsPsych.finishTrial(trial_data);
+      jsPsych.interruptExperiment(browser_inactivated_notif && browser_inactivated_notif_text || '');
+    }
+
+    function checkAbsenceTime() {
+      timeCheckInterval = setInterval(function() {
+        if (!isTimerActive) {
+          return clearInterval(timeCheckInterval);
+        }
+
+        var timeDifference = jsPsych.totalTime() - absenceTime;
+        if (timeDifference >= browser_inactivated_duration * 1000) {
+          stopExperiment();
+        }
+      }, 1000);
+    }
+
+    function startTimer() {
+      absenceTime = jsPsych.totalTime();
+      isTimerActive = true;
+
+      checkAbsenceTime();
+    }
+
+    function stopTimer() {
+      isTimerActive = false;
+      
+      var currentTime = jsPsych.totalTime()
+
+      if (currentTime - absenceTime >= browser_inactivated_duration * 1000) {
+        stopExperiment();
+      }
+    }
+
+    function onWindowBlur() {
+      if (isTimerActive) return;
+      responseStore.trial_events.push({
+        event_type: 'window change',
+        event_raw_details: 'window deactivated',
+        event_converted_details: 'window deactivated',
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp,
+      });
+      
+      numberOfWindowSwitches += 1;
+
+      if (numberOfWindowSwitches >= browser_inactivated_num) {
+        stopExperiment();
+        return;
+      }
+
+      if (popup_browser) {
+        jsPsych.pluginAPI.showModal('window-blur', modalConfig);
+      }
+      startTimer();
+    }
+
+    function onWindowFocus() {
+      stopTimer();
+
+      responseStore.trial_events.push({
+        event_type: 'window change',
+        event_raw_details: 'window activated',
+        event_converted_details: 'window activated',
+        timestamp: jsPsych.totalTime(),
+        time_elapsed: jsPsych.totalTime() - timestamp,
+      });
+    }
+
+    window.addEventListener('focus', onWindowFocus);
+    window.addEventListener('blur', onWindowBlur);
+
+    var focusListener = {
+      type: 'focus',
+      fn: onWindowFocus
+    };
+
+    var blurListener = {
+      type: 'blur',
+      fn: onWindowBlur
+    };
+
+    focus_listeners.push(focusListener, blurListener);
+
+    if (isTimerActive) {
+      jsPsych.pluginAPI.showModal('window-blur', modalConfig);
+    }
+
+    checkAbsenceTime();
+  }
+
+  module.cancelAllWindowChangeListeners = function() {
+    for (var i = 0; i < focus_listeners.length; i++) {
+      // remove the listener from the doc
+      window.removeEventListener(focus_listeners[i].type,focus_listeners[i].fn);
+    }
+    focus_listeners = [];
   }
 
   return module;
