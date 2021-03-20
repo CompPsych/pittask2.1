@@ -34,13 +34,15 @@ var close_instruct_latency = 500;
 var popup_text_behav = "Please provide your answer prior to submission.";
 var popup_text_WBF = "Sorry, all questions need to be answered prior to submission.";
 var popup_browser = true;
-var popup_text_browser = "Please focus on the experiment by keeping the application active in your browser.";
+var popup_text_browser = "‘Please focus on the experiment by keeping the application active in your browser. The experiment will close without payment if it has been inactive for too long, or if there are too many deactivations caused by navigation to other windows. The experiment will be paused until you dismiss this popup message. Thank you for understanding.";
 var browser_inactivated_duration = 120;
 var browser_inactivated_num = 10;
 var popup_exit = true;
 var popup_text_exit = "Are you sure you want to leave the experiment?";
 var browser_inactivated_notif = true;
-var browser_inactivated_notif_text = "The experiment has ended because you were absent for too long.";
+var browser_inactivated_notif_text = 
+"<p>The experiment has ended because you were absent for too long.</p><br>"
+"<p>Please close this window. You will not be paid for this HIT.</p>";
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -448,16 +450,16 @@ var close_instruct_text_transfer_q =
 "<h2>That is it for the memory test.</h2><br>" +
 "<h2></h2><br>" + 
 "<h2> Press any key to continue. </h2>";
-var transfer_q_q1_stim1_colour = false;
+var transfer_q_q1_stim1_colour = true;
 var transfer_q_q2_stim1_colour = false;
 var transfer_q_q3_stim1_colour = true;
-var transfer_q_q1_stim2_colour = false;
+var transfer_q_q1_stim2_colour = true;
 var transfer_q_q2_stim2_colour = false;
 var transfer_q_q3_stim2_colour = true;
-var transfer_q_q1_stim3_colour = false;
+var transfer_q_q1_stim3_colour = true;
 var transfer_q_q2_stim3_colour = false;
 var transfer_q_q3_stim3_colour = true;
-var transfer_q_q1_stim4_colour = false;
+var transfer_q_q1_stim4_colour = true;
 var transfer_q_q2_stim4_colour = false;
 var transfer_q_q3_stim4_colour = true;
 var transfer_q_1a_questiontext = "How likely are you to get food if you tip the machine now?";
