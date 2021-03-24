@@ -34,7 +34,7 @@ var close_instruct_latency = 500;
 var popup_text_behav = "Please provide your answer prior to submission.";
 var popup_text_WBF = "Sorry, all questions need to be answered prior to submission.";
 var popup_browser = true;
-var popup_text_browser = "‘Please focus on the experiment by keeping the application active in your browser. The experiment will close without payment if it has been inactive for too long, or if there are too many deactivations caused by navigation to other windows. The experiment will be paused until you dismiss this popup message. Thank you for understanding.";
+var popup_text_browser = "Please focus on the experiment by keeping the application active in your browser. The experiment will close without payment if it has been inactive for too long, or if there are too many deactivations caused by navigation to other windows. The experiment will be paused until you dismiss this popup message. Thank you for understanding.";
 var browser_inactivated_duration = 120;
 var browser_inactivated_num = 10;
 var popup_exit = true;
@@ -503,7 +503,7 @@ var answer_latency_text_ceiling = 'There are no incorrect answers in this questi
 
 /* _SI */
 var popup_answer_latency_floor_SI = true;
-var answer_latency_floor_SI = 8000;
+var answer_latency_floor_SI = 1590;
 
 var popup_answer_latency_ceiling_SI = true;
 var answer_latency_ceiling_SI = 180000;
@@ -511,7 +511,7 @@ var answer_latency_ceiling_SI = 180000;
 
 /* _SDS */
 var popup_answer_latency_floor_SDS = true;
-var answer_latency_floor_SDS = 8000;
+var answer_latency_floor_SDS = 2030;
 
 var popup_answer_latency_ceiling_SDS = true;
 var answer_latency_ceiling_SDS = 180000;
@@ -519,7 +519,7 @@ var answer_latency_ceiling_SDS = 180000;
 
 /* _ICAR */
 var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 8000;
+var answer_latency_floor_ICAR = 5000;
 
 var popup_answer_latency_ceiling_ICAR = true;
 var answer_latency_ceiling_ICAR = 180000;
