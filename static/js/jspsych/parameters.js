@@ -35,14 +35,15 @@ var popup_text_behav = "Please provide your answer prior to submission.";
 var popup_text_WBF = "Sorry, all questions need to be answered prior to submission.";
 var popup_browser = true;
 var popup_text_browser = "Please focus on the experiment by keeping the application active in your browser. The experiment will close without payment if it has been inactive for too long, or if there are too many deactivations caused by navigation to other windows. The experiment will be paused until you dismiss this popup message. Thank you for understanding.";
-var browser_inactivated_duration = 120;
+//unit is second for browser_inactivated_duration
+var browser_inactivated_duration = 1800;
 var browser_inactivated_num = 10;
 var popup_exit = true;
 var popup_text_exit = "Are you sure you want to leave the experiment?";
 var browser_inactivated_notif = true;
 var browser_inactivated_notif_text = 
 "<p>The experiment has ended because you were absent for too long.</p><br>"
-"<p>Please close this window. You will not be paid for this HIT.</p>";
+"<p>You will not be paid for this HIT. Please close this window.</p>";
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -242,7 +243,7 @@ var stim4_colour = "rgb(240,228,66)";
  * Pavlovian Conditioning
  ************************************************************/
 var min_num_correct_pav = 4;
-var max_num_incorrect_pav = 50;
+var max_num_incorrect_pav = 100;
 var open_instruct_pav = true;
 var close_instruct_pav = false;
 var open_instruct_text_pav = 
@@ -286,7 +287,7 @@ var degrad_pattern_VVR1 = ["d0"];
 var prob_value_VVR1 = [0.2];
 var min_blocks_num_VVR1 = 2;
 var min_num_correct_VVR1 = 6;
-var max_num_incorrect_VVR1 = 50;
+var max_num_incorrect_VVR1 = 100;
 var open_instruct_VVR1 = true;
 var close_instruct_VVR1 = false;
 var open_instruct_text_VVR1 =
@@ -519,7 +520,7 @@ var answer_latency_ceiling_SDS = 180000;
 
 /* _ICAR */
 var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 5000;
+var answer_latency_floor_ICAR = 1590;
 
 var popup_answer_latency_ceiling_ICAR = true;
 var answer_latency_ceiling_ICAR = 180000;
