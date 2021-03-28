@@ -28,6 +28,7 @@ loglevel = 2
 debug = true
 login_username = examplename
 login_pw = examplepassword
+unique_links_path = Participants/unique_links.csv
 threads = auto
 secret_key = 'this is my secret key which is hard to guess, i should change this'
 #certfile = <path_to.crt> 
