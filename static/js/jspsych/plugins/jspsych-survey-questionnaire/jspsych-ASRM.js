@@ -247,7 +247,9 @@ jsPsych.plugins['ASRM'] = (function () {
         </div>
     </div>`;
 
+    html += '<div id="translation-listener">translate</div>';
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_translator_text);
 
     // popup of timer module
     if (timerModule) {
@@ -371,6 +373,9 @@ jsPsych.plugins['ASRM'] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, timerModule);
+
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // form functionality
     document.querySelector('form').addEventListener('submit', function (event) {

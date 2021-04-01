@@ -158,7 +158,9 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
       video_html += trial.prompt;
     }
 
+    video_html += '<div id="translation-listener">translate</div>';
     video_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    video_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_translator_text);
 
     // render
     display_element.innerHTML = video_html;
@@ -205,6 +207,8 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // function to end trial when it is time
     function end_trial() {
