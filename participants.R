@@ -531,10 +531,10 @@ if(isClass(query))
     }
 
     if (length(temp_mouse_events) > 0) {
-    for (j in 1: length(temp_mouse_events)) {
-      complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
+      for (j in 1: length(temp_mouse_events)) {
+        complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
+      }
     }
-  }
   }
   
   # Setting vectors sizes pre-allocates memory
@@ -1286,6 +1286,9 @@ if(isClass(query))
     
       date <- format(as.IDate(dateTime[icar_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[icar_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[pid5bf_index]
+      time_ms <- dateTime_ms[pid5bf_index] - time_elapsed
       
       for(j in 1:length(icar_responses)){
         timestamp <- ifelse(is.na(names(icar_timestamps)[j]), 'NA', icar_timestamps[[j]])
