@@ -338,7 +338,7 @@ jsPsych.plugins['GAD-7'] = (function () {
 
     html += '<div id="translation-listener">translate</div>';
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
-    html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_translator_text);
+    html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     // popup of timer module
     if (timerModule) {

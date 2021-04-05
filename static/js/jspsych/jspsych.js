@@ -3462,7 +3462,7 @@ jsPsych.pluginAPI = (function() {
   var translationDetector;
 
   module.initializeTranslatorDetector = function(target, expectedValue, responseStore, timestamp, dataProccess, timerModule = null) {
-    if (!target) return
+    if (!target || !popup_translator) return
     
     var modalConfig = {
       onShow() {
@@ -3482,8 +3482,8 @@ jsPsych.pluginAPI = (function() {
       if (translator_detected_notif) {
         responseStore.trial_events.push({
           event_type: 'text appears',
-          event_raw_details: 'translator_detected_text',
-          event_converted_details: 'translator_detected_text appears',
+          event_raw_details: 'translator_detected_notif ',
+          event_converted_details: 'translator_detected_notif appears',
           timestamp: jsPsych.totalTime(),
           time_elapsed: jsPsych.totalTime() - timestamp,
         });

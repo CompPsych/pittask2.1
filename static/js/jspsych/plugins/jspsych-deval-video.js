@@ -160,7 +160,7 @@ jsPsych.plugins["video-keyboard-response"] = (function () {
 
     video_html += '<div id="translation-listener">translate</div>';
     video_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
-    video_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_translator_text);
+    video_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     // render
     display_element.innerHTML = video_html;

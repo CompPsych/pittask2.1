@@ -42,7 +42,7 @@ var popup_text_exit = "Are you sure you want to leave the experiment?";
 var browser_inactivated_notif = true;
 var browser_inactivated_notif_text = "The experiment has ended because you were absent for too long.";
 var popup_translator = true;
-var popup_translator_text = "Please turn off the translation software otherwise you'll be banned from this HIT."
+var popup_text_translator = "Please turn off the translation software otherwise you'll be banned from this HIT."
 var translator_detected_notif = true;
 var translator_detected_nofit_text = "The experiment has ended because you didn't turn the translator off."
 

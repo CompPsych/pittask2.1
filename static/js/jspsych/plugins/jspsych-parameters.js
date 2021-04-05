@@ -50,7 +50,7 @@ jsPsych.plugins['parameters'] = (function () {
             browser_inactivated_notif: browser_inactivated_notif,
             browser_inactivated_notif_text: browser_inactivated_notif_text,
             popup_translator: popup_translator,
-            popup_translator_text: popup_translator_text,
+            popup_text_translator: popup_text_translator,
             translator_detected_notif: translator_detected_notif,
             translator_detected_nofit_text: translator_detected_nofit_text,
 

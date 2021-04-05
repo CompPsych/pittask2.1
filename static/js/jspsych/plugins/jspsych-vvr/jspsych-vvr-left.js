@@ -131,7 +131,7 @@ jsPsych.plugins['survey-vvr-questions-left'] = (function () {
 
     new_html += '<div id="translation-listener">translate</div>';
     new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
-    new_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_translator_text);
+    new_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     var timestamp_onload = vvr_timer;
     var question_number = item_id + 1;
