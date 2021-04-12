@@ -3406,7 +3406,7 @@ jsPsych.pluginAPI = (function() {
       
       numberOfWindowSwitches += 1;
 
-      if (numberOfWindowSwitches >= browser_inactivated_num) {
+      if (numberOfWindowSwitches > browser_inactivated_num) {
         stopExperiment();
         return;
       }
