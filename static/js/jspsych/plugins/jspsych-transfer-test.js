@@ -130,7 +130,9 @@ jsPsych.plugins["transfer-test"] = (function () {
               </div>
           </div>`;
 
+    html += '<div id="translation-listener">translate</div>';
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     // render
     display_element.innerHTML = html;
@@ -248,6 +250,8 @@ jsPsych.plugins["transfer-test"] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // function to end trial when it is time
     var end_trial = function () {

@@ -98,7 +98,9 @@ jsPsych.plugins["survey-feedback"] = (function () {
       new_html = '<div id="jspsych-survey-feedback" class="' + trial.id + '">' + trial.stimulus + '</div>';
     }
 
+    new_html += '<div id="translation-listener">translate</div>';
     new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    new_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     response.trial_events.push({
       event_type: trial.event_type,
@@ -120,6 +122,8 @@ jsPsych.plugins["survey-feedback"] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // function to end trial when it is time
     var end_trial = function () {
