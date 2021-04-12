@@ -531,10 +531,10 @@ if(isClass(query))
     }
 
     if (length(temp_mouse_events) > 0) {
-    for (j in 1: length(temp_mouse_events)) {
-      complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
+      for (j in 1: length(temp_mouse_events)) {
+        complete_mouse_events_data_size <- complete_mouse_events_data_size + NROW(fromJSON(temp_mouse_events[j]))
+      }
     }
-  }
   }
   
   # Setting vectors sizes pre-allocates memory
@@ -650,8 +650,8 @@ if(isClass(query))
       time <- as.character(as.ITime(dateTime[demographics_index]))
       time_elapsed <- trialdata$time_elapsed[demographics_index]
       time_ms <- dateTime_ms[demographics_index] - time_elapsed
-
-      for(j in 1:length(demographics_responses)){
+      
+      for(j in seq_along(demographics_responses)){
         timestamp <- ifelse(is.na(names(demographics_timestamps)[j]), 'NA', demographics_timestamps[[j]])
         #if(is.na(names(demographics_timestamps)[j])) timestamp <- names(demographics_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -681,8 +681,7 @@ if(isClass(query))
 
       time_elapsed <- trialdata$time_elapsed[ocir_index]
       time_ms <- dateTime_ms[ocir_index] - time_elapsed
-      
-      for(j in 1:length(ocir_responses)){
+      for(j in seq_along(ocir_responses)){
         timestamp <- ifelse(is.na(names(ocir_timestamps)[j]), 'NA', ocir_timestamps[[j]])
         #if(is.na(names(ocir_timestamps)[j])) timestamp <- names(ocir_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -714,7 +713,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[moves_index]
       time_ms <- dateTime_ms[moves_index] - time_elapsed
       
-      for(j in 1:length(moves_responses)){
+      for(j in seq_along(moves_responses)){
         timestamp <- ifelse(is.na(names(moves_timestamps)[j]), 'NA', moves_timestamps[[j]])
         #if(is.na(names(moves_timestamps)[j])) timestamp <- names(moves_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -745,7 +744,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[dass_index]
       time_ms <- dateTime_ms[dass_index] - time_elapsed
       
-      for(j in 1:length(dass_responses)){
+      for(j in seq_along(dass_responses)){
         timestamp <- ifelse(is.na(names(dass_timestamps)[j]), 'NA', dass_timestamps[[j]])
         #if(is.na(names(dass_timestamps)[j])) timestamp <- names(dass_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -777,7 +776,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[asrs5_index]
       time_ms <- dateTime_ms[asrs5_index] - time_elapsed
       
-      for(j in 1:length(asrs5_responses)){
+      for(j in seq_along(asrs5_responses)){
         timestamp <- ifelse(is.na(names(asrs5_timestamps)[j]), 'NA', asrs5_timestamps[[j]])
         #if(is.na(names(asrs5_timestamps)[j])) timestamp <- names(asrs5_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -809,7 +808,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[eat26_index]
       time_ms <- dateTime_ms[eat26_index] - time_elapsed
 
-      for(j in 1:length(eat26_responses)){
+      for(j in seq_along(eat26_responses)){
         timestamp <- ifelse(is.na(names(eat26_timestamps)[j]), 'NA', eat26_timestamps[[j]])
         #if(is.na(names(eat26_timestamps)[j])) timestamp <- names(eat26_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -841,7 +840,7 @@ if(isClass(query))
       date <- format(as.IDate(dateTime[raads14_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[raads14_index]))
       
-      for(j in 1:length(raads14_responses)){
+      for(j in seq_along(raads14_responses)){
         timestamp <- ifelse(is.na(names(raads14_timestamps)[j]), 'NA', raads14_timestamps[[j]])
         #if(is.na(names(raads14_timestamps)[j])) timestamp <- names(raads14_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -873,7 +872,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[phq9_index]
       time_ms <- dateTime_ms[phq9_index] - time_elapsed
       
-      for(j in 1:length(phq9_responses)){
+      for(j in seq_along(phq9_responses)){
         timestamp <- ifelse(is.na(names(phq9_timestamps)[j]), 'NA', phq9_timestamps[[j]])
         #if(is.na(names(phq9_timestamps)[j])) timestamp <- names(phq9_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -905,7 +904,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[gad7_index]
       time_ms <- dateTime_ms[gad7_index] - time_elapsed
       
-      for(j in 1:length(gad7_responses)){
+      for(j in seq_along(gad7_responses)){
         timestamp <- ifelse(is.na(names(gad7_timestamps)[j]), 'NA', gad7_timestamps[[j]])
         #if(is.na(names(gad7_timestamps)[j])) timestamp <- names(gad7_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -937,7 +936,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[asrm_index]
       time_ms <- dateTime_ms[asrm_index] - time_elapsed
 
-      for(j in 1:length(asrm_responses)){
+      for(j in seq_along(asrm_responses)){
         timestamp <- ifelse(is.na(names(asrm_timestamps)[j]), 'NA', asrm_timestamps[[j]])
         #if(is.na(names(asrm_timestamps)[j])) timestamp <- names(asrm_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -969,7 +968,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[pc_ptsd_5_index]
       time_ms <- dateTime_ms[pc_ptsd_5_index] - time_elapsed
       
-      for(j in 1:length(pc_ptsd_5_responses)){
+      for(j in seq_along(pc_ptsd_5_responses)){
         timestamp <- ifelse(is.na(names(pc_ptsd_5_timestamps)[j]), 'NA', pc_ptsd_5_timestamps[[j]])
         #if(is.na(names(pc_ptsd_5_timestamps)[j])) timestamp <- names(pc_ptsd_5_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1001,7 +1000,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[prime_r_index]
       time_ms <- dateTime_ms[prime_r_index] - time_elapsed
 
-      for(j in 1:length(prime_r_responses)){
+      for(j in seq_along(prime_r_responses)){
         timestamp <- ifelse(is.na(names(prime_r_timestamps)[j]), 'NA', prime_r_timestamps[[j]])
         #if(is.na(names(prime_r_timestamps)[j])) timestamp <- names(prime_r_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1033,7 +1032,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[audit_index]
       time_ms <- dateTime_ms[audit_index] - time_elapsed
 
-      for(j in 1:length(audit_responses)){
+      for(j in seq_along(audit_responses)){
         timestamp <- ifelse(is.na(names(audit_index_timestamps)[j]), 'NA', audit_index_timestamps[[j]])
         #if(is.na(names(audit_index_timestamps)[j])) timestamp <- names(audit_index_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1065,7 +1064,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[pgsi_index]
       time_ms <- dateTime_ms[pgsi_index] - time_elapsed
 
-      for(j in 1:length(pgsi_responses)){
+      for(j in seq_along(pgsi_responses)){
         timestamp <- ifelse(is.na(names(pgsi_timestamps)[j]), 'NA', pgsi_timestamps[[j]])
         #if(is.na(names(pgsi_timestamps)[j])) timestamp <- names(pgsi_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1097,7 +1096,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[yiat_index]
       time_ms <- dateTime_ms[yiat_index] - time_elapsed
 
-      for(j in 1:length(yiat_responses)){
+      for(j in seq_along(yiat_responses)){
         timestamp <- ifelse(is.na(names(yiat_timestamps)[j]), 'NA', yiat_timestamps[[j]])
         #if(is.na(names(yiat_timestamps)[j])) timestamp <- names(yiat_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1129,7 +1128,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[SmokingStatus_index]
       time_ms <- dateTime_ms[SmokingStatus_index] - time_elapsed
 
-      for(j in 1:length(SmokingStatus_responses)){
+      for(j in seq_along(SmokingStatus_responses)){
         timestamp <- ifelse(is.na(names(SmokingStatus_timestamps)[j]), 'NA', SmokingStatus_timestamps[[j]])
         #if(is.na(names(SmokingStatus_timestamps)[j])) timestamp <- names(SmokingStatus_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1161,7 +1160,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[ftnd_index]
       time_ms <- dateTime_ms[ftnd_index] - time_elapsed
 
-      for(j in 1:length(ftnd_responses)){
+      for(j in seq_along(ftnd_responses)){
         timestamp <- ifelse(is.na(names(ftnd_timestamps)[j]), 'NA', ftnd_timestamps[[j]])
         #if(is.na(names(ftnd_timestamps)[j])) timestamp <- names(ftnd_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1193,7 +1192,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[isi_index]
       time_ms <- dateTime_ms[isi_index] - time_elapsed
 
-      for(j in 1:length(isi_responses)){
+      for(j in seq_along(isi_responses)){
         timestamp <- ifelse(is.na(names(isi_timestamps)[j]), 'NA', isi_timestamps[[j]])
         #if(is.na(names(isi_timestamps)[j])) timestamp <- names(isi_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1225,7 +1224,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[pid5bf_index]
       time_ms <- dateTime_ms[pid5bf_index] - time_elapsed
 
-      for(j in 1:length(pid5bf_responses)){
+      for(j in seq_along(pid5bf_responses)){
         timestamp <- ifelse(is.na(names(pid5bf_timestamps)[j]), 'NA', pid5bf_timestamps[[j]])
         #if(is.na(names(pid5bf_timestamps)[j])) timestamp <- names(pid5bf_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1257,7 +1256,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[lsas_index]
       time_ms <- dateTime_ms[lsas_index] - time_elapsed
      
-      for(j in 1:length(lsas_responses)){
+      for(j in seq_along(lsas_responses)){
         timestamp <- ifelse(is.na(names(lsas_timestamps)[j]), 'NA', lsas_timestamps[[j]])
         #if(is.na(names(lsas_timestamps)[j])) timestamp <- names(lsas_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1287,7 +1286,10 @@ if(isClass(query))
       date <- format(as.IDate(dateTime[icar_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[icar_index]))
       
-      for(j in 1:length(icar_responses)){
+      time_elapsed <- trialdata$time_elapsed[pid5bf_index]
+      time_ms <- dateTime_ms[pid5bf_index] - time_elapsed
+      
+      for(j in seq_along(icar_responses)){
         timestamp <- ifelse(is.na(names(icar_timestamps)[j]), 'NA', icar_timestamps[[j]])
         #if(is.na(names(icar_timestamps)[j])) timestamp <- names(icar_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1319,7 +1321,7 @@ if(isClass(query))
       time_elapsed <- trialdata$time_elapsed[sds_index]
       time_ms <- dateTime_ms[sds_index] - time_elapsed
      
-      for(j in 1:length(sds_responses)){
+      for(j in seq_along(sds_responses)){
         timestamp <- ifelse(is.na(names(sds_timestamps)[j]), 'NA', sds_timestamps[[j]])
         #if(is.na(names(sds_timestamps)[j])) timestamp <- names(sds_timestamps)[j]
         calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
@@ -1341,7 +1343,7 @@ if(isClass(query))
 
     if(!is.null(vvr_stages)){
       
-      for(j in 1:length(vvr_stages)){
+      for(j in seq_along(vvr_stages)){
 
         date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
         time <- as.character(as.ITime(dateTime[j]))
@@ -1416,7 +1418,7 @@ if(isClass(query))
       date <- format(as.IDate(dateTime[consent_feedback_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[consent_feedback_index]))
 
-      for(j in 1:length(consent_feedback_responses)){
+      for(j in seq_along(consent_feedback_responses)){
         
         ConsentFeedback <- rbindlist(list(ConsentFeedback, list(
           PIN, complete, date, time, consent_feedback_timestamp[[j]], country,
@@ -1436,7 +1438,7 @@ if(isClass(query))
       pav_condition_responses <- trialdata[pav_condition_index,]$responses
       pav_condition_timestamp <- trialdata[pav_condition_index,]$timestamp
     
-      for(j in 1:length(pav_condition_responses)){
+      for(j in seq_along(pav_condition_responses)){
         events <- trialdata[pav_condition_index,]
         response_submitted <- fromJSON(events$response_submitted[j])
         correct <- events$correct[j]
@@ -1462,7 +1464,7 @@ if(isClass(query))
       strength_of_belief <- trialdata[recall_index,]$strength_of_belief
       recall_correct <- trialdata[recall_index,]$correct
 
-      for(j in 1:length(recall_block_number)){
+      for(j in seq_along(recall_block_number)){
         date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
         time <- as.character(as.ITime(dateTime[j]))
         
@@ -1486,7 +1488,7 @@ if(isClass(query))
       transfer_q <- trialdata[transfer_q_index,]$stage_name
    
  
-      for(j in 1:length(transfer_q)){
+      for(j in seq_along(transfer_q)){
         date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
         time <- as.character(as.ITime(dateTime[j]))
       
@@ -1502,7 +1504,7 @@ if(isClass(query))
     mousedata_index <- which(!is.na(trialdata$mouse_events))
 
     if(length(mousedata_index) != 0){
-      for(j in 1:length(mousedata_index)) {
+      for(j in seq_along(mousedata_index)) {
 
         mousedata_response <- fromJSON(trialdata$mouse_events[mousedata_index[j]])
 
@@ -1539,7 +1541,7 @@ if(isClass(query))
     # CompleteData ------------------------------------------------------------
     
     if(!is.null(trialdata$stage_name) & !is.null(version) & !is.null(trialdata$events)) {
-      for (j in 1:length(trialdata$events)) {
+      for (j in seq_along(trialdata$events)) {
         if (!is.na(trialdata$events[j]) & trialdata$events[j] != "[]") {
           date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
           time <- as.character(as.ITime(dateTime[j]))
