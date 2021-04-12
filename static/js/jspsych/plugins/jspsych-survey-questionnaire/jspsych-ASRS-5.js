@@ -122,6 +122,7 @@ jsPsych.plugins['ASRS-5'] = (function () {
       'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
+    html += '<div id="translation-listener">translate</div>';
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
     html += ".jspsych-survey-multi-choice-question { display: flex; text-align: left; border-top: 1px solid }" +
@@ -275,7 +276,6 @@ jsPsych.plugins['ASRS-5'] = (function () {
               </div>
           </div>`;
 
-    html += '<div id="translation-listener">translate</div>';
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
     html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 

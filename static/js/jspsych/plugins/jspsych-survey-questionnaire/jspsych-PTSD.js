@@ -122,6 +122,7 @@ jsPsych.plugins['PC-PTSD-5'] = (function () {
       'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
+    html += '<div id="translation-listener">translate</div>';
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
     html += ".jspsych-survey-multi-choice-question { display: flex; margin-top: 1em; margin-bottom: 1em; text-align: left; justify-content: space-between; }" +
@@ -273,7 +274,6 @@ jsPsych.plugins['PC-PTSD-5'] = (function () {
           </div>
       </div>`;
 
-    html += '<div id="translation-listener">translate</div>';
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
     html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 

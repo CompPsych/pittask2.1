@@ -3490,6 +3490,10 @@ jsPsych.pluginAPI = (function() {
       }
 
       var trial_data = dataProccess();
+      if (trial_data.responses) {
+        trial_data.responses = JSON.stringify({})
+        trial_data.timestamp = JSON.stringify({})
+      }
       jsPsych.finishTrial(trial_data);
       jsPsych.interruptExperiment((translator_detected_notif && translator_detected_nofit_text) || '');
     }
