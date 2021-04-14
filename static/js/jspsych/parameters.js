@@ -45,9 +45,11 @@ var browser_inactivated_notif_text =
     "<p>The experiment has ended because you were absent for too long.</p><br>" +
     "<p>You will not be paid for this HIT. Please close this window.</p>";
 var popup_translator = true;
-var popup_text_translator = "Please turn off the translation software otherwise you'll be banned from this HIT."
+var popup_text_translator = "This HIT is not designed to be used with any translation softwares. Please turn off any translation software. Otherwise, you will not be paid for this HIT."
 var translator_detected_notif = true;
-var translator_detected_nofit_text = "The experiment has ended because you didn't turn the translator off."
+var translator_detected_nofit_text = 
+"<p>The experiment has ended because you didn't turn the translator off.</p><br>" +
+"<p>You will not be paid for this HIT. Please close this window.</p>"
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -312,20 +314,21 @@ var popup_text_machine_VVR1 = 'Don’t forget, you can tip the vending machine a
  ************************************************************/
 var degrad_pattern_VVR2 = ["d1"];
 var prob_value_VVR2 = [0.2];
-var min_blocks_num_VVR2 = 2;
+var min_blocks_num_VVR2 = 3;
 var min_num_correct_VVR2 = 0;
 var max_num_incorrect_VVR2 = 0;
 var open_instruct_VVR2 = true;
 var close_instruct_VVR2 = false;
 var open_instruct_text_VVR2 =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
-    "<h2>You can tip the machine and see what snacks fall out.</h2><br>" +
+    "<h2>You can tip the machine and </h2>" +
+    "<h2>see what snacks fall out.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
 var close_instruct_text_VVR2 = "Thank you for your input. Proceeding to the next stage.";
 
 var popup_machine_VVR2 = true;
-var popup_duration_machine_VVR2 = 6; //(seconds)
+var popup_duration_machine_VVR2 = 15; //(seconds)
 var popup_text_machine_VVR2 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
 
 /************************************************************
@@ -333,20 +336,21 @@ var popup_text_machine_VVR2 = 'Don’t forget, you can tip the vending machine a
  ************************************************************/
 var degrad_pattern_VVR3 = ["d0"];
 var prob_value_VVR3 = [0.2];
-var min_blocks_num_VVR3 = 2;
-var min_num_correct_VVR3 = 2;
-var max_num_incorrect_VVR3 = 4;
+var min_blocks_num_VVR3 = 3;
+var min_num_correct_VVR3 = 6;
+var max_num_incorrect_VVR3 = 100;
 var open_instruct_VVR3 = true;
 var close_instruct_VVR3 = false;
 var open_instruct_text_VVR3 =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
-    "<h2>You can tip the machine and see what snacks fall out.</h2><br>" +
+    "<h2>You can tip the machine and </h2>" +
+    "<h2>see what snacks fall out.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
 var close_instruct_text_VVR3 = "Thank you for your input. Proceeding to the next stage.";
 
 var popup_machine_VVR3 = true;
-var popup_duration_machine_VVR3 = 6; //(seconds)
+var popup_duration_machine_VVR3 = 15; //(seconds)
 var popup_text_machine_VVR3 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
 
 /************************************************************
@@ -422,9 +426,13 @@ var OI_threshold = 30;
 var VOR_duration = 180;
 
 var open_instruct_VOR = true;
-var close_instruct_VOR = true;
+var close_instruct_VOR = false;
 var open_instruct_text_VOR =
-    "<h2>Open instruction for VOR</h2>";
+    "<h2>The vending machine is still malfunctioning.</h2><br>" +
+    "<h2>You can tip the machine and </h2>" +
+    "<h2>see what snacks fall out.</h2><br>" +
+    "<h2>Get all the snacks that you want!</h2><br>" +
+    "<h2>Press any key to begin.</h2>";
 var close_instruct_text_VOR =
     "<h2>Close instruction for VOR</h2>";
 
@@ -508,7 +516,7 @@ var answer_latency_text_ceiling = 'There are no incorrect answers in this questi
 
 /* _SI */
 var popup_answer_latency_floor_SI = true;
-var answer_latency_floor_SI = 1590;
+var answer_latency_floor_SI = 870;
 
 var popup_answer_latency_ceiling_SI = true;
 var answer_latency_ceiling_SI = 180000;
@@ -516,7 +524,7 @@ var answer_latency_ceiling_SI = 180000;
 
 /* _SDS */
 var popup_answer_latency_floor_SDS = true;
-var answer_latency_floor_SDS = 2030;
+var answer_latency_floor_SDS = 1230;
 
 var popup_answer_latency_ceiling_SDS = true;
 var answer_latency_ceiling_SDS = 180000;
@@ -524,7 +532,7 @@ var answer_latency_ceiling_SDS = 180000;
 
 /* _ICAR */
 var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 1590;
+var answer_latency_floor_ICAR = 870;
 
 var popup_answer_latency_ceiling_ICAR = true;
 var answer_latency_ceiling_ICAR = 180000;
