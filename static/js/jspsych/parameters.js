@@ -430,7 +430,7 @@ var close_instruct_VOR = false;
 var open_instruct_text_VOR =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
     "<h2>You can tip the machine and </h2>" +
-    "<h2>see what snacks fall out.</h2><br>" +
+    "<h2>see what happens.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
 var close_instruct_text_VOR =
