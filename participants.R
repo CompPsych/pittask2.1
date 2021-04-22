@@ -22,6 +22,7 @@ options(useFancyQuotes = FALSE)
 
 Parameters <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(), 
   calendar_time = character(),
@@ -34,6 +35,7 @@ Parameters <- data.table(
 
 Specs <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(), 
   calendar_time = character(),
@@ -49,6 +51,7 @@ Specs <- data.table(
 
 Demographics <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -63,6 +66,7 @@ Demographics <- data.table(
 
 OCI_R <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -76,6 +80,7 @@ OCI_R <- data.table(
 
 MOVES <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -89,6 +94,7 @@ MOVES <- data.table(
 
 DASS <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -102,6 +108,7 @@ DASS <- data.table(
 
 ASRS5 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -115,6 +122,7 @@ ASRS5 <- data.table(
 
 EAT_26 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -128,6 +136,7 @@ EAT_26 <- data.table(
 
 RAADS_14 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -141,6 +150,7 @@ RAADS_14 <- data.table(
 
 PHQ_9 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -154,6 +164,7 @@ PHQ_9 <- data.table(
 
 GAD_7 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -167,6 +178,7 @@ GAD_7 <- data.table(
 
 ASRM <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -180,6 +192,7 @@ ASRM <- data.table(
 
 PC_PTSD_5 <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -193,6 +206,7 @@ PC_PTSD_5 <- data.table(
 
 PRIME_R <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -206,6 +220,7 @@ PRIME_R <- data.table(
 
 AUDIT <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -219,6 +234,7 @@ AUDIT <- data.table(
 
 PGSI <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -232,6 +248,7 @@ PGSI <- data.table(
 
 YIAT <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -245,6 +262,7 @@ YIAT <- data.table(
 
 SmokingStatus <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -258,6 +276,7 @@ SmokingStatus <- data.table(
 
 FTND <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -271,6 +290,7 @@ FTND <- data.table(
 
 ISI <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -284,6 +304,7 @@ ISI <- data.table(
 
 PID_5_BF <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -297,6 +318,7 @@ PID_5_BF <- data.table(
 
 LSAS <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -310,6 +332,7 @@ LSAS <- data.table(
 
 ICAR <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -324,6 +347,7 @@ ICAR <- data.table(
 
 SDS <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -337,6 +361,7 @@ SDS <- data.table(
 
 VVR <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -354,6 +379,7 @@ VVR <- data.table(
 
 FoodRatings <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -368,6 +394,7 @@ FoodRatings <- data.table(
 
 HungerRating <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -381,6 +408,7 @@ HungerRating <- data.table(
 
 ConsentFeedback <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -395,6 +423,7 @@ ConsentFeedback <- data.table(
 
 PavCondition <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -409,6 +438,7 @@ PavCondition <- data.table(
 
 Recall <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -425,6 +455,7 @@ Recall <- data.table(
 
 Transfer_q <- data.table(
   PIN = character(),
+  unique_link = character(),
   complete = character(),
   date = character(),
   calendar_time = character(),
@@ -494,7 +525,8 @@ formatDateTime <- function(dateTime){
 
 # Connection --------------------------------------------------------------
 
-connection = dbConnect(MySQL(), user = 'root', password='VolitionL101', dbname = 'pittask', host='127.0.0.1')
+connection = dbConnect(MySQL(), user = 'root', password='password', dbname = 'pittask', host='localhost')
+#connection = dbConnect(MySQL(), user = 'root', password='VolitionL101', dbname = 'pittask', host='127.0.0.1')
 
 query <- tryCatch(
   dbSendQuery(connection, "SELECT * FROM turkdemo"),
@@ -506,6 +538,11 @@ if(isClass(query))
 {
   data <- dbFetch(query, n = -1)
   recordsCount <- nrow(data)
+
+  links_query <- tryCatch(
+    dbSendQuery(connection, "SELECT * FROM unique_links"),
+    error = function(e){ "NA" })
+  links <- dbFetch(links_query, n = -1)
   
   # Parsing non-empty trialdata events and counting CompleteData size
   
@@ -541,6 +578,7 @@ if(isClass(query))
   
   CompleteData <- data.table(
     PIN = character(complete_data_size),
+    unique_link = character(complete_data_size),
     complete = character(complete_data_size),
     date = character(complete_data_size),
     calendar_time = character(complete_data_size),
@@ -559,6 +597,7 @@ if(isClass(query))
 
   MouseData <- data.table(
     PIN = character(complete_mouse_events_data_size),
+    unique_link = character(complete_mouse_events_data_size),
     complete = character(complete_mouse_events_data_size),
     date = character(complete_mouse_events_data_size), 
     calendar_time = character(complete_mouse_events_data_size),
@@ -591,6 +630,10 @@ if(isClass(query))
       next
     }
     
+    #isUsedLink <- which(sapply(links$link, function(y) data$workerid[[i]] %in% y))
+    isUsedLink <- which(links$link %in% data$workerid[[i]])
+    usedLink <- ifelse(length(isUsedLink) == 0, "NA", data$workerid[[i]])
+    
     dateTime <- formatDateTime(json_data[[i]]$data$dateTime)
     dateTime_ms <- json_data[[i]]$data$dateTime
     trialdata <- json_data[[i]]$data$trialdata
@@ -614,7 +657,7 @@ if(isClass(query))
       
       for(j in 1:length(parameters_response)){
         Parameters <- rbindlist(list(Parameters, list(
-          PIN, complete, date, time,
+          PIN, usedLink, complete, date, time,
           country, commit, version,
           names(parameters_response)[j],
           parameters_response[[j]]
@@ -632,7 +675,7 @@ if(isClass(query))
       time <- as.character(as.ITime(dateTime[specs_index]))
  
       Specs <- rbindlist(list(Specs, list(
-        PIN, complete, date, time,
+        PIN, usedLink, complete, date, time,
         country, commit, version,
         specs[[3]], specs[[4]], specs[[5]], specs[[1]], specs[[2]]
       )))
@@ -650,7 +693,6 @@ if(isClass(query))
       time <- as.character(as.ITime(dateTime[demographics_index]))
       time_elapsed <- trialdata$time_elapsed[demographics_index]
       time_ms <- dateTime_ms[demographics_index] - time_elapsed
-      
       for(j in seq_along(demographics_responses)){
         timestamp <- ifelse(is.na(names(demographics_timestamps)[j]), 'NA', demographics_timestamps[[j]])
         #if(is.na(names(demographics_timestamps)[j])) timestamp <- names(demographics_timestamps)[j]
@@ -659,7 +701,7 @@ if(isClass(query))
         response <- ifelse(nchar(demographics_responses[[j]]) == 0, 'NA', demographics_responses[[j]])
 
         Demographics <- rbindlist(list(Demographics, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp, country, timezone, commit, version,
           names(demographics_responses)[j],
@@ -681,6 +723,7 @@ if(isClass(query))
 
       time_elapsed <- trialdata$time_elapsed[ocir_index]
       time_ms <- dateTime_ms[ocir_index] - time_elapsed
+      
       for(j in seq_along(ocir_responses)){
         timestamp <- ifelse(is.na(names(ocir_timestamps)[j]), 'NA', ocir_timestamps[[j]])
         #if(is.na(names(ocir_timestamps)[j])) timestamp <- names(ocir_timestamps)[j]
@@ -689,7 +732,7 @@ if(isClass(query))
         response <- ifelse(nchar(ocir_responses[[j]]) == 0, 'NA', ocir_responses[[j]])
 
         OCI_R <- rbindlist(list(OCI_R, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -721,7 +764,7 @@ if(isClass(query))
         response <- ifelse(nchar(moves_responses[[j]]) == 0, 'NA', moves_responses[[j]])
         
         MOVES <- rbindlist(list(MOVES, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp, country, commit, version,
           names(moves_responses)[j],
@@ -752,7 +795,7 @@ if(isClass(query))
         response <- ifelse(nchar(dass_responses[[j]]) == 0, 'NA', dass_responses[[j]])
 
         DASS <- rbindlist(list(DASS, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -784,7 +827,7 @@ if(isClass(query))
         response <- ifelse(nchar(asrs5_responses[[j]]) == 0, 'NA', asrs5_responses[[j]])
 
         ASRS5 <- rbindlist(list(ASRS5, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -816,7 +859,7 @@ if(isClass(query))
         response <- ifelse(nchar(eat26_responses[[j]]) == 0, 'NA', eat26_responses[[j]])
 
         EAT_26 <- rbindlist(list(EAT_26, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -848,7 +891,7 @@ if(isClass(query))
         response <- ifelse(nchar(raads14_responses[[j]]) == 0, 'NA', raads14_responses[[j]])
 
         RAADS_14 <- rbindlist(list(RAADS_14, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -880,7 +923,7 @@ if(isClass(query))
         response <- ifelse(nchar(phq9_responses[[j]]) == 0, 'NA', phq9_responses[[j]])
 
         PHQ_9 <- rbindlist(list(PHQ_9, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -912,7 +955,7 @@ if(isClass(query))
         response <- ifelse(nchar(gad7_responses[[j]]) == 0, 'NA', gad7_responses[[j]])
 
         GAD_7 <- rbindlist(list(GAD_7, list(
-          PIN, complete, date, 
+          PIN, usedLink, complete, date, 
           calendar_time,
           timestamp,
           country, commit, version,
@@ -944,7 +987,7 @@ if(isClass(query))
         response <- ifelse(nchar(asrm_responses[[j]]) == 0, 'NA', asrm_responses[[j]])
 
         ASRM <- rbindlist(list(ASRM, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -976,7 +1019,7 @@ if(isClass(query))
         response <- ifelse(nchar(pc_ptsd_5_responses[[j]]) == 0, 'NA', pc_ptsd_5_responses[[j]])
 
         PC_PTSD_5 <- rbindlist(list(PC_PTSD_5, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time, 
           timestamp,
           country, commit, version,
@@ -1008,7 +1051,7 @@ if(isClass(query))
         response <- ifelse(nchar(prime_r_responses[[j]]) == 0, 'NA', prime_r_responses[[j]])
 
         PRIME_R <- rbindlist(list(PRIME_R, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1040,7 +1083,7 @@ if(isClass(query))
         response <- ifelse(nchar(audit_responses[[j]]) == 0, 'NA', audit_responses[[j]])
 
         AUDIT <- rbindlist(list(AUDIT, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1072,7 +1115,7 @@ if(isClass(query))
         response <- ifelse(nchar(pgsi_responses[[j]]) == 0, 'NA', pgsi_responses[[j]])
 
         PGSI <- rbindlist(list(PGSI, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1104,7 +1147,7 @@ if(isClass(query))
         response <- ifelse(nchar(yiat_responses[[j]]) == 0, 'NA', yiat_responses[[j]])
 
         YIAT <- rbindlist(list(YIAT, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1136,7 +1179,7 @@ if(isClass(query))
         response <- ifelse(nchar(SmokingStatus_responses[[j]]) == 0, 'NA', SmokingStatus_responses[[j]])
 
         SmokingStatus <- rbindlist(list(SmokingStatus, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1168,7 +1211,7 @@ if(isClass(query))
         response <- ifelse(nchar(ftnd_responses[[j]]) == 0, 'NA', ftnd_responses[[j]])
 
         FTND <- rbindlist(list(FTND, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time, 
           timestamp,
           country, commit, version,
@@ -1200,7 +1243,7 @@ if(isClass(query))
         response <- ifelse(nchar(isi_responses[[j]]) == 0, 'NA', isi_responses[[j]])
 
         ISI <- rbindlist(list(ISI, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1232,7 +1275,7 @@ if(isClass(query))
         response <- ifelse(nchar(pid5bf_responses[[j]]) == 0, 'NA', pid5bf_responses[[j]])
 
         PID_5_BF <- rbindlist(list(PID_5_BF, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1264,7 +1307,7 @@ if(isClass(query))
         response <- ifelse(nchar(lsas_responses[[j]]) == 0, 'NA', lsas_responses[[j]])
 
         LSAS <- rbindlist(list(LSAS, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp,
           country, commit, version,
@@ -1297,7 +1340,7 @@ if(isClass(query))
         response <- ifelse(nchar(icar_responses[[j]]) == 0, 'NA', icar_responses[[j]])
 
         ICAR <- rbindlist(list(ICAR, list(
-          PIN, complete, date, time, 
+          PIN, usedLink, complete, date, time, 
           timestamp,
           country, commit, version,
           names(icar_responses)[j],
@@ -1329,7 +1372,7 @@ if(isClass(query))
         response <- ifelse(nchar(sds_responses[[j]]) == 0, 'NA', sds_responses[[j]])
 
         SDS <- rbindlist(list(SDS, list(
-          PIN, complete, date,
+          PIN, usedLink, complete, date,
           calendar_time,
           timestamp, country, commit, version,
           names(sds_responses)[j],
@@ -1350,7 +1393,7 @@ if(isClass(query))
 
         if(!is.na(trialdata$vvr_stage[j])) {
           VVR <- rbindlist(list(VVR, list(
-            PIN, complete, date, time,
+            PIN, usedLink, complete, date, time,
             trialdata$timestamp[j], country,
             fromJSON(trialdata$vvr_stage[j]), commit, version,
             trialdata$block_number[j],
@@ -1375,7 +1418,7 @@ if(isClass(query))
       
       for(fr in 1:dim(food_ratings)[1]) {
         FoodRatings <- rbindlist(list(FoodRatings, list(
-          PIN, complete,
+          PIN, usedLink, complete,
           format(as.IDate(dateTime[food_ratings_indices[fr]]), "%d-%m-%Y"),
           format(as.ITime(dateTime[food_ratings_indices[fr]])),
           food_ratings$timestamp[fr], country, commit,
@@ -1397,7 +1440,7 @@ if(isClass(query))
       
       for(hr in 1:dim(hunger_ratings)[1]) {
         HungerRating <- rbindlist(list(HungerRating, list(
-          PIN, complete,
+          PIN, usedLink, complete,
           format(as.IDate(dateTime[hunger_rating_indices[hr]]), "%d-%m-%Y"),
           format(as.ITime(dateTime[hunger_rating_indices[hr]])),
           hunger_ratings$timestamp[hr], country, commit, version,
@@ -1421,7 +1464,7 @@ if(isClass(query))
       for(j in seq_along(consent_feedback_responses)){
         
         ConsentFeedback <- rbindlist(list(ConsentFeedback, list(
-          PIN, complete, date, time, consent_feedback_timestamp[[j]], country,
+          PIN, usedLink, complete, date, time, consent_feedback_timestamp[[j]], country,
           commit, version,
           ifelse(j == 4, 3, j),
           names(consent_feedback_responses)[j] %>% str_replace("^\\d+ :", "") %>% str_trim(),
@@ -1447,7 +1490,7 @@ if(isClass(query))
         time <- as.character(as.ITime(dateTime[j]))
     
         PavCondition <- rbindlist(list(PavCondition, list(
-          PIN, complete, date, time, pav_condition_timestamp[j], country, commit, version, 
+          PIN, usedLink, complete, date, time, pav_condition_timestamp[j], country, commit, version, 
           j, response_submitted, substring(correct, 1, 1)
         )))
       }
@@ -1469,7 +1512,7 @@ if(isClass(query))
         time <- as.character(as.ITime(dateTime[j]))
         
         Recall <- rbindlist(list(Recall, list(
-          PIN, complete, date, time, recall_timestamp[j], commit, version, country, 
+          PIN, usedLink, complete, date, time, recall_timestamp[j], commit, version, country, 
           recall_block_number[j], j, 
           ifelse(is.na(response_submitted[j]), "NA", fromJSON(response_submitted[j])),
           recall_correct[j],
@@ -1493,7 +1536,7 @@ if(isClass(query))
         time <- as.character(as.ITime(dateTime[j]))
       
         Transfer_q <- rbindlist(list(Transfer_q, list(
-          PIN, complete, date, time, transfer$timestamp[j], fromJSON(transfer_q[j]), commit,
+          PIN, usedLink, complete, date, time, transfer$timestamp[j], fromJSON(transfer_q[j]), commit,
           version, country, "NA", transfer$item_id[j], fromJSON(transfer$stimulus[j]),
           fromJSON(transfer$strength_of_belief[j]), fromJSON(transfer$text[j])
         )))
@@ -1526,8 +1569,8 @@ if(isClass(query))
           scrollX <- mousedata_response$scrollX[k]
           scrollY <- mousedata_response$scrollY[k]
 
-          set(MouseData,complete_mouse_events_index, 1L:17L, list(
-            PIN, complete, date, time, mousedata_response$timestamp[k],
+          set(MouseData,complete_mouse_events_index, 1L:18L, list(
+            PIN, usedLink, complete, date, time, mousedata_response$timestamp[k],
             country, commit, version,
             stage_name, viewport_size, page_size,
             type, x, y, target, scrollX, scrollY
@@ -1559,8 +1602,8 @@ if(isClass(query))
           # set() method with pre-allocated memory is much faster than appending data row by row using rbindlist()
           
           for (e in 1:nrow(events)) {
-            set(CompleteData, complete_data_index, 1L:15L, list(
-              PIN, complete, format(as.IDate(formatDateTime(time_ms + events$timestamp[e])), "%d-%m-%Y"),
+            set(CompleteData, complete_data_index, 1L:16L, list(
+              PIN, usedLink, complete, format(as.IDate(formatDateTime(time_ms + events$timestamp[e])), "%d-%m-%Y"),
               as.character(as.ITime(formatDateTime(time_ms + events$timestamp[e]))),
               ifelse(is.na(events$timestamp[e]), 'NA', events$timestamp[e]),
               country, timezone, stage_name, commit, version, 
