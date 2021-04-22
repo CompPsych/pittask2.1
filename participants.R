@@ -693,7 +693,6 @@ if(isClass(query))
       time <- as.character(as.ITime(dateTime[demographics_index]))
       time_elapsed <- trialdata$time_elapsed[demographics_index]
       time_ms <- dateTime_ms[demographics_index] - time_elapsed
-
       for(j in seq_along(demographics_responses)){
         timestamp <- ifelse(is.na(names(demographics_timestamps)[j]), 'NA', demographics_timestamps[[j]])
         #if(is.na(names(demographics_timestamps)[j])) timestamp <- names(demographics_timestamps)[j]
@@ -1329,6 +1328,9 @@ if(isClass(query))
     
       date <- format(as.IDate(dateTime[icar_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[icar_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[pid5bf_index]
+      time_ms <- dateTime_ms[pid5bf_index] - time_elapsed
       
       for(j in seq_along(icar_responses)){
         timestamp <- ifelse(is.na(names(icar_timestamps)[j]), 'NA', icar_timestamps[[j]])

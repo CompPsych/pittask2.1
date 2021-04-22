@@ -121,6 +121,7 @@ jsPsych.plugins['SDS'] = (function () {
       'time_elapsed': jsPsych.totalTime() - timestamp_onload
     });
 
+    html += '<div id="translation-listener">translate</div>';
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
     html += ".jspsych-survey-multi-choice-question { text-align: center; outline: 1px solid #fff; padding: 2rem; margin: 2rem 0; }" +
@@ -376,6 +377,7 @@ jsPsych.plugins['SDS'] = (function () {
           </div>`;
 
     html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     // popup of timer module
     if (timerModule) {
@@ -587,6 +589,9 @@ jsPsych.plugins['SDS'] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, timerModule);
+
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // from functionality
     document.querySelector('form').addEventListener('submit', function (event) {

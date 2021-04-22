@@ -260,6 +260,7 @@ window.jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     jsPsych.pluginAPI.cancelAllWindowChangeListeners();
+    jsPsych.pluginAPI.cancelTranslationDetector();
 
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
@@ -3405,7 +3406,7 @@ jsPsych.pluginAPI = (function() {
       
       numberOfWindowSwitches += 1;
 
-      if (numberOfWindowSwitches >= browser_inactivated_num) {
+      if (numberOfWindowSwitches > browser_inactivated_num) {
         stopExperiment();
         return;
       }
@@ -3458,6 +3459,70 @@ jsPsych.pluginAPI = (function() {
     focus_listeners = [];
   }
 
+  var translationDetector;
+
+  module.initializeTranslatorDetector = function(target, expectedValue, responseStore, timestamp, dataProccess, timerModule = null) {
+    if (!target || !popup_translator) return
+    
+    var modalConfig = {
+      onShow() {
+        if (!timerModule) return;
+        timerModule.stopTimerModule();
+      },
+      onClose() {
+        if (target.innerHTML !== expectedValue) {
+          return stopExperiment();
+        }
+        if (!timerModule) return;
+        timerModule.restartTimerModule();
+      }
+    }
+    
+    function stopExperiment() {
+      if (translator_detected_notif) {
+        responseStore.trial_events.push({
+          event_type: 'text appears',
+          event_raw_details: 'translator_detected_notif ',
+          event_converted_details: 'translator_detected_notif appears',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp,
+        });
+      }
+
+      var trial_data = dataProccess();
+      if (trial_data.responses) {
+        trial_data.responses = JSON.stringify({})
+        trial_data.timestamp = JSON.stringify({})
+      }
+      jsPsych.finishTrial(trial_data);
+      jsPsych.interruptExperiment((translator_detected_notif && translator_detected_nofit_text) || '');
+    }
+
+    function checkChanges(mutationsList) {
+      if (mutationsList && mutationsList.length) {
+        if (target.innerHTML !== expectedValue) {
+          if (popup_translator) {
+            jsPsych.pluginAPI.showModal('translator-detected', modalConfig);
+          }
+        }
+      }
+    }
+
+    translationDetector = new MutationObserver(checkChanges);
+
+    const config = {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      characterData: true,
+    };
+
+    translationDetector.observe(target, config);
+  }
+
+  module.cancelTranslationDetector = function () {
+    return translationDetector && translationDetector.disconnect();
+  }
   return module;
 })();
 

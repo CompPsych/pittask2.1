@@ -100,7 +100,9 @@ jsPsych.plugins['survey-vvr'] = (function () {
       </div>
       </div>`;
 
+    new_html += '<div id="translation-listener">translate</div>';
     new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
+    new_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
     display_element.innerHTML = new_html;
 
@@ -341,6 +343,9 @@ jsPsych.plugins['survey-vvr'] = (function () {
     }
 
     jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+
+    const translatorTarget = document.getElementById('translation-listener')
+    jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 
     // function to end trial when it is time
     var end_trial = function () {
