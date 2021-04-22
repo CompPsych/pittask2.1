@@ -8,10 +8,13 @@ mysql -h $host -P $port -u $user -p <<QUERY
 USE ${database};
 CREATE TABLE IF NOT EXISTS unique_links (
     id INT NOT NULL AUTO_INCREMENT,
-    participant VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    unique_identifier VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     link VARCHAR(8) NOT NULL UNIQUE,
     expiresAt DATETIME,
     status TINYINT NOT NULL DEFAULT 0,
+    file VARCHAR(20) NOT NULL,
     PRIMARY KEY (id)
 );
 QUERY

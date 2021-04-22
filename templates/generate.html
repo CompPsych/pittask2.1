@@ -9,30 +9,36 @@
     </head>
 
     <body>
-        <form method="POST" action="/generate" class="unique-links-form">
-            <h3>GENERATE LINKS</h3>
-            <div class="unqiue-links-result">
-                {% if error %}<span class="error">Something went wrong, please check logs</span>{%
-                endif %}
-            </div>
-            <div class="unique-links-form-control">
-                <label for="participant" class="form-label">Participant: </label>
-                <input id="participant" type="text" name="participant" maxlength="50" class="form-control" required>
-            </div>
-            <div class="unique-links-form-control form-check expiration-control">
-                <label for="expires" class="form-check-label">Expires: </label>
-                <input id="expires" type="checkbox" name="expires" class="form-check-input" value="1">
-                <div class="expire-date">
-                    <label for="expiresAt" class="form-label">Expires in: </label>
-                    <input id="expiresAt" type="number" name="expiresAt" class="form-control">
-                    <span>hours</span>
+        <div class="files-list">
+            {% for file in files %}
+            <a href="/export-links/{{file[0]}}">{{file[0]}}</a>
+            {% endfor %}
+        </div>
+        <div class="form">
+            <form method="POST" action="/generate" class="unique-links-form" enctype="multipart/form-data">
+                <h3>GENERATE LINKS</h3>
+                <div class="unqiue-links-result">
+                    {% if error %}<span class="error">Something went wrong, please check logs</span>{%
+                    endif %}
                 </div>
-            </div>
-            <div class="unique-links-form-submit">
-                <a type="button" class="btn btn-success" target="_black" href="/export-links">EXPORT</a>
-                <button type="submit" class="btn btn-primary">SUBMIT</button>
-            </div>
-        </form>
+                <div class="unique-links-form-control">
+                    <label for="participant" class="form-label">Participant: </label>
+                    <input id="participant" type="file" name="participant" class="form-control" accept=".csv" required>
+                </div>
+                <div class="unique-links-form-control form-check expiration-control">
+                    <label for="expires" class="form-check-label">Expires: </label>
+                    <input id="expires" type="checkbox" name="expires" class="form-check-input" value="1">
+                    <div class="expire-date">
+                        <label for="expiresAt" class="form-label">Expires in: </label>
+                        <input id="expiresAt" type="number" name="expiresAt" min="0" class="form-control">
+                        <span>hours</span>
+                    </div>
+                </div>
+                <div class="unique-links-form-submit">
+                    <button type="submit" class="btn btn-primary">SUBMIT</button>
+                </div>
+            </form>
+        </div>
     </body>
 
 </html>

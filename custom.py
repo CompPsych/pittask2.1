@@ -12,6 +12,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from psiturk.psiturk_config import PsiturkConfig
 from psiturk.experiment_errors import ExperimentError, InvalidUsage
 from psiturk.user_utils import PsiTurkAuthorization, nocache
+from psiturk.experiment import app
 
 # # Database setup
 from psiturk.db import db_session, init_db
@@ -21,9 +22,11 @@ from json import dumps, loads
 import random
 import csv
 import os
+import io
 from datetime import datetime
 from datetime import timedelta
 from psiturk.psiturk_statuses import *
+from flask_mail import Mail, Message
 
 # load the configuration options
 config = PsiturkConfig()
@@ -34,6 +37,16 @@ myauth = PsiTurkAuthorization(config)
 # explore the Blueprint
 custom_code = Blueprint('custom_code', __name__,
                         template_folder='templates', static_folder='static')
+
+app.config.update(
+    MAIL_SERVER=config.get('Mail Parameters', 'mail_server'),
+    MAIL_PORT=config.get('Mail Parameters', 'mail_port'),
+    MAIL_USE_SSL=config.get('Mail Parameters', 'mail_use_ssl'),
+    MAIL_USE_TLS=config.get('Mail Parameters', 'mail_use_tls'),
+    MAIL_USERNAME=config.get('Mail Parameters', 'mail_username'),
+    MAIL_PASSWORD=config.get('Mail Parameters', 'mail_password')
+)
+mail = Mail(app)
 
 
 ###########################################################
@@ -145,8 +158,12 @@ def compute_bonus():
 @myauth.requires_auth
 def generateLink():
     try:
-        return render_template('generate.html')
-    except TemplateNotFound:
+        files = UniqueLink.query.\
+            with_entities(UniqueLink.file).\
+            group_by(UniqueLink.file).all()
+        return render_template('generate.html', files=files)
+    except Exception as e:
+        app.logger.error(e)
         abort(404)
 
 
@@ -157,6 +174,65 @@ def generateUniqueLink():
         charIndex = random.randint(0, len(possibleChars) - 1)
         text += possibleChars[charIndex]
     return text
+
+
+def createLinksFile(filename):
+    try:
+        unique_links_path = config.get(
+            'Unique Links Parameters', 'unique_links_path')
+        dirname = os.path.dirname(__file__)
+        filepath = os.path.join(dirname, unique_links_path, filename)
+        unique_links = UniqueLink.query.\
+            filter(UniqueLink.file == filename)
+        with open(filepath, 'wb') as file:
+            writer = csv.writer(file)
+            writer.writerow(
+                ['name', 'unique_identifier', 'email', 'link', 'expiration_date', 'expiration_time', 'status'])
+            for unique_link in unique_links:
+                if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.now():
+                    unique_link.status = LINK_EXPIRED
+                    db_session.add(unique_link)
+                status = LINK_STATUSES[unique_link.status]
+                expiration_date = unique_link.expiresAt.strftime(
+                    '%d-%m-%Y') if unique_link.expiresAt != None else 'NA'
+                expiration_time = unique_link.expiresAt.strftime(
+                    '%H:%M') if unique_link.expiresAt != None else 'NA'
+                writer.writerow([
+                    unique_link.name,
+                    unique_link.unique_identifier,
+                    unique_link.email,
+                    url_for('custom_code.useUniqueLink',
+                            link=unique_link.link, _external=True),
+                    expiration_date,
+                    expiration_time,
+                    status
+                ])
+        db_session.commit()
+        return filepath
+    except Exception as e:
+        app.logger.error(e)
+        return ''
+
+
+def sendMail(recipients):
+    isMailEnabled = config.get('Mail Parameters', 'mail_enabled')
+    if not isMailEnabled:
+        return
+
+    with mail.connect() as conn:
+        for recipient in recipients:
+            sender = (config.get('Mail Parameters', 'mail_sender_name'),
+                      config.get('Mail Parameters', 'mail_sender_email'))
+            subject = config.get('Mail Parameters', 'mail_subject')
+            html_text_param = 'mail_text_with_expiration' if recipient.expiresAt != None else 'mail_text_without_expiration'
+            unique_link = url_for('custom_code.useUniqueLink',
+                                  link=recipient.link, _external=True)
+            html = config.get('Mail Parameters', html_text_param).\
+                format(name=recipient.name, link=unique_link,
+                       expiresAt=recipient.expiresAt)
+            msg = Message(subject=subject, sender=sender,
+                          recipients=[recipient.email], html=html)
+            conn.send(msg)
 
 
 Base = declarative_base()
@@ -174,34 +250,52 @@ class UniqueLink(Base):
     """
     __tablename__ = 'unique_links'
     id = Column(Integer, primary_key=True)
-    participant = Column(String(50), nullable=False)
+    name = Column(String(100), nullable=False)
+    unique_identifier = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False)
     link = Column(String(8), nullable=False)
     expiresAt = Column(DateTime, nullable=True)
     status = Column(String(9), nullable=False, default=LINK_UNUSED)
+    file = Column(String(20), nullable=False)
 
 
 @custom_code.route('/generate', methods=['POST'])
 @myauth.requires_auth
 def saveLink():
     try:
-        participant = request.form['participant']
-        link = generateUniqueLink()
-        unique_link_attributes = dict(
-            participant=participant,
-            link=link,
-            expiresAt=None
-        )
-        if 'expires' in request.form and 'expiresAt' in request.form:
-            expiresAt = int(request.form['expiresAt'])
-            unique_link_attributes['expiresAt'] = datetime.now(
-            ) + timedelta(hours=expiresAt)
-        unique_link = UniqueLink(**unique_link_attributes)
-        db_session.add(unique_link)
+        file = request.files['participant']
+        if not file:
+            raise Exception('Couldn\'t load .csv file')
+
+        stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+        csv_input = csv.reader(stream)
+        next(csv_input)
+        unique_links = []
+        for row in csv_input:
+            if len(row) > 3:
+                continue
+            link = generateUniqueLink()
+            unique_link_attributes = dict(
+                name=row[0],
+                unique_identifier=row[1],
+                email=row[2],
+                link=link,
+                expiresAt=None,
+                file=file.filename
+            )
+            if 'expires' in request.form and 'expiresAt' in request.form:
+                expiresAt = int(request.form['expiresAt'])
+                unique_link_attributes['expiresAt'] = datetime.now(
+                ) + timedelta(hours=expiresAt)
+            unique_link = UniqueLink(**unique_link_attributes)
+            db_session.add(unique_link)
+            unique_links.append(unique_link)
         db_session.commit()
+        sendMail(unique_links)
         return redirect(url_for('custom_code.generateLink'))
     except Exception as e:
-        print(e)
-        return render_template('generate.html', error=1)
+        app.logger.error(e)
+        return redirect(url_for('custom_code.generateLink'))
 
 
 @custom_code.route('/lab/<link>', methods=['GET'])
@@ -225,9 +319,11 @@ def useUniqueLink(link):
             return render_template('thanks.html')
 
         link = unique_link.link
-        return redirect(url_for('start_exp', hitId=link, assignmentId=link, workerId=link, mode='lab'))
+        show_consent = config.get('Unique Links Parameters', 'show_consent')
+        redirect_to = 'give_consent' if show_consent else 'start_exp'
+        return redirect(url_for(redirect_to, hitId=link, assignmentId=link, workerId=link, mode='lab'))
     except Exception as e:
-        print(e)
+        app.logger.error(e)
         abort(404)
 
 
@@ -265,33 +361,19 @@ def complete_override():
                         db_session.add(unique_link)
                         db_session.commit()
                     except:
-                        current_app.logger.info(
+                        current_app.logger.error(
                             "Couldn't change status to SUBMITTED for %s" % link)
                 return render_template('complete.html')
 
 
-@custom_code.route('/export-links', methods=['GET'])
+@custom_code.route('/export-links/<filename>', methods=['GET'])
 @myauth.requires_auth
-def export_unique_links():
+def export_unique_links(filename):
     try:
-        unique_links_path = config.get(
-            'Server Parameters', 'unique_links_path')
-        dirname = os.path.dirname(__file__)
-        filename = os.path.join(dirname, unique_links_path)
-        unique_links = UniqueLink.query.all()
-        with open(unique_links_path, 'wb') as file:
-            writer = csv.writer(file)
-            writer.writerow(
-                ['id', 'participant', 'link', 'expiresAt', 'status'])
-            for unique_link in unique_links:
-                if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.now():
-                    unique_link.status = LINK_EXPIRED
-                    db_session.add(unique_link)
-                status = LINK_STATUSES[unique_link.status]
-                writer.writerow([unique_link.id, unique_link.participant, unique_link.link,
-                                unique_link.expiresAt if unique_link.expiresAt != None else 'NA', status])
-        db_session.commit()
-        return send_file(unique_links_path, mimetype='text/csv', as_attachment=True)
+        filepath = createLinksFile(filename)
+        if filepath == '':
+            raise Exception('File not found')
+        return send_file(filepath, mimetype='text/csv', as_attachment=True)
     except Exception as e:
-        print(e)
+        app.logger.error(e)
         abort(404)
