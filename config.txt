@@ -52,3 +52,21 @@ persistent_history_file = .psiturk_history
 
 use_psiturk_ad_server = true
 ad_location = false
+
+[Unique Links Parameters]
+unique_links_path = Participants/
+show_consent = true
+
+[Mail Parameters]
+mail_enabled = true
+mail_server = outlook.office365.com
+mail_port = 587
+mail_use_ssl = 
+mail_use_tls = true
+mail_username = 
+mail_password = 
+mail_sender_name = UNSW Australia
+mail_sender_email = 
+mail_subject = Psychology Experiment
+mail_text_with_expiration = <p>Hello, {name}</p><p>This is your link to access the experiment <a href="{link}">{link}</a> which expires {expiresAt}</p>
+mail_text_without_expiration = <p>Hello, {name}</p><p>This is your link to access the experiment <a href="{link}">{link}</a></p>
