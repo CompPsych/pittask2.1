@@ -634,12 +634,12 @@ var PTSD = {
             prompt:
                 'Sometimes things happen to people that are unusually or especially frightening, horrible, or traumatic. For example:' +
                 '<ul>' +
-                    '<li>a serious accident or fire</li>' +
-                    '<li>a physical or sexual assault or abuse</li>' +
-                    '<li>an earthquake or flood</li>' +
-                    '<li>a war</li>' +
-                    '<li>seeing someone be killed or seriously injured</li>' +
-                    '<li>having a loved one die through homicide or suicide</li>' +
+                '<li>a serious accident or fire</li>' +
+                '<li>a physical or sexual assault or abuse</li>' +
+                '<li>an earthquake or flood</li>' +
+                '<li>a war</li>' +
+                '<li>seeing someone be killed or seriously injured</li>' +
+                '<li>having a loved one die through homicide or suicide</li>' +
                 '</ul>' +
                 '<p>Have you ever experienced this kind of event?</p>',
             options: ['YES', 'NO'],
@@ -815,10 +815,10 @@ var LSAS = {
     type: 'LSAS',
     preamble:
         '<ul>' +
-            '<li>This measure assesses the way that social phobia plays a role in your life across a variety of situations.</li>' +
-            '<li>Read each situation carefully and answer two questions about that situation. The first question asks how anxious or fearful you feel in the situation. The second question asks how often you avoid the situation.</li>' +
-            '<li>If you come across a situation that you ordinarily do not experience, we ask that you imagine ‘what if you were faced with that situation’, and then rate the degree to which you would fear this hypothetical situation and how often you would tend to avoid it.</li>' +
-            '<li>Please base your ratings on the way that the situations have affected you in the last week.</li>' +
+        '<li>This measure assesses the way that social phobia plays a role in your life across a variety of situations.</li>' +
+        '<li>Read each situation carefully and answer two questions about that situation. The first question asks how anxious or fearful you feel in the situation. The second question asks how often you avoid the situation.</li>' +
+        '<li>If you come across a situation that you ordinarily do not experience, we ask that you imagine ‘what if you were faced with that situation’, and then rate the degree to which you would fear this hypothetical situation and how often you would tend to avoid it.</li>' +
+        '<li>Please base your ratings on the way that the situations have affected you in the last week.</li>' +
         '</ul>',
     questions: [
         {
@@ -1328,46 +1328,46 @@ var AUDIT = {
         '<p>This guide contains examples of <strong>one standard drink.</strong></p>' +
         '<p>A full strength can or stubbie contains <strong>one and a half standard drinks.</strong></p>' +
         '<div class="audit-img-container">' +
-            '<img src="../static/images/audit_image.jpg">' +
+        '<img src="../static/images/audit_image.jpg">' +
         '</div>',
     questions: [
         {
             prompt: 'How often do you have a drink containing alcohol?',
             options: ['Never', 'Monthly or less', '2-4 times a month', '2-3 times a week', '4 or more times a week'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How many standard drinks do you have on a typical day when you are drinking?',
             options: ['1 or 2', '3 or 4', '5 or 6', '7 to 9', '10 or more'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often do you have six or more standard drinks on one occasion ?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often during the last year have you found that you were not able to stop drinking once you had started?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often during the last year have you failed to do what was normally expected of you because of drinking?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often during the last year have you needed a first drink in the morning to get yourself going after a heavy drinking session?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often during the last year have you had a feeling of guilt or remorse after drinking?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often during the last year have you been unable to remember what happened the night before because you had been drinking?',
             options: ['Never', 'Less than monthly', 'Monthly', 'Weekly', 'Daily or almost daily'],
             horizontal: true
-        },{
+        }, {
             prompt: 'Have you or someone else been injured because of your drinking?',
             options: ['No', 'Yes but not in the last year', 'Yes, during the last year'],
             horizontal: true
-        },{
+        }, {
             prompt: 'Has a relative, friend, doctor, or other health care worker been concerned about your drinking or suggested you cut down?',
             options: ['No', 'Yes but not in the last year', 'Yes, during the last year'],
             horizontal: true
@@ -1385,13 +1385,13 @@ var SMOKE_FTND = {
     timeline: [
         {
             type: 'Smoking-Status',
-            preamble:'We would like to ask you about your smoking. Please answer the following questions.',
+            preamble: 'We would like to ask you about your smoking. Please answer the following questions.',
             questions: [
                 {
                     prompt: 'Have you smoked at least 100 cigarettes in your ENTIRE LIFE?',
                     options: ['Yes', 'No'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'Do you NOW smoke cigarettes, e-cigarette, cigar, pipe filled with tobacco, hookah, or use smokeless tobacco products every day, some days or not at all?',
                     options: ['Every day', 'Some days', 'Not at all'],
                     horizontal: false
@@ -1404,29 +1404,29 @@ var SMOKE_FTND = {
         },
         {
             type: 'FTND',
-            preamble:'We would like to ask you a little more about your current smoking habits. Please answer the following questions.',
+            preamble: 'We would like to ask you a little more about your current smoking habits. Please answer the following questions.',
             questions: [
                 {
                     prompt: 'How soon after you wake up do you smoke your first cigarette?',
                     options: ['Within 5 minutes', '6 - 30 minutes', '31 - 60 minutes', 'After 60 minutes'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'Do you find it difficult to refrain from smoking in places where it is forbidden e.g. in church, at the library, in cinema, etc.?',
                     options: ['Yes', 'No'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'Which cigarette would you hate most to give up?',
                     options: ['The first one in the morning', 'All others'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'How many cigarettes/day do you smoke?',
                     options: ['10 or less', '11 - 20', '21 - 30', '31 or more'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'Do you smoke more frequently during the first hours after waking than during the rest of the day?',
                     options: ['Yes', 'No'],
                     horizontal: false
-                },{
+                }, {
                     prompt: 'Do you smoke if you are so ill that you are in bed most of the day?',
                     options: ['Yes', 'No'],
                     horizontal: false
@@ -1456,35 +1456,35 @@ var PGSI = {
             prompt: 'How often have you bet more than you could really afford to lose?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have you needed to gamble with larger amounts of money to get the same feeling of excitement?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have you gone back another day to try to win back the money you lost?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have you borrowed money or sold anything to get money to gamble?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have you felt that you might have a problem with gambling?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have people criticized your betting or told you that you had a gambling problem, regardless of whether or not you thought it was true?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often have you felt guilty about the way you gamble, or what happens when you gamble?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often has your gambling caused you any health problems, including stress or anxiety?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
-        },{
+        }, {
             prompt: 'How often has your gambling caused any financial problems for you or your household?',
             options: ['Never', 'Sometimes', 'Most of the time', 'Almost always'],
             horizontal: true
@@ -1508,27 +1508,27 @@ var SDS_STAGE = {
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal: false,
             name: 'WORK*'
-        },{
+        }, {
             prompt:
                 '<h2 class="question-title question-title-heading">Social life</h2>' +
                 '<h3>The symptoms have disrupted your social life / leisure activities:</h3>',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal: false,
             name: 'SOCIAL*'
-        },{
+        }, {
             prompt:
                 '<h2 class="question-title question-title-heading">Family life / Home Responsibilities</h2>' +
                 '<h3>The symptoms have disrupted your family life / home responsibilities</h3>',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal: false,
             name: 'FAMILY*'
-        },{
+        }, {
             title: 'Days Lost',
             prompt: 'On how many days in the last week did your symptoms cause you to miss school or work or leave you unable to carry out your normal daily responsibilities',
             options: [0, 1, 2, 3, 4, 5, 6, 7],
             horizontal: false,
             name: 'DAYS LOST**'
-        },{
+        }, {
             title: 'Days Unproductive',
             prompt: 'On how many days in the last week did you feel so impaired by your symptoms that even though you went to school or work, your productivity was reduced?',
             options: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -1543,9 +1543,13 @@ var SDS_STAGE = {
 }
 
 // ICAR
+var three_dimensional_rotate_numbers = [
+    3, 4, 6, 8
+]
 var three_dimensional_rotate = [];
-for ( i = 1; i <= 66 ; i++ ) {
-    var pathNum = i < 10 ? ("0" + i.toString()) : i.toString();
+for (i = 0; i < three_dimensional_rotate_numbers.length; i++) {
+    var item = three_dimensional_rotate_numbers[i]
+    var pathNum = item < 10 ? ("0" + item.toString()) : item.toString();
     three_dimensional_rotate.push(
         {
             prompt: 'All the cubes below have a different image on each side. Select the choice that could represent a rotation of the cube labeled X',
@@ -1553,16 +1557,16 @@ for ( i = 1; i <= 66 ; i++ ) {
             options: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
             horizontal: false,
             name: 'three_dimensional_rotate',
-            number: 'R3D.' +  pathNum
+            number: 'R3D.' + pathNum
         }
     );
 }
 
 var matrix_reasoning_numbers = [
-    43, 44, 45, 46, 47, 48, 50, 53, 54, 55, 56
+    45, 46, 47, 55,
 ]
 var matrix_reasoning = [];
-for ( i = 0; i < matrix_reasoning_numbers.length ; i++ ) {
+for (i = 0; i < matrix_reasoning_numbers.length; i++) {
     var pathNum = matrix_reasoning_numbers[i];
     matrix_reasoning.push(
         {
@@ -1577,38 +1581,6 @@ for ( i = 0; i < matrix_reasoning_numbers.length ; i++ ) {
 }
 
 var letter_number_series = [
-    {
-        prompt: 'In the following number series, what number comes next?',
-        sequence: '64, 81, 100, 121, 144, …',
-        options: [154, 156, 162, 169, 178, 196, 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'letter_number_series',
-        number: 'LN.01'
-    },
-    {
-        prompt: 'In the following number series, what number comes next?',
-        sequence: '4, 7, 11, 18, 29, …',
-        options: [37, 39, 46, 47, 49, 55, 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'letter_number_series',
-        number: 'LN.03'
-    },
-    {
-        prompt: 'In the following alphanumeric series, what letter comes next?',
-        sequence: 'C, F, I, L, O, …',
-        options: ['Q', 'R', 'S', 'T', 'U', 'V', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'letter_number_series',
-        number: 'LN.05'
-    },
-    {
-        prompt: 'In the following alphanumeric series, what letter comes next?',
-        sequence: 'H, J, F, H, D, …',
-        options: ['D', 'E', 'F', 'G', 'H', 'I', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'letter_number_series',
-        number: 'LN.06'
-    },
     {
         prompt: 'In the following alphanumeric series, what letter comes next?',
         sequence: 'K, N, P, S, U, …',
@@ -1635,14 +1607,6 @@ var letter_number_series = [
     },
     {
         prompt: 'In the following alphanumeric series, what letter comes next?',
-        sequence: 'Z, W, X, U, V, …',
-        options: ['R', 'S', 'T', 'U', 'V', 'W', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'letter_number_series',
-        number: 'LN.35'
-    },
-    {
-        prompt: 'In the following alphanumeric series, what letter comes next?',
         sequence: 'Q, S, N, P, L, …',
         options: ['J', 'H', 'I', 'N', 'M', 'L', 'None of these', 'I don’t know'],
         horizontal: false,
@@ -1660,34 +1624,6 @@ var verbal_reasoning = [
         number: 'VR.04'
     },
     {
-        prompt: 'Please mark the word that does not match the other words',
-        options: ['Sycamore', 'Buckeye', 'Elm', 'Daffodil', 'Hickory', 'Sequoia', 'They all match', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.09'
-    },
-    {
-        prompt: 'The opposite of a “stubborn” person is a “________” person',
-        options: ['Flexible', 'Passionate', 'Mediocre', 'Reserved', 'Pigheaded', 'Persistent', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.11'
-    },
-    {
-        prompt: 'Michelle likes 96 but not 45; she also likes 540 but not 250. Which does she like?',
-        options: ['86', '93', '98', '128', '132', '140', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.13'
-    },
-    {
-        prompt: 'Adam and Melissa went fly-fishing and caught a total of 32 salmon. Melissa caught three times as many salmon as Adam. How many salmon did Adam catch?',
-        options: ['7', '8', '9', '10', '11', '12', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.14'
-    },
-    {
         prompt: 'Zach is taller than Matt & Richard is shorter than Zach. Which of the following statements would be most accurate?',
         options: ['Richard is taller than Matt', 'Richard is shorter than Matt', 'Richard is as tall as Matt', 'It is impossible to tell', 'Richard is taller than Zach', 'Zach is shorter than Matt', 'None of these', 'I don’t know'],
         horizontal: false,
@@ -1702,74 +1638,11 @@ var verbal_reasoning = [
         number: 'VR.17'
     },
     {
-        prompt: 'The sixth month of the year is:',
-        options: ['September', 'July', 'May', 'August', 'June', 'April', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.18'
-    },
-    {
         prompt: 'If the day after tomorrow is two days before Thursday then what day is today?',
         options: ['Friday', 'Monday', 'Wednesday', 'Saturday', 'Tuesday', 'Sunday', 'None of these', 'I don’t know'],
         horizontal: false,
         name: 'verbal_reasoning',
         number: 'VR.19'
-    },
-    {
-        prompt: 'Please mark the world that does not match the other words:',
-        options: ['Buenos Aires', 'Melbourne', 'Seattle', 'Cairo', 'Morocco', 'Milan', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.23'
-    },
-    {
-        prompt: 'The opposite of an “affable” person is a(n) “__________” person.',
-        options: ['Angry', 'Sociable', 'Gracious', 'Frustrated', 'Reserved', 'Ungrateful', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.26'
-    },
-    {
-        prompt: 'Isaac is shorter than George and Phillip is taller than George. Which of the following statements is most accurate?',
-        options: ['Phillip is taller than Isaac', 'Phillip is shorter than Isaac', 'Phillip is as tall as Isaac', 'It is impossible to tell', 'Isaac is taller than George', 'George is taller than Phillip', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.31'
-    },
-    {
-        prompt: 'If the day before yesterday is three days after Saturday then what day is today?',
-        options: ['Thursday', 'Saturday', 'Wednesday', 'Friday', 'Sunday', 'Tuesday', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.32'
-    },
-    {
-        prompt: 'The opposite of an “ambiguous” situation is a(n) “_________” situation.',
-        options: ['Suspicious', 'Vague', 'Unequivocal', 'Intelligent', 'Dubious', 'Genuine', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.36'
-    },
-    {
-        prompt: 'How many total legs do three cows and four chickens have?',
-        options: ['16', '18', '20', '21', '22', '24', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.39'
-    },
-    {
-        prompt: 'The 4th planet from the sun is:',
-        options: ['Jupiter', 'Saturn', 'Pluto', 'Earth', 'Mars', 'Venus', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.42'
-    },
-    {
-        prompt: 'The 4th planet from the sun is:',
-        options: ['Jupiter', 'Saturn', 'Pluto', 'Earth', 'Mars', 'Venus', 'None of these', 'I don’t know'],
-        horizontal: false,
-        name: 'verbal_reasoning',
-        number: 'VR.42'
     },
 
 ]
@@ -1783,16 +1656,16 @@ var ICAR_STAGE = {
     event_converted_details: 'ICAR questions appears'
 }
 
-var letter_number_series_new = _.shuffle(letter_number_series).slice(0,4);
-var verbal_reasoning_new = _.shuffle(verbal_reasoning).slice(0,4);
-var three_dimensional_rotate_new = _.shuffle(three_dimensional_rotate).slice(0,4);
-var matrix_reasoning_new = _.shuffle(matrix_reasoning).slice(0,4);
+var letter_number_series_new = _.shuffle(letter_number_series).slice(0, 4);
+var verbal_reasoning_new = _.shuffle(verbal_reasoning).slice(0, 4);
+var three_dimensional_rotate_new = _.shuffle(three_dimensional_rotate).slice(0, 4);
+var matrix_reasoning_new = _.shuffle(matrix_reasoning).slice(0, 4);
 
 var icar_arr = [verbal_reasoning_new, letter_number_series_new, three_dimensional_rotate_new, matrix_reasoning_new];
 var icar_shuffled_arr = jsPsych.randomization.shuffle(icar_arr);
 
-icar_shuffled_arr.forEach(function(arr) {
-    arr.forEach(function(element) {
+icar_shuffled_arr.forEach(function (arr) {
+    arr.forEach(function (element) {
         ICAR_STAGE.questions.push(element);
     });
 });
