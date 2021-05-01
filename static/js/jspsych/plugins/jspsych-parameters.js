@@ -256,6 +256,21 @@ jsPsych.plugins['parameters'] = (function () {
             close_instruct_VOR: close_instruct_VOR,
             open_instruct_text_VOR: open_instruct_text_VOR,
             close_instruct_text_VOR: close_instruct_text_VOR,
+
+            answer_latency_text_floor: answer_latency_text_floor,
+            answer_latency_text_ceiling: answer_latency_text_ceiling,
+            popup_answer_latency_floor_SI: popup_answer_latency_floor_SI,
+            answer_latency_floor_SI: answer_latency_floor_SI,
+            popup_answer_latency_ceiling_SI: popup_answer_latency_ceiling_SI,
+            answer_latency_ceiling_SI: answer_latency_ceiling_SI,
+            popup_answer_latency_floor_SDS: popup_answer_latency_floor_SDS,
+            answer_latency_floor_SDS: answer_latency_floor_SDS,
+            popup_answer_latency_ceiling_SDS: popup_answer_latency_ceiling_SDS,
+            answer_latency_ceiling_SDS: answer_latency_ceiling_SDS,
+            popup_answer_latency_floor_ICAR: popup_answer_latency_floor_ICAR,
+            answer_latency_floor_ICAR: answer_latency_floor_ICAR,
+            popup_answer_latency_ceiling_ICAR: popup_answer_latency_ceiling_ICAR,
+            answer_latency_ceiling_ICAR: answer_latency_ceiling_ICAR
         };
 
         // copy symptom inventory array

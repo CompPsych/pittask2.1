@@ -541,8 +541,9 @@ if(isClass(query))
 
   links_query <- tryCatch(
     dbSendQuery(connection, "SELECT * FROM unique_links"),
-    error = function(e){ "NA" })
-  links <- dbFetch(links_query, n = -1)
+    error = function(e){ NA })
+
+  links <- ifelse(is.na(links_query),data.frame(),dbFetch(links_query, n = -1))
   
   # Parsing non-empty trialdata events and counting CompleteData size
   
