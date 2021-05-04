@@ -45,89 +45,101 @@ var DEGRAD_PATTERN = {
 // Each game launching has 
 // a randomly chosen game version
 var counter_balancing_input = [
-    a = {
+    {
         game_version: 'A',
         left: 'MM',
         right: 'BBQ',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM","BBQ","TT"]
     },
-    b = {
+    {
         game_version: 'B',
         left: 'BBQ',
         right: 'MM',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM","BBQ","TT"]
     },
-    c = {
+    {
         game_version: 'C',
         left: 'TT',
         right: 'BBQ',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM","BBQ","TT"]
     },
-    d = {
+    {
         game_version: 'D',
         left: 'BBQ',
         right: 'TT',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM","BBQ","TT"]
     },
-    e = {
+    {
         game_version: 'E',
         left: 'MM',
         right: 'TT',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM","BBQ","TT"]
     },
-    f = {
+    {
         game_version: 'F',
         left: 'TT',
         right: 'MM',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM","BBQ","TT"]
     },
-    g = {
+    {
         game_version: 'G',
         left: 'MM',
         right: 'BBQ',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM","BBQ","TT"]
     },
-    h = {
+    {
         game_version: 'H',
         left: 'BBQ',
         right: 'MM',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM","BBQ","TT"]
     },
-    i = {
+    {
         game_version: 'I',
         left: 'TT',
         right: 'BBQ',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM","BBQ","TT"]
     },
-    j = {
+    {
         game_version: 'J',
         left: 'BBQ',
         right: 'TT',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM","BBQ","TT"]
     },
-    k = {
+    {
         game_version: 'K',
         left: 'MM',
         right: 'TT',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM","BBQ","TT"]
     },
-    l = {
+    {
         game_version: 'L',
         left: 'TT',
         right: 'MM',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM","BBQ","TT"]
     }
 ];
 
@@ -1900,55 +1912,55 @@ timeline.push({
 
 
 // Key-testing
-timeline.push(KEY_TESTING);
-// Food & Hunger Questions pre-rating
-timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
-//  Instrumental Conditioning (VVR1)
-timeline.push(VVR1);
-// Pavlovian Condition
-timeline.push(PAV_CON);
-// Transfer Test
-timeline.push(TRANSFER1);
-// Instrumental Degradation (VVR2)
-//timeline.push(VVR2);
-// Transfer Test 2
-//timeline.push(TRANSFER2);
-// Instrumental Restoration (VVR3)
-//timeline.push(VVR3);
-// Deval Video
-timeline.push(DEVAL_VIDEO);
-// Deval Test
-timeline.push(DEVAL_TEST);
-// VOR
-//timeline.push(VOR);
-// Food & Hunger Questions post-rating
-timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
-// Recall
-timeline.push(RECALL);
-// transfer_q
-timeline.push(TRANSFER_Q)
-// Transfer Test 3
-//timeline.push(TRANSFER3);
-// Intro: We'd like to briefly ask you about some symptoms before the online game.
-timeline.push(WBF_OPEN);
-// Demographics
-timeline.push(DEMOGRAPHICS);
-timeline.push(INVENTORY_OPEN);
-// Symptom Inventories
-for(var item of symptom_inventory_arr){
-    timeline.push(item);
-}
-timeline.push(INVENTORY_CLOSE);
-// SDS
-timeline.push(SDS);
-// ICAR
-timeline.push(ICAR);
-// Close: That's it for the symptom questions. Now we're ready to start the online game
-//timeline.push(WBF_CLOSE);
-//  Close HIT Questions
-timeline.push(CLOSE_HIT);
-// Thanks
-timeline.push(THANKS)
+// timeline.push(KEY_TESTING);
+// // Food & Hunger Questions pre-rating
+// timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
+// //  Instrumental Conditioning (VVR1)
+// timeline.push(VVR1);
+// // Pavlovian Condition
+// timeline.push(PAV_CON);
+// // Transfer Test
+// timeline.push(TRANSFER1);
+// // Instrumental Degradation (VVR2)
+// //timeline.push(VVR2);
+// // Transfer Test 2
+// //timeline.push(TRANSFER2);
+// // Instrumental Restoration (VVR3)
+// //timeline.push(VVR3);
+// // Deval Video
+// timeline.push(DEVAL_VIDEO);
+// // Deval Test
+// timeline.push(DEVAL_TEST);
+// // VOR
+timeline.push(VOR);
+// // Food & Hunger Questions post-rating
+// timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
+// // Recall
+// timeline.push(RECALL);
+// // transfer_q
+// timeline.push(TRANSFER_Q)
+// // Transfer Test 3
+// //timeline.push(TRANSFER3);
+// // Intro: We'd like to briefly ask you about some symptoms before the online game.
+// timeline.push(WBF_OPEN);
+// // Demographics
+// timeline.push(DEMOGRAPHICS);
+// timeline.push(INVENTORY_OPEN);
+// // Symptom Inventories
+// for(var item of symptom_inventory_arr){
+//     timeline.push(item);
+// }
+// timeline.push(INVENTORY_CLOSE);
+// // SDS
+// timeline.push(SDS);
+// // ICAR
+// timeline.push(ICAR);
+// // Close: That's it for the symptom questions. Now we're ready to start the online game
+// //timeline.push(WBF_CLOSE);
+// //  Close HIT Questions
+// timeline.push(CLOSE_HIT);
+// // Thanks
+// timeline.push(THANKS)
 
 jsPsych.init({
         timeline: timeline,

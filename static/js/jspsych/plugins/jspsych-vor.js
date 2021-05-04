@@ -45,16 +45,12 @@ jsPsych.plugins["vor"] = (function () {
         var OI_threshold_timer;
         var OI_interval = 0;
 
-        var outcome_collection = {
-            MM: "/static/images/MM.png",
-            TT: "/static/images/TT.png",
-            BBQ: "/static/images/BBQ.png",
-        };
+        var VOR_outcome_array = [];
+        counter_balancing[0].outcomes.forEach(element => {
+            VOR_outcome_array.push("/static/images/" + element + ".png")
+        });
 
-        var outcome_arr = jsPsych.randomization.shuffle([
-            outcome_collection[counter_balancing[0].left],
-            outcome_collection[counter_balancing[0].right]
-        ]);
+        var outcome_arr = jsPsych.randomization.shuffle(VOR_outcome_array);
 
         // store events
         var response = {
@@ -134,24 +130,22 @@ jsPsych.plugins["vor"] = (function () {
             }, outcome_duration);
 
             interval_number += 1;
-            if (interval_number === 2) {
+            if (interval_number >= outcome_arr.length) {
                 interval_number = 0;
                 block_number += 1;
-                outcome_arr = jsPsych.randomization.shuffle([
-                    outcome_collection[counter_balancing[0].left],
-                    outcome_collection[counter_balancing[0].right],
-                ]);
+                outcome_arr = jsPsych.randomization.shuffle(VOR_outcome_array);
             }
 
             OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
-                // terminate VOR stage
                 if (block_number === VOR_block_num) {
+                    // terminate VOR stage
                     clearTimeout(OI_interval_timer);
                     end_trial();
-                    // continue VOR stage
                 } else {
+                    // continue VOR stage
                     start_OI();
                     threshold_interval();
+                    
                 }
             }, OI_duration + outcome_duration);
         }
@@ -168,6 +162,7 @@ jsPsych.plugins["vor"] = (function () {
                     end_trial();
                 } else {
                     start_OI();
+                    threshold_interval();
                 }
             }, OI_duration + outcome_duration);
         }
@@ -175,14 +170,12 @@ jsPsych.plugins["vor"] = (function () {
         function threshold_interval() {
 
             clearTimeout(OI_threshold_interval);
-
             OI_threshold_interval = jsPsych.pluginAPI.setTimeout(function () {
-
                 OI_duration = OI_duration_B;
-
-                var internal_threshold_timer = jsPsych.totalTime() - OI_threshold_timer;
-                if (internal_threshold_timer >= OI_duration_B) {
+                var time_elapsed = jsPsych.totalTime() - OI_threshold_timer;
+                if (time_elapsed >= OI_duration_B) {
                     start_OI();
+                    threshold_interval();
                 } else {
                     clearTimeout(OI_interval_timer);
                     OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
@@ -191,8 +184,9 @@ jsPsych.plugins["vor"] = (function () {
                             end_trial();
                         } else {
                             start_OI();
+                            threshold_interval();
                         }
-                    }, OI_duration_B - internal_threshold_timer);
+                    }, OI_duration_B - time_elapsed);
                 }
             }, OI_threshold * 1000);
         }

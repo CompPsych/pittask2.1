@@ -419,10 +419,10 @@ var popup_text_machine_deval_test = "You can tip the machine anytime in this sta
  * VOR Virtual Outcome Reinstatement
  ************************************************************/
 var VOR_block_num = 3;
-var extinct_duration = 10;
+var extinct_duration = 2;
 var OI_duration_A = 6000; //default: 6000
 var OI_duration_B = 1500;
-var OI_threshold = 30;
+var OI_threshold = 15;
 var VOR_duration = 180;
 
 var open_instruct_VOR = true;
