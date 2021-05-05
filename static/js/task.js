@@ -1905,16 +1905,16 @@ timeline.push(KEY_TESTING);
 timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
 //  Instrumental Conditioning (VVR1)
 timeline.push(VVR1);
+// Instrumental Degradation (VVR2)
+timeline.push(VVR2);
 // Pavlovian Condition
 timeline.push(PAV_CON);
 // Transfer Test
 timeline.push(TRANSFER1);
-// Instrumental Degradation (VVR2)
-//timeline.push(VVR2);
 // Transfer Test 2
 //timeline.push(TRANSFER2);
 // Instrumental Restoration (VVR3)
-//timeline.push(VVR3);
+timeline.push(VVR3);
 // Deval Video
 timeline.push(DEVAL_VIDEO);
 // Deval Test
