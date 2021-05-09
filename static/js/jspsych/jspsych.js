@@ -3068,19 +3068,29 @@ jsPsych.pluginAPI = (function () {
       disableScroll: true,
       onShow: function () {
         var triggeringEvent = {}
+        const currentTimestamp = jsPsych.totalTime()
         for (let i = responseStore.trial_events.length - 1; i >= 0; i--) {
-          if (responseStore.trial_events[i].event_converted_details === 'left_mouse key released') {
+          if (openEventName !== 'floor' && responseStore.trial_events[i].timestamp > currentTimestamp - maxAnswerTime) continue
+          if (responseStore.trial_events[i].event_converted_details === 'left_mouse key released'
+            || responseStore.trial_events[i].event_type === 'popup closed') {
             triggeringEvent = responseStore.trial_events[i]
             break
           }
         }
 
-        var text = 'popup triggered by ';
+        var text = 'popup triggered';
 
         if (openEventName === 'floor') {
-          text += triggeringEvent.event_converted_details + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
+          text += ' by ' + triggeringEvent.event_converted_details + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
         } else {
-          text += openEventName + ' threshold value exceeding answer_latency_ceiling_' + testName;
+          let eventText
+          if (triggeringEvent.timestamp) {
+            eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
+          } else {
+            eventText = 'start of the trial'
+            triggeringEvent.timestamp = timestamp
+          }
+          text += ' as ' + maxAnswerTime + 'ms has lapsed since ' + eventText + ' at timestamp ' + triggeringEvent.timestamp
         }
 
         responseStore.trial_events.push({
