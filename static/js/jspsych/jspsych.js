@@ -3083,13 +3083,11 @@ jsPsych.pluginAPI = (function () {
         if (openEventName === 'floor') {
           text += ' by ' + triggeringEvent.event_converted_details + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
         } else {
-          let eventText
-          if (triggeringEvent.timestamp) {
-            eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
-          } else {
-            eventText = 'start of the trial'
-            triggeringEvent.timestamp = timestamp
+          if (!triggeringEvent.timestamp) {
+            triggeringEvent = responseStore.trial_events.length && responseStore.trial_events[0]
           }
+          const eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
+
           text += ' as ' + maxAnswerTime + 'ms has lapsed since ' + eventText + ' at timestamp ' + triggeringEvent.timestamp
         }
 
