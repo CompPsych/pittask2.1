@@ -74,12 +74,6 @@ jsPsych.plugins['ACI'] = (function () {
                 default: 'Continue',
                 description: 'Label of the button.'
             },
-            time_stamp: {
-                type: jsPsych.plugins.parameterType.OBJECT,
-                pretty_name: 'Timestamp',
-                default: {},
-                description: 'Object for collecting timestamp'
-            },
             event_type: {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Event type',
@@ -161,6 +155,7 @@ jsPsych.plugins['ACI'] = (function () {
     }
 
     plugin.trial = function (display_element, trial) {
+        var time_stamps = {}
 
         var plugin_id_name = "jspsych-survey-multi-choice-ACI";
         var html = "";
@@ -352,7 +347,7 @@ jsPsych.plugins['ACI'] = (function () {
 
                 if (info.el) {
                     if (info.el.dataset.timeStamp) {
-                        trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
+                        time_stamps[info.el.dataset.timeStamp] = jsPsych.totalTime();
                     }
 
                     if (info.el.dataset.questionNumber) {
@@ -409,7 +404,7 @@ jsPsych.plugins['ACI'] = (function () {
                     time_stamp_key = $(this).data('time-stamp');
 
                     if (time_stamp_key) {
-                        trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+                        time_stamps[time_stamp_key] = jsPsych.totalTime();
                     }
                 }
 
@@ -453,15 +448,15 @@ jsPsych.plugins['ACI'] = (function () {
                 }
 
                 obje[name] = val;
-                timestamp_data[name] = trial.time_stamp['Q' + id];
+                timestamp_data[name] = time_stamps['Q' + id];
                 Object.assign(question_data, obje);
             }
 
             return {
-                'stage_name': JSON.stringify(plugin.info.name),
+                'stage_name': JSON.stringify(trial.name),
                 'responses': JSON.stringify(question_data),
                 'timestamp': JSON.stringify(timestamp_data),
-                'time_stamp': JSON.stringify(trial.time_stamp),
+                'time_stamp': JSON.stringify(time_stamps),
                 'question_order': JSON.stringify(question_order),
                 'events': JSON.stringify(response.trial_events),
                 'mouse_events': JSON.stringify(response.mouse_events)

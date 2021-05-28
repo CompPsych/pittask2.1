@@ -207,7 +207,7 @@ var DEMOGRAPHICS_INSTRUCT_CLOSE = {
 // stage with instructions
 var DEMOGRAPHICS = {
     timeline: [
-        DEMOGRAPHICS_INSTRUCT_OPEN, DEMOGRAPHICS_STAGE, DEMOGRAPHICS_INSTRUCT_CLOSE
+        DEMOGRAPHICS_STAGE, DEMOGRAPHICS_INSTRUCT_CLOSE
     ]
 };
 
@@ -1928,14 +1928,18 @@ timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
 // Recall
 timeline.push(RECALL);
 // transfer_q
-timeline.push(TRANSFER_Q)
+timeline.push(TRANSFER_Q);
 // Transfer Test 3
 //timeline.push(TRANSFER3);
 // Intro: We'd like to briefly ask you about some symptoms before the online game.
 timeline.push(WBF_OPEN);
+// Demographics open instruct
+timeline.push(DEMOGRAPHICS_INSTRUCT_OPEN);
+// Attention check 1
+timeline.push(ACI1);
 // Demographics
-timeline.push(ACI1)
 timeline.push(DEMOGRAPHICS);
+
 timeline.push(INVENTORY_OPEN);
 // Symptom Inventories
 for (var item of symptom_inventory_arr) {
@@ -1948,8 +1952,9 @@ timeline.push(SDS);
 timeline.push(ICAR);
 // Close: That's it for the symptom questions. Now we're ready to start the online game
 //timeline.push(WBF_CLOSE);
+// Attention check 2
+timeline.push(ACI2);
 //  Close HIT Questions
-timeline.push(ACI2)
 timeline.push(CLOSE_HIT);
 // Thanks
 timeline.push(THANKS)

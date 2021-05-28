@@ -471,6 +471,20 @@ Transfer_q <- data.table(
   text = character()
 )
 
+ACI <- data.table(
+  PIN = character(),
+  unique_link = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  item = numeric(),
+  response = character()
+)
+
 # Geo ---------------------------------------------------------------------
 
 getGeoInfoByIP <- function(ipList){
@@ -1382,6 +1396,39 @@ if(isClass(query))
       }
     }
 
+    # ACI --------------------------------------------------------------------
+    
+    aci_index <- which(trialdata$stage_name %in% "\"ACI\"")
+    
+    for (k in seq_along(aci_index)) {
+      if(length(aci_index[k]) != 0){
+        aci_responses <- fromJSON(trialdata[aci_index[k],]$responses)
+        aci_timestamps <- fromJSON(trialdata[aci_index[k],]$timestamp)
+        
+        date <- format(as.IDate(dateTime[aci_index[k]]), "%d-%m-%Y")
+        time <- as.character(as.ITime(dateTime[aci_index[k]]))
+
+        time_elapsed <- trialdata$time_elapsed[aci_index[k]]
+        time_ms <- dateTime_ms[aci_index[k]] - time_elapsed
+        
+        for(j in seq_along(aci_responses)){
+          timestamp <- ifelse(is.na(names(aci_timestamps)[j]), 'NA', aci_timestamps[[j]])
+          #if(is.na(names(aci_timestamps)[j])) timestamp <- names(aci_timestamps)[j]
+          calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
+              time_ms + as.numeric(if(timestamp != 'NA') timestamp)))))
+          response <- ifelse(nchar(aci_responses[[j]]) == 0, 'NA', aci_responses[[j]])
+          
+          ACI <- rbindlist(list(ACI, list(
+            PIN, usedLink, complete, date,
+            calendar_time,
+            timestamp, country, commit, version,
+            names(aci_responses)[j],
+            response
+          )))
+        }
+      }
+    }
+
     # VVR ---------------------------------------------------------------------
     vvr_stages <- trialdata$vvr_stage
 
@@ -1666,6 +1713,7 @@ if(isClass(query))
     "LSAS" = LSAS,
     "ICAR" = ICAR,
     "SDS" = SDS,
+    "ACI" = ACI,
     "VVR" = VVR,
     "food_ratings" = FoodRatings,
     "hunger_rating" = HungerRating,
