@@ -136,31 +136,31 @@ var counter_balancing = jsPsych.randomization.sampleWithoutReplacement(counter_b
 
 // Reconnection to the Database
 var error_message =
-"<div class='jspsych-content-wrapper'>" +
-"<div class='jspsych-content'>" +
-"<h1>Oops!</h1>" +
-"<p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p>" +
-"<button class='btn btn-primary btn-lg' id='resubmit'>Resubmit</button>" +
-"</div>" +
-"</div>";
+    "<div class='jspsych-content-wrapper'>" +
+    "<div class='jspsych-content'>" +
+    "<h1>Oops!</h1>" +
+    "<p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p>" +
+    "<button class='btn btn-primary btn-lg' id='resubmit'>Resubmit</button>" +
+    "</div>" +
+    "</div>";
 
-prompt_resubmit = function() {
-    $( "body" ).addClass("jspsych-display-element");
+prompt_resubmit = function () {
+    $("body").addClass("jspsych-display-element");
     document.body.innerHTML = error_message;
 
     $("#resubmit").click(resubmit);
 };
 
-resubmit = function() {
+resubmit = function () {
 
     document.body.innerHTML = "<div class='jspsych-content-wrapper'>" +
-    "<div class='jspsych-content'>" +
-    "<h1>Trying to resubmit...</h1>" +
-    "</div>" +
-    "</div>";
+        "<div class='jspsych-content'>" +
+        "<h1>Trying to resubmit...</h1>" +
+        "</div>" +
+        "</div>";
     reprompt = setTimeout(prompt_resubmit, 10000);
     psiTurk.saveData({
-        success: function() {
+        success: function () {
             clearInterval(reprompt);
             psiTurk.completeHIT();
         },
@@ -181,7 +181,7 @@ var DEMOGRAPHICS_INSTRUCT_OPEN = {
         event_raw_details: 'open_instruct_text_demographics',
         event_converted_details: "demographics_open text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_demographics;
     }
 };
@@ -199,7 +199,7 @@ var DEMOGRAPHICS_INSTRUCT_CLOSE = {
         event_raw_details: 'close_instruct_text_demographics',
         event_converted_details: "demographics_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_demographics;
     }
 };
@@ -224,7 +224,7 @@ var SDS_INSTRUCT_OPEN = {
         event_raw_details: 'open_instruct_text_SDS',
         event_converted_details: "SDS open instructions text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_SDS;
     }
 };
@@ -242,7 +242,7 @@ var SDS_INSTRUCT_CLOSE = {
         event_raw_details: 'close_instruct_text_SDS',
         event_converted_details: "SDS close instructions text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_SDS;
     }
 };
@@ -250,7 +250,7 @@ var SDS_INSTRUCT_CLOSE = {
 // stage with instructions
 var SDS = {
     timeline: [
-       SDS_INSTRUCT_OPEN, SDS_STAGE, SDS_INSTRUCT_CLOSE
+        SDS_INSTRUCT_OPEN, SDS_STAGE, SDS_INSTRUCT_CLOSE
     ]
 };
 
@@ -267,7 +267,7 @@ var ICAR_INSTRUCT_OPEN = {
         event_raw_details: 'open_instruct_text_ICAR',
         event_converted_details: "ICAR open instructions text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_ICAR;
     }
 };
@@ -285,7 +285,7 @@ var ICAR_INSTRUCT_CLOSE = {
         event_raw_details: 'close_instruct_text_ICAR',
         event_converted_details: "ICAR close instructions text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_ICAR;
     }
 };
@@ -337,7 +337,7 @@ var KEY_TESTING = {
 
 // FHR_timestamp helps pass timestamp parameter trough
 // the all stages FHQ for simulating uniformity.
-var FHR_timestamp = 0; 
+var FHR_timestamp = 0;
 var FHQ1_1 = {
     stage_name: "FHQ1",
     type: 'food-and-hunger-questions',
@@ -409,7 +409,7 @@ var FHQ1_OPEN = {
         event_raw_details: 'open_instruct_text_FHQ_pre_rating',
         event_converted_details: "FHQ1_open text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_FHQ_pre_rating;
     }
 };
@@ -426,7 +426,7 @@ var FHQ1_CLOSE = {
         event_raw_details: 'close_instruct_text_FHQ_pre_rating',
         event_converted_details: "FHQ1_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_FHQ_pre_rating;
     }
 };
@@ -502,7 +502,7 @@ var FHQ2_OPEN = {
         event_raw_details: 'open_instruct_text_FHQ_post_rating',
         event_converted_details: "FHQ2_open text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_FHQ_post_rating;
     }
 };
@@ -519,7 +519,7 @@ var FHQ2_CLOSE = {
         event_raw_details: 'close_instruct_text_FHQ_post_rating',
         event_converted_details: "FHQ2_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_FHQ_post_rating;
     }
 };
@@ -572,7 +572,7 @@ var vvr_3_vars = {
 };
 
 // main function used for all VVR stages
-var VVR = function(data) {
+var VVR = function (data) {
     var min_blocks_num = data.min_blocks_num;
     var min_num_correct = data.min_num_correct;
     var max_num_incorrect = data.max_num_incorrect;
@@ -586,7 +586,7 @@ var VVR = function(data) {
             VVR_INTERVAL_DURATION: interval_duration,
             VVR_OUTCOME_DURATION: outcome_duration,
             VVR_PROB_VALUE: data.prob_value,
-            VVR_DEGRAD_PATTERN : data.degrad_pattern,
+            VVR_DEGRAD_PATTERN: data.degrad_pattern,
         },
         popup_machine: data.popup_machine,
         popup_machine_duration: data.popup_machine_duration,
@@ -627,18 +627,18 @@ var VVR = function(data) {
             {
                 stage_name: stage_name,
                 type: 'survey-feedback',
-                stimulus: function() {
-                    return vvrIsCorrect? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
+                stimulus: function () {
+                    return vvrIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
                 },
                 choices: jsPsych.NO_KEYS,
                 trial_duration: feedback_duration,
                 vvr_timer: true,
                 event_type: 'text appears',
-                event_raw_details: function() {
-                    return vvrIsCorrect? 'correct_text': 'incorrect_text';
+                event_raw_details: function () {
+                    return vvrIsCorrect ? 'correct_text' : 'incorrect_text';
                 },
-                event_converted_details: function() {
-                    return vvrIsCorrect? correct_text + ' text appears': incorrect_text + ' text appears'
+                event_converted_details: function () {
+                    return vvrIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
                 }
             }
         ]
@@ -678,18 +678,18 @@ var VVR = function(data) {
             {
                 stage_name: stage_name,
                 type: 'survey-feedback',
-                stimulus: function() {
-                    return vvrIsCorrect? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
+                stimulus: function () {
+                    return vvrIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
                 },
                 choices: jsPsych.NO_KEYS,
                 trial_duration: feedback_duration,
                 vvr_timer: true,
                 event_type: 'text appears',
-                event_raw_details: function() {
-                    return vvrIsCorrect? 'correct_text': 'incorrect_text';
+                event_raw_details: function () {
+                    return vvrIsCorrect ? 'correct_text' : 'incorrect_text';
                 },
-                event_converted_details: function() {
-                    return vvrIsCorrect? correct_text + ' text appears': incorrect_text + ' text appears'
+                event_converted_details: function () {
+                    return vvrIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
                 }
             }
         ]
@@ -701,11 +701,11 @@ var VVR = function(data) {
 
     function vvr_shuffle_questions() {
         var rand = jsPsych.randomization.sampleWithoutReplacement(['right', 'left'], 1);
-        if(rand[0] === 'right') {
+        if (rand[0] === 'right') {
             vvr_a_cond = false;
             vvr_b_cond = true;
             vvr_c_cond = true;
-        } else if(rand[0] === 'left') {
+        } else if (rand[0] === 'left') {
             vvr_a_cond = true;
             vvr_b_cond = true;
             vvr_c_cond = false;
@@ -715,27 +715,27 @@ var VVR = function(data) {
     vvr_shuffle_questions();
 
     var loop_node_VVR = {
-        timeline: [ vvr_a,
-                {
-                    timeline: [questions_a],
-                    conditional_function: function() {
-                        return vvr_a_cond;
-                    }
-                },
-                {
-                    timeline: [questions_b],
-                    conditional_function: function() {
-                        return vvr_b_cond;
-                    }
-                },
-                {
-                    timeline: [questions_a],
-                    conditional_function: function() {
-                        return vvr_c_cond;
-                    }
+        timeline: [vvr_a,
+            {
+                timeline: [questions_a],
+                conditional_function: function () {
+                    return vvr_a_cond;
                 }
+            },
+            {
+                timeline: [questions_b],
+                conditional_function: function () {
+                    return vvr_b_cond;
+                }
+            },
+            {
+                timeline: [questions_a],
+                conditional_function: function () {
+                    return vvr_c_cond;
+                }
+            }
         ],
-        loop_function: function(){
+        loop_function: function () {
             function reset_vars() {
                 degrad_pattern_loop_counter = 0;
                 prob_value_loop_counter = 0;
@@ -745,10 +745,10 @@ var VVR = function(data) {
                 item_id = 0;
             };
 
-            if(loop_node_counter_vvr_determination >= min_blocks_num && max_num_incorrect <= loop_node_counter_max_num_incorrect) {
+            if (loop_node_counter_vvr_determination >= min_blocks_num && max_num_incorrect <= loop_node_counter_max_num_incorrect) {
                 reset_vars();
                 return false;
-            } else if(loop_node_counter_vvr_determination >= min_blocks_num && min_num_correct <= loop_node_counter_max_num_correct) {
+            } else if (loop_node_counter_vvr_determination >= min_blocks_num && min_num_correct <= loop_node_counter_max_num_correct) {
                 reset_vars();
                 return false;
             } else {
@@ -774,8 +774,8 @@ var VVR1 = {
                 event_raw_details: 'open_instruct_text_VVR1',
                 event_converted_details: 'VVR1_open text appears'
             }],
-            conditional_function: function(){
-                return  open_instruct_VVR1;
+            conditional_function: function () {
+                return open_instruct_VVR1;
             }
         },
         VVR(vvr_1_vars),
@@ -791,7 +791,7 @@ var VVR1 = {
                 event_raw_details: 'close_instruct_text_VVR1',
                 event_converted_details: 'VVR1_close text appears'
             }],
-            conditional_function: function(){
+            conditional_function: function () {
                 return close_instruct_VVR1;
             }
         }
@@ -811,8 +811,8 @@ var VVR2 = {
                 event_raw_details: 'open_instruct_text_VVR2',
                 event_converted_details: 'VVR2_open text appears'
             }],
-            conditional_function: function(){
-                return  open_instruct_VVR2;
+            conditional_function: function () {
+                return open_instruct_VVR2;
             }
         },
         VVR(vvr_2_vars),
@@ -828,7 +828,7 @@ var VVR2 = {
                 event_raw_details: 'close_instruct_text_VVR2',
                 event_converted_details: 'VVR2_close text appears'
             }],
-            conditional_function: function(){
+            conditional_function: function () {
                 return close_instruct_VVR2;
             }
         }
@@ -848,8 +848,8 @@ var VVR3 = {
                 event_raw_details: 'open_instruct_text_VVR3',
                 event_converted_details: 'VVR3_open text appears'
             }],
-            conditional_function: function(){
-                return  open_instruct_VVR3;
+            conditional_function: function () {
+                return open_instruct_VVR3;
             }
         },
         VVR(vvr_3_vars),
@@ -865,7 +865,7 @@ var VVR3 = {
                 event_raw_details: 'close_instruct_text_VVR3',
                 event_converted_details: 'VVR3_close text appears'
             }],
-            conditional_function: function(){
+            conditional_function: function () {
                 return close_instruct_VVR3;
             }
         }
@@ -908,7 +908,7 @@ var INVENTORY_OPEN = {
         event_raw_details: 'open_instruct_text_inventory',
         event_converted_details: "inventory_open text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_inventory;
     }
 };
@@ -925,7 +925,7 @@ var INVENTORY_CLOSE = {
         event_raw_details: 'close_instruct_text_inventory',
         event_converted_details: "inventory_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_inventory;
     }
 };
@@ -982,41 +982,42 @@ var PAV_CONDITIONING_MAIN = {
             stage_type: 'Pav Conditioning Response',
             type: 'survey-pav-multi-choice',
             questions: [
-                { prompt: "Which snack is overstocked?", name: 'response', options: [
-                    {
-                        name: 'M&Ms',
-                        value: 'MM',
-                        img: '/static/images/MM.png',
-                        response: 'a',
-                    },
-                    {
-                        name: 'BBQ',
-                        value: 'BBQ',
-                        img: '/static/images/BBQ.png',
-                        response: 'b',
-                    },
-                    {
-                        name: 'Tiny teddy',
-                        value: 'TT',
-                        img: '/static/images/TT.png',
-                        response: 'c',
-                    },
-                    {
-                        name: 'Empty',
-                        value: 'Empty',
-                        img: '/static/images/EMPTY.png',
-                        response: 'd',
-                    }
-                ]
-            }],
+                {
+                    prompt: "Which snack is overstocked?", name: 'response', options: [
+                        {
+                            name: 'M&Ms',
+                            value: 'MM',
+                            img: '/static/images/MM.png',
+                            response: 'a',
+                        },
+                        {
+                            name: 'BBQ',
+                            value: 'BBQ',
+                            img: '/static/images/BBQ.png',
+                            response: 'b',
+                        },
+                        {
+                            name: 'Tiny teddy',
+                            value: 'TT',
+                            img: '/static/images/TT.png',
+                            response: 'c',
+                        },
+                        {
+                            name: 'Empty',
+                            value: 'Empty',
+                            img: '/static/images/EMPTY.png',
+                            response: 'd',
+                        }
+                    ]
+                }],
             button_label: 'submit answer',
         },
         {
             stage_name: 'pav_con',
             type: 'html-keyboard-response',
             pav_con_timer: true,
-            stimulus: function() {
-                if(pav_is_correct) {
+            stimulus: function () {
+                if (pav_is_correct) {
                     return '<p style="font-size: 24px;">' + correct_text + '</p>';
                 } else {
                     return '<p style="font-size: 24px;">' + incorrect_text + '</p>';
@@ -1024,15 +1025,15 @@ var PAV_CONDITIONING_MAIN = {
             },
             trial_duration: feedback_duration,
             event_type: 'text appears',
-            event_raw_details: function() {
-               if(pav_is_correct){
-                   return 'correct_text'
-               } else {
-                   return 'incorrect_text'
-               }
+            event_raw_details: function () {
+                if (pav_is_correct) {
+                    return 'correct_text'
+                } else {
+                    return 'incorrect_text'
+                }
             },
-            event_converted_details: function() {
-                if(pav_is_correct){
+            event_converted_details: function () {
+                if (pav_is_correct) {
                     return 'correct_text text appears'
                 } else {
                     return 'incorrect_text text appears'
@@ -1040,10 +1041,10 @@ var PAV_CONDITIONING_MAIN = {
             }
         }
     ],
-    loop_function: function(){
-        pav_multi_choice_counter ++;
+    loop_function: function () {
+        pav_multi_choice_counter++;
         pav_is_correct = false;
-        if(pav_correct_holder >= min_num_correct_pav || pav_incorrect_holder >= max_num_incorrect_pav) {
+        if (pav_correct_holder >= min_num_correct_pav || pav_incorrect_holder >= max_num_incorrect_pav) {
             pav_correct_holder = 0;
             pav_incorrect_holder = 0;
             pav_multi_choice_counter = 0;
@@ -1068,7 +1069,7 @@ var PAV_TEST_INSTRUCT_OPEN = {
         event_raw_details: 'open_instruct_text_pav',
         event_converted_details: "pav_con_open text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_pav;
     }
 };
@@ -1085,7 +1086,7 @@ var PAV_TEST_INSTRUCT_CLOSE = {
         event_raw_details: 'close_instruct_text_pav',
         event_converted_details: "pav_con_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_pav;
     }
 };
@@ -1113,7 +1114,7 @@ var TRANSFER1 = {
                 event_raw_details: 'open_instruct_text_transfer_test',
                 event_converted_details: "transfer1_open text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_transfer_test;
             }
         },
@@ -1140,12 +1141,12 @@ var TRANSFER1 = {
                 event_raw_details: 'close_instruct_text_transfer_test',
                 event_converted_details: "transfer1_close text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_transfer_test;
             }
         }
     ],
-    conditional_function: function() {
+    conditional_function: function () {
         return transfer_test1;
     }
 };
@@ -1164,7 +1165,7 @@ var TRANSFER2 = {
                 event_raw_details: 'open_instruct_text_transfer_test',
                 event_converted_details: "transfer2_open text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_transfer_test;
             }
         },
@@ -1191,12 +1192,12 @@ var TRANSFER2 = {
                 event_raw_details: 'close_instruct_text_transfer_test',
                 event_converted_details: "transfer2_close text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_transfer_test;
             }
         }
     ],
-    conditional_function: function() {
+    conditional_function: function () {
         return transfer_test2;
     }
 };
@@ -1215,7 +1216,7 @@ var TRANSFER3 = {
                 event_raw_details: 'open_instruct_text_transfer_test',
                 event_converted_details: "transfer3_open text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_transfer_test;
             }
         },
@@ -1242,12 +1243,12 @@ var TRANSFER3 = {
                 event_raw_details: 'close_instruct_text_transfer_test',
                 event_converted_details: "transfer3_close text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_transfer_test;
             }
         }
     ],
-    conditional_function: function() {
+    conditional_function: function () {
         return transfer_test3;
     }
 };
@@ -1266,7 +1267,7 @@ var DEVAL_VIDEO = {
                 event_raw_details: 'open_instruct_text_video',
                 event_converted_details: "open_instruct_text_video text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_video;
             }
         },
@@ -1293,7 +1294,7 @@ var DEVAL_VIDEO = {
                 event_raw_details: 'close_instruct_text_video',
                 event_converted_details: "close_instruct_text_video text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_video;
             }
         },
@@ -1323,7 +1324,7 @@ var DEVAL_TEST_INSTRUCT_OPEN = {
         event_raw_details: 'open_instruct_text_deval_test',
         event_converted_details: "open_instruct_text_deval_test text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return open_instruct_deval_test;
     }
 };
@@ -1340,7 +1341,7 @@ var DEVAL_TEST_INSTRUCT_CLOSE = {
         event_raw_details: 'close_instruct_text_deval_test',
         event_converted_details: "deval_test_close text appears",
     }],
-    conditional_function: function() {
+    conditional_function: function () {
         return close_instruct_deval_test;
     }
 };
@@ -1366,7 +1367,7 @@ var VOR = {
                 event_raw_details: 'open_instruct_text_VOR',
                 event_converted_details: "open_instruct_text_VOR text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_VOR;
             }
         },
@@ -1388,7 +1389,7 @@ var VOR = {
                 event_raw_details: 'close_instruct_text_VOR',
                 event_converted_details: "close_instruct_text_VOR text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_VOR;
             }
         },
@@ -1410,7 +1411,7 @@ var RECALL = {
                 event_raw_details: 'open_instruct_text_recall',
                 event_converted_details: "open_instruct_text_recall text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_recall;
             }
         },
@@ -1421,46 +1422,47 @@ var RECALL = {
                     stage_type: 'pav_con',
                     type: 'survey-pav-multi-choice',
                     questions: [
-                        { prompt: "Which snack is overstocked?", name: 'response', options: [
-                            {
-                                name: 'M&Ms',
-                                value: 'MM',
-                                img: '/static/images/MM.png',
-                                response: 'a',
-                            },
-                            {
-                                name: 'BBQ',
-                                value: 'BBQ',
-                                img: '/static/images/BBQ.png',
-                                response: 'b',
-                            },
-                            {
-                                name: 'Tiny teddy',
-                                value: 'TT',
-                                img: '/static/images/TT.png',
-                                response: 'c',
-                            },
-                            {
-                                name: 'Empty',
-                                value: 'Empty',
-                                img: '/static/images/EMPTY.png',
-                                response: 'd',
-                            }
-                        ]
-                    }],
+                        {
+                            prompt: "Which snack is overstocked?", name: 'response', options: [
+                                {
+                                    name: 'M&Ms',
+                                    value: 'MM',
+                                    img: '/static/images/MM.png',
+                                    response: 'a',
+                                },
+                                {
+                                    name: 'BBQ',
+                                    value: 'BBQ',
+                                    img: '/static/images/BBQ.png',
+                                    response: 'b',
+                                },
+                                {
+                                    name: 'Tiny teddy',
+                                    value: 'TT',
+                                    img: '/static/images/TT.png',
+                                    response: 'c',
+                                },
+                                {
+                                    name: 'Empty',
+                                    value: 'Empty',
+                                    img: '/static/images/EMPTY.png',
+                                    response: 'd',
+                                }
+                            ]
+                        }],
                     button_label: 'submit answer',
                 },
             ],
-            loop_function: function(){
-                pav_multi_choice_counter ++;
+            loop_function: function () {
+                pav_multi_choice_counter++;
                 pav_is_correct = false;
-                if(pav_multi_choice_counter < 4) {
+                if (pav_multi_choice_counter < 4) {
                     return true;
                 } else {
 
                     return false;
                 }
-                
+
             }
         },
         {
@@ -1534,10 +1536,10 @@ var RECALL = {
                 event_raw_details: 'close_instruct_text_recall',
                 event_converted_details: "close_instruct_text_recall text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return close_instruct_recall;
             }
-        }, 
+        },
     ]
 };
 
@@ -1556,7 +1558,7 @@ var TRANSFER_Q = {
                 event_raw_details: 'open_instruct_text_transfer_q',
                 event_converted_details: "open_instruct_text_transfer_q text appears",
             }],
-            conditional_function: function() {
+            conditional_function: function () {
                 return open_instruct_transfer_q;
             }
         }
@@ -1582,10 +1584,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q1_stim1_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1602,10 +1604,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q2_stim1_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1622,7 +1624,7 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q3_stim1_colour;
         }
     }],
@@ -1643,10 +1645,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q1_stim2_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1663,10 +1665,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q2_stim2_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1683,7 +1685,7 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q3_stim2_colour;
         }
     }],
@@ -1704,10 +1706,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q1_stim3_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1724,10 +1726,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q2_stim3_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1744,7 +1746,7 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q3_stim3_colour;
         }
     }],
@@ -1765,10 +1767,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q1_stim4_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1785,10 +1787,10 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q2_stim4_colour;
         }
-    },{
+    }, {
         timeline: [
             {
                 stage_name: "transfer_q",
@@ -1805,15 +1807,15 @@ var transfer_q_holder = jsPsych.randomization.shuffle([
                 event_converted_details: "text appears",
             }
         ],
-        conditional_function: function() {
+        conditional_function: function () {
             return transfer_q_q3_stim4_colour;
         }
     }]
 ]);
 
 // push transfer_q stages to the main TRANSFER_Q function
-transfer_q_holder.forEach(function(item) {
-    item.forEach(function(obj) {
+transfer_q_holder.forEach(function (item) {
+    item.forEach(function (obj) {
         // insert stages after open_instruct stage
         TRANSFER_Q.timeline.push(obj);
     });
@@ -1833,7 +1835,7 @@ TRANSFER_Q.timeline.push(
             event_raw_details: 'close_instruct_text_transfer_q',
             event_converted_details: "close_instruct_text_transfer_q text appears",
         }],
-        conditional_function: function() {
+        conditional_function: function () {
             return close_instruct_transfer_q;
         }
     }
@@ -1874,18 +1876,18 @@ var preload_images = ['/static/images/BBQ.png', '/static/images/TT.png', '/stati
 var preload_video = [counter_balancing[0].video + '.mp4'];
 
 three_dimensional_rotate_new.forEach(element => {
-    preload_images.push('/static/images/ICAR/three-dimensional_rotate/' + element.img)  
+    preload_images.push('/static/images/ICAR/three-dimensional_rotate/' + element.img)
 });
 
 matrix_reasoning_new.forEach(element => {
-    preload_images.push('/static/images/ICAR/matrix_reasoning/' + element.img)  
+    preload_images.push('/static/images/ICAR/matrix_reasoning/' + element.img)
 });
 
 // timeline array holds all stages in a sequence
 var timeline = [];
 var symptom_inventories_random = jsPsych.randomization.shuffle(symptom_inventory);
 var symptom_inventories_ordered = symptom_inventory;
-var symptom_inventory_arr = inventory_rand ?  symptom_inventories_random : symptom_inventories_ordered;
+var symptom_inventory_arr = inventory_rand ? symptom_inventories_random : symptom_inventories_ordered;
 
 /************************************************************
  * Stages sequence configuration
@@ -1932,10 +1934,11 @@ timeline.push(TRANSFER_Q)
 // Intro: We'd like to briefly ask you about some symptoms before the online game.
 timeline.push(WBF_OPEN);
 // Demographics
+timeline.push(ACI1)
 timeline.push(DEMOGRAPHICS);
 timeline.push(INVENTORY_OPEN);
 // Symptom Inventories
-for(var item of symptom_inventory_arr){
+for (var item of symptom_inventory_arr) {
     timeline.push(item);
 }
 timeline.push(INVENTORY_CLOSE);
@@ -1946,31 +1949,32 @@ timeline.push(ICAR);
 // Close: That's it for the symptom questions. Now we're ready to start the online game
 //timeline.push(WBF_CLOSE);
 //  Close HIT Questions
+timeline.push(ACI2)
 timeline.push(CLOSE_HIT);
 // Thanks
 timeline.push(THANKS)
 
 jsPsych.init({
-        timeline: timeline,
-        preload_images: preload_images,
-        preload_video: preload_video,
-        // on_finish: function(){
-        //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
-        //     $(window).off("beforeunload");
-        //     jsPsych.data.displayData(); 
-        // }, 
-        on_finish: function() {
-            psiTurk.saveData({
-                success: function() {
-                    $(window).off("beforeunload");
-                    psiTurk.completeHIT();
-                },
-                error: prompt_resubmit
-            });
-        }, 
-        on_data_update: function(data) {
-            psiTurk.recordTrialData(data);
-            psiTurk.saveData();
-        }
+    timeline: timeline,
+    preload_images: preload_images,
+    preload_video: preload_video,
+    // on_finish: function(){
+    //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
+    //     $(window).off("beforeunload");
+    //     jsPsych.data.displayData(); 
+    // }, 
+    on_finish: function () {
+        psiTurk.saveData({
+            success: function () {
+                $(window).off("beforeunload");
+                psiTurk.completeHIT();
+            },
+            error: prompt_resubmit
+        });
+    },
+    on_data_update: function (data) {
+        psiTurk.recordTrialData(data);
+        psiTurk.saveData();
     }
+}
 );
