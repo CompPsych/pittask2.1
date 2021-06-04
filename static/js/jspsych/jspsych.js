@@ -2083,7 +2083,9 @@ jsPsych.pluginAPI = (function () {
 
         parameters.callback_function({
           key: e.keyCode,
-          rt: key_time - start_time
+          rt: key_time - start_time,
+          el: e.target,
+          e: e
         });
 
         if (keyboard_listeners.includes(listener_id)) {
@@ -3068,26 +3070,36 @@ jsPsych.pluginAPI = (function () {
       disableScroll: true,
       onShow: function () {
         var triggeringEvent = {}
-        const currentTimestamp = jsPsych.totalTime()
-        for (let i = responseStore.trial_events.length - 1; i >= 0; i--) {
-          if (openEventName !== 'floor' && responseStore.trial_events[i].timestamp > currentTimestamp - maxAnswerTime) continue
-          if (responseStore.trial_events[i].event_converted_details === 'left_mouse key released'
-            || responseStore.trial_events[i].event_type === 'popup closed') {
-            triggeringEvent = responseStore.trial_events[i]
+        var currentTimestamp = jsPsych.totalTime()
+        for (var i = responseStore.trial_events.length - 1; i >= 0; i--) {
+          var evt = responseStore.trial_events[i]
+          if (openEventName !== 'floor' && evt.timestamp > currentTimestamp - maxAnswerTime) continue
+          var expectKeyCodes = [37, 38, 39, 40, 1, 32]
+          if (evt.event_type === 'key release') {
+            for (var j = 0; j < expectKeyCodes.length; j++) {
+              if (evt.event_raw_details == expectKeyCodes[j]) {
+                triggeringEvent = evt
+                break
+              }
+            }
+          } else if (evt.event_type === 'popup closed') {
+            triggeringEvent = evt
+          }
+          if (triggeringEvent.event_type) {
             break
           }
         }
 
         var text = 'popup triggered';
 
+        var eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
+
         if (openEventName === 'floor') {
-          text += ' by ' + triggeringEvent.event_converted_details + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
+          text += ' by ' + eventText + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
         } else {
           if (!triggeringEvent.timestamp) {
             triggeringEvent = responseStore.trial_events.length && responseStore.trial_events[0]
           }
-          const eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
-
           text += ' as ' + maxAnswerTime + 'ms has lapsed since ' + eventText + ' at timestamp ' + triggeringEvent.timestamp
         }
 
