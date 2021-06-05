@@ -450,7 +450,7 @@ jsPsych.plugins['Demographics'] = (function () {
     }
 
     // add multiple-choice questions
-    for (var i = 4; i < 8; i++) {
+    for (var i = 4; i < 9; i++) {
       // get question based on question_order
       var question = trial.questions[question_order[i]];
       var question_id = question_order[i];
@@ -468,7 +468,11 @@ jsPsych.plugins['Demographics'] = (function () {
       html += '<div style="width: 30%; padding: 1rem;"><p class="jspsych-survey-multi-choice-question survey-multi-choice" style="padding-top: 3px; text-align: left;"><span>' + (i + 1) + '. ' + question.prompt
       // question.required
       html += '</span></p></div>';
-      html += '<div style="border-left: 1px solid #fff; padding: 1rem 0 1rem 2rem; ">';
+      if (question.direction === 'row') {
+        html += '<div style="display: flex; width: 70%;  padding: 2rem; justify-content: space-around; border-left: 1px solid #fff; ">';
+      } else {
+        html += '<div style="border-left: 1px solid #fff; padding: 1rem 0 1rem 2rem; ">';
+      }
 
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
@@ -479,10 +483,20 @@ jsPsych.plugins['Demographics'] = (function () {
 
         var required_attr = question.required ? 'required' : '';
 
+        var style = ''
+        if (question.direction === 'row') {
+          style = 'style="flex-flow: column-reverse; height: 80px; justify-content: space-between;'
+        }
         // add radio button container
-        html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
+        html += '<div ' + style + ' id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
         html += '<input type="radio" name="' + input_name + '" data-time-stamp="Q' + (i + 1) + '" data-question-number="Q' + (i + 1) + 'A' + (j + 1) + '" id="' + input_id + '" class="form-radio" value="' + question.options[j] + '" ' + required_attr + '></input>';
-        html += '<label style="padding-left: 2rem; " data-time-stamp="Q' + (i + 1) + '" class="jspsych-survey-multi-choice-text" for="' + input_id + '">' + question.options[j] + '</label>';
+
+        style = 'padding-left: 2rem;'
+        if (question.direction === 'row') {
+          style = 'padding-left: 0rem;'
+        }
+
+        html += '<label style="' + style + '" data-time-stamp="Q' + (i + 1) + '" class="jspsych-survey-multi-choice-text" for="' + input_id + '">' + question.options[j] + '</label>';
         html += '</div>';
 
         elementsMapping.push(
