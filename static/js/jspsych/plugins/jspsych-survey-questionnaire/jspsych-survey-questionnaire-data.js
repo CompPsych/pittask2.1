@@ -45,6 +45,12 @@ var DEMOGRAPHICS_STAGE = {
             name: 'Gross annual household income (US dollars)',
             options: ['< $15,000', '$15,000 - $24,999', '$25,000 - $74,999', '> $75,000'],
             horizontal: true
+        }, {
+            prompt: 'English language',
+            name: 'English language',
+            options: ['Fluent', 'Not fluent'],
+            horizontal: true,
+            direction: 'row'
         }
 
     ],
