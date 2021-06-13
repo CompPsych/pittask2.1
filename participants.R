@@ -1398,7 +1398,7 @@ if(isClass(query))
 
     # ACI --------------------------------------------------------------------
     
-    aci_index <- which(trialdata$stage_name %in% "\"ACI\"")
+    aci_index <- which(trialdata$stage_name %in% "\"ACI1\"" | trialdata$stage_name %in% "\"ACI2\"")
     
     for (k in seq_along(aci_index)) {
       if(length(aci_index[k]) != 0){

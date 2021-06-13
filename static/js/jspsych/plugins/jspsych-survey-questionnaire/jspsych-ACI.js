@@ -53,7 +53,25 @@ jsPsych.plugins['ACI'] = (function () {
                         pretty_name: 'Question Name',
                         default: '',
                         description: 'Controls the name of data values associated with this question'
-                    }
+                    },
+                    hidden_options: {
+                        type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Hidden Options',
+                        default: false,
+                        description: 'If true, then options at the top of the table are hidden.'
+                    },
+                    display_labels: {
+                        type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Display Labels',
+                        default: false,
+                        description: 'If true, then checkbox labels are displayed.'
+                    },
+                    title: {
+                        type: jsPsych.plugins.parameterType.STRING,
+                        pretty_name: 'Question group title',
+                        default: '',
+                        description: 'Controls the name of question groups'
+                    },
                 }
             },
             randomize_question_order: {
@@ -109,6 +127,12 @@ jsPsych.plugins['ACI'] = (function () {
                 pretty_name: 'Force answer',
                 default: true,
                 description: 'Expect all of the questions is answered.'
+            },
+            hide_gaps: {
+                type: jsPsych.plugins.parameterType.BOOL,
+                pretty_name: 'Hide gaps',
+                default: false,
+                description: 'Hide gaps between question groups.'
             }
         }
     };
@@ -119,27 +143,30 @@ jsPsych.plugins['ACI'] = (function () {
             ".jspsych-survey-multi-choice-text span.required {color: darkred;}" +
             "#jspsych-survey-multi-choice-30 {  border-bottom: none; }" +
             ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}" +
-            ".jspsych-survey-multi-choice-option {  display: flex; justify-content: center; align-items: center; }" +
+            ".jspsych-survey-multi-choice-option {  display: flex; justify-content: center; align-items: center;flex-direction: row-reverse; }" +
             ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  width: 100%; border-right: 1px solid; text-align: center; padding: 2rem 0;}" +
             ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option:last-child { border-right: none;}" +
+            ".audit-img-container { text-align: center; padding-top: 2rem; } " +
+            ".audit-img-container img { width: 75%; } " +
+            ".audit-img-container div { display: flex; flex-direction: column; justify-content: space-around; align-content: center; padding-left: 1rem;} " +
             ".jspsych-survey-highlight { cursor: pointer; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }" +
             ".jspsych-content { width: 1000px}" +
             ".jspsych-btn { margin: 100px 0; }" +
             ".jspsych-content { margin-top: 130px;}" +
-            "ul {list-style: none}" +
+            "ul {list-style: none; font-size: 0.9vw;}" +
             ".form-radio { top: 0; }" +
             ".jspsych-survey-multi-choice-option-left { display: flex; width: 40%; text-align: left; border-right: 3px solid #fff; padding-bottom: 2rem; }" +
             ".jspsych-survey-multi-choice-option-right { display: flex; width: 60%; justify-content: space-around; }" +
             ".jspsych-survey-multi-choice-number { height: 100%; width: 45px; text-align: center; justify-content: center; }" +
             ".jspsych-survey-multi-choice-preamble { text-align: left; padding-bottom: 3rem; }" +
-            ".jspsych-survey-multi-choice-instructions { display: flex; justify-content: space-between;  border-bottom: 3px solid; font-weight: bold; font-size: 1.5rem;   }" +
+            ".jspsych-survey-multi-choice-instructions { display: flex; justify-content: space-between;  border-bottom: 3px solid #fff; font-weight: bold;  }" +
             ".jspsych-survey-multi-choice-instructions ul { display: flex; width: 60%; justify-content: space-around; padding-inline-start: 0; margin-bottom: 0; }" +
-            ".jspsych-survey-multi-choice-instructions li { display: flex; justify-content: center; align-items: center; width: 100%; border-right: 1px solid; padding: 1rem 0; }" +
+            ".jspsych-survey-multi-choice-instructions li { display: flex; justify-content: center; align-items: center; width: 100%; padding: 1rem; border-right: 1px solid; }" +
             ".jspsych-survey-multi-choice-instructions li:last-child { border-right: none; }" +
             "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}" +
             ".jspsych-survey-highlight { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }" +
             "p { margin: 0 0 0px;}" +
-            "@media (max-width: 900px) {" +
+            "@media screen and (max-width: 900px) {" +
             ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option { padding: 0;}" +
             ".jspsych-survey-multi-choice-instructions li { padding: 0; }" +
             ".jspsych-survey-multi-choice-instructions ul { font-size: 1.6vw; }" +
@@ -148,6 +175,12 @@ jsPsych.plugins['ACI'] = (function () {
             ".jspsych-display-element { font-size: 14px;}" +
             ".jspsych-survey-multi-choice-number { width: 25px; }" +
             ".questions-right-row { font-size: 2.6vw; }" +
+            "}" +
+            "@media (max-width: 1028px) {" +
+            ".jspsych-survey-multi-choice-instructions ul { font-size: 1.3vw; }" +
+            "}" +
+            "@media (max-width: 1200px) {" +
+            ".jspsych-survey-multi-choice-instructions ul { font-size: 1.2vw; }" +
             "}"
         html += '</style>';
 
@@ -217,7 +250,10 @@ jsPsych.plugins['ACI'] = (function () {
         }
 
         var questions = trial.questions;
+        var questionNumber = 0
         for (var i = 0; i < questions.length; i++) {
+            html += '<div>'
+
             var options = questions[i].options;
 
             var optionsHTML = ''
@@ -229,14 +265,16 @@ jsPsych.plugins['ACI'] = (function () {
                 optionsHTML += '<li><div>' + option + '</div></li>'
 
                 elementsMapping.push({
-                    element: 'A' + (j + 1),
+                    element: 'Q' + (i + 1) + 'A' + (j + 1),
                     text: [option]
                 })
             }
 
+            var instruct_style = trial.hide_gaps ? '' : 'margin-top: 5rem;'
+            instruct_style += !trial.questions[i].hidden_options ? '' : 'height:0;overflow:hidden;'
             html +=
-                '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-instructions">' +
-                '<div class="jspsych-survey-multi-choice-option-left"></div>' +
+                '<div id="jspsych-survey-multi-choice-instructions" class="jspsych-survey-multi-choice-instructions" style="' + instruct_style + '">' +
+                '<div class="jspsych-survey-multi-choice-option-left">' + questions[i].title + '</div>' +
                 '<ul>' + optionsHTML + '</ul>' +
                 '</div>';
 
@@ -252,7 +290,7 @@ jsPsych.plugins['ACI'] = (function () {
 
             for (var j = 0; j < question_order.length; j++) {
                 var question = questions[i].prompts[question_order[j]];
-                var question_id = question_order[j];
+                var question_id = questionNumber + question_order[j];
 
                 var question_classes = ['jspsych-survey-multi-choice-question'];
 
@@ -260,11 +298,11 @@ jsPsych.plugins['ACI'] = (function () {
                     question_classes.push('jspsych-survey-multi-choice-horizontal');
                 }
 
-                html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (j + 1) + '">';
+                html += '<div id="jspsych-survey-multi-choice-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + (questionNumber + j + 1) + '">';
 
                 html +=
                     '<div class="jspsych-survey-multi-choice-option-left">' +
-                    '<span class="jspsych-survey-multi-choice-number">' + (j + 1) + '.</span>' +
+                    '<span class="jspsych-survey-multi-choice-number">' + (questionNumber + j + 1) + '.</span>' +
                     '<p class="jspsych-survey-multi-choice-text survey-multi-choice jspsych-survey-multi-choice-question-text" style="text-align: left; padding-left: 10px; width: 100%;">' +
                     '<span>' + question + '</span></p></div>';
 
@@ -272,9 +310,9 @@ jsPsych.plugins['ACI'] = (function () {
 
                 var options = questions[i].options;
                 for (var k = 0; k < options.length; k++) {
-                    var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + k;
-                    var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
-                    var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + k;
+                    var option_id_name = 'jspsych-survey-multi-choice-option-' + (questionNumber + question_id) + '-' + k;
+                    var input_name = 'jspsych-survey-multi-choice-response-' + (questionNumber + question_id);
+                    var input_id = 'jspsych-survey-multi-choice-response-' + (questionNumber + question_id) + '-' + k;
                     var option = options[k]
 
                     if (typeof options[k] === 'object') {
@@ -286,37 +324,38 @@ jsPsych.plugins['ACI'] = (function () {
                     var input_classes = ''
 
                     if (trial.checkbox_appearance === 'square') {
-                        label_classes += ' hidden'
+                        label_classes += trial.questions[i].display_labels ? ' checkbox' : ' hidden'
                         input_classes += 'form-radio'
                     }
 
                     html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
-                    html += '<label class="' + label_classes + '" data-time-stamp="Q' + (k + 1) + '" for="' + input_id + '">' + option + '</label>';
-                    html += '<input ' + isHiddenInput + 'type="radio" name="' + input_name + '" data-time-stamp="Q' + (k + 1) + '" data-question-number="Q' + (k + 1) + 'A' + (k + 1) + '" id="' + input_id + '" class="' + input_classes + '" value="' + option + '"></input>';
+                    html += '<label class="' + label_classes + '" data-time-stamp="Q' + (questionNumber + j + 1) + '" data-question-number="Q' + (questionNumber + j + 1) + 'A' + (k + 1) + '" for="' + input_id + '">' + option + '</label>';
+                    html += '<input ' + isHiddenInput + 'type="radio" name="' + input_name + '" data-time-stamp="Q' + (questionNumber + j + 1) + '" data-question-number="Q' + (questionNumber + j + 1) + 'A' + (k + 1) + '" id="' + input_id + '" class="' + input_classes + '" value="' + option + '"></input>';
                     html += '</div>';
 
                     elementsMapping.push(
                         {
-                            element: 'Q' + (k + 1) + 'A' + (k + 1) + ' label',
-                            text: [option]
+                            element: 'Q' + (questionNumber + j + 1) + 'A' + (k + 1) + ' label',
+                            for: [input_id]
                         },
                         {
-                            element: 'Q' + (k + 1) + 'A' + (k + 1) + ' input',
+                            element: 'Q' + (questionNumber + j + 1) + 'A' + (k + 1) + ' input',
                             id: [input_id]
                         }
                     );
-                    // elements mapping
                 }
 
                 html += '</div></div>'
 
                 elementsMapping.push({
-                    element: 'Q' + (j + 1),
-                    text: [(j + 1) + '.', question]
+                    element: 'Q' + (questionNumber + j + 1),
+                    text: [(questionNumber + j + 1) + '.', question]
                 });
             }
 
+            questionNumber += questions[i].prompts.length
 
+            html += '</div>'
         }
         // add submit button
         html += '<p><input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input></p>';
@@ -401,11 +440,6 @@ jsPsych.plugins['ACI'] = (function () {
                         $(this).parent().find('label').addClass('bg-primary');
                     }
 
-                    time_stamp_key = $(this).data('time-stamp');
-
-                    if (time_stamp_key) {
-                        time_stamps[time_stamp_key] = jsPsych.totalTime();
-                    }
                 }
 
                 return isSuccess
@@ -413,7 +447,11 @@ jsPsych.plugins['ACI'] = (function () {
         });
 
         $('input[type=radio]').on('input', function (event) {
-            console.log('input!', event.target.value)
+            time_stamp_key = $(this).data('time-stamp');
+
+            if (time_stamp_key) {
+                time_stamps[time_stamp_key] = jsPsych.totalTime();
+            }
         });
 
         function proccessDataBeforeSubmit(validate = false) {
@@ -423,35 +461,39 @@ jsPsych.plugins['ACI'] = (function () {
 
             validate = validate && trial.force_answer
 
-            for (var i = 0; i < trial.questions.length; i++) {
-                var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
-                var id = i + 1;
-                var val = '';
+            var questionId = 0
+            for (var j = 0; j < trial.questions.length; j++) {
+                for (var i = 0; i < trial.questions[j].prompts.length; i++) {
+                    var match = display_element.querySelector('#jspsych-survey-multi-choice-' + (questionId + i));
+                    var id = (questionId + i + 1);
+                    var val = '';
 
-                if (match.querySelector('input[type=radio]:checked') !== null) {
-                    val = match.querySelector('input[type=radio]:checked').value;
+                    if (match.querySelector('input[type=radio]:checked') !== null) {
+                        val = match.querySelector('input[type=radio]:checked').value;
 
-                    $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
-                    $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
-                } else if (validate) {
-                    val = '';
+                        $(match).find('.jspsych-survey-multi-choice-question-text').removeClass('survey-error-after');
+                        $(match).find('.jspsych-survey-multi-choice-number').removeClass('survey-error-text');
+                    } else if (validate) {
+                        val = '';
 
-                    $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
-                    $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
+                        $(match).find('.jspsych-survey-multi-choice-question-text').addClass('survey-error-after');
+                        $(match).find('.jspsych-survey-multi-choice-number').addClass('survey-error-text');
+                    }
+
+                    var obje = {};
+                    var name = id;
+
+                    if (match.attributes['data-name'].value !== '') {
+                        name = match.attributes['data-name'].value;
+                    }
+
+                    obje[name] = val;
+                    timestamp_data[name] = time_stamps['Q' + id];
+                    Object.assign(question_data, obje);
                 }
 
-                var obje = {};
-                var name = id;
-
-                if (match.attributes['data-name'].value !== '') {
-                    name = match.attributes['data-name'].value;
-                }
-
-                obje[name] = val;
-                timestamp_data[name] = time_stamps['Q' + id];
-                Object.assign(question_data, obje);
+                questionId += trial.questions[j].prompts.length
             }
-
             return {
                 'stage_name': JSON.stringify(trial.name),
                 'responses': JSON.stringify(question_data),
@@ -470,7 +512,6 @@ jsPsych.plugins['ACI'] = (function () {
 
         // form functionality
         document.querySelector('form').addEventListener('submit', function (event) {
-            console.log('sub')
             event.preventDefault();
             response.trial_events.push({
                 'event_type': 'button clicked',

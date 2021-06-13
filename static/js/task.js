@@ -169,7 +169,7 @@ resubmit = function () {
 };
 
 // demographics instructions before the stage
-var DEMOGRAPHICS_INSTRUCT_OPEN = {
+var DEMOGRAPHICS_OPEN = {
     timeline: [{
         stage_name: 'demographics_open',
         type: 'html-keyboard-response',
@@ -1934,7 +1934,7 @@ timeline.push(TRANSFER_Q);
 // Intro: We'd like to briefly ask you about some symptoms before the online game.
 timeline.push(WBF_OPEN);
 // Demographics open instruct
-timeline.push(DEMOGRAPHICS_INSTRUCT_OPEN);
+timeline.push(DEMOGRAPHICS_OPEN);
 // Attention check 1
 timeline.push(ACI1);
 // Demographics

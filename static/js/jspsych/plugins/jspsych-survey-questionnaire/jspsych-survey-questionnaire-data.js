@@ -1673,7 +1673,7 @@ icar_shuffled_arr.forEach(function (arr) {
 
 var ACI1 = {
     type: 'ACI',
-    name: 'ACI',
+    name: 'ACI1',
     questions: [
         {
             prompts: [
@@ -1715,7 +1715,7 @@ var ACI1 = {
 
 var ACI2 = {
     type: 'ACI',
-    name: 'ACI',
+    name: 'ACI2',
     questions: [
         {
             prompts: [
