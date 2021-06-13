@@ -1675,3 +1675,88 @@ icar_shuffled_arr.forEach(function (arr) {
         ICAR_STAGE.questions.push(element);
     });
 });
+
+
+var ACI1 = {
+    type: 'ACI',
+    name: 'ACI1',
+    questions: [
+        {
+            prompts: [
+                'Please select “Strongly agree” from the list below. This is a quality check question.'
+            ],
+            name: 'Attention',
+            options: [
+                {
+                    name: 'Strongly disagree',
+                    value: 0
+                },
+                {
+                    name: 'Disagree',
+                    value: 1
+                },
+                {
+                    name: 'Neither agree or disagree',
+                    value: 2
+                },
+                {
+                    name: 'Agree',
+                    value: 3
+                },
+                {
+                    name: 'Strongly agree',
+                    value: 4
+                }
+            ],
+            horizontal: true
+        }
+    ],
+    button_label: 'submit answers',
+    event_type: 'question appears',
+    event_raw_details: 'ACI1, options',
+    event_converted_details: 'Attention check item 1 appears',
+    enable_timed_popups: false,
+    force_answer: false,
+}
+
+var ACI2 = {
+    type: 'ACI',
+    name: 'ACI2',
+    questions: [
+        {
+            prompts: [
+                'You should not answer this question if you read it; it is to check your attention.'
+            ],
+            name: 'Attention',
+            options: [
+                {
+                    name: 'Strongly disagree',
+                    value: 0
+                },
+                {
+                    name: 'Disagree',
+                    value: 1
+                },
+                {
+                    name: 'Neither agree or disagree',
+                    value: 2
+                },
+                {
+                    name: 'Agree',
+                    value: 3
+                },
+                {
+                    name: 'Strongly agree',
+                    value: 4
+                }
+            ],
+            horizontal: true
+        }
+    ],
+    button_label: 'submit answers',
+    event_type: 'question appears',
+    event_raw_details: 'ACI2, options',
+    event_converted_details: 'Attention check item 2 appears',
+    enable_timed_popups: false,
+    force_answer: false,
+}
