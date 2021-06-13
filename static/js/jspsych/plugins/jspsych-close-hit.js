@@ -1,11 +1,6 @@
 jsPsych.plugins['close-hit-questions'] = (function () {
   var plugin = {};
 
-  /**
-   * Timer module.
-   */
-  var timerModule = null;
-
   plugin.info = {
     name: 'close-hit-questions',
     description: '',
@@ -89,11 +84,6 @@ jsPsych.plugins['close-hit-questions'] = (function () {
     };
 
     var timestamp_onload = jsPsych.totalTime();
-
-    // timer module init
-    if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, 'close-hit-questions')) {
-      timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
-    }
 
     response.trial_events.push({
       "event_type": trial.event_type,
@@ -218,12 +208,6 @@ jsPsych.plugins['close-hit-questions'] = (function () {
               </div>
           </div>`;
 
-
-    // popup of timer module
-    if (timerModule) {
-      html += timerModule.getPopupHTML();
-    }
-
     // render
     display_element.innerHTML = html;
 
@@ -311,10 +295,6 @@ jsPsych.plugins['close-hit-questions'] = (function () {
     document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
 
-      var isSuccess = timerModule ? timerModule.check() : true;
-
-      if (!isSuccess) return false
-
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
@@ -386,7 +366,7 @@ jsPsych.plugins['close-hit-questions'] = (function () {
             response.trial_events.push({
               'event_type': 'error message',
               'event_raw_details': 'Error message',
-              'event_converted_details': 'popup triggered by incomplete WBF question',
+              'event_converted_details': 'popup triggered by incomplete participant feedback item',
               'timestamp': jsPsych.totalTime(),
               'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
@@ -395,7 +375,7 @@ jsPsych.plugins['close-hit-questions'] = (function () {
             response.trial_events.push({
               'event_type': 'popup closed',
               'event_raw_details': 'Close',
-              'event_converted_details': trial.event_converted_details,
+              'event_converted_details': 'participant feedback item appears',
               'timestamp': jsPsych.totalTime(),
               'time_elapsed': jsPsych.totalTime() - timestamp_onload
             });
