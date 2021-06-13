@@ -1846,9 +1846,12 @@ var CLOSE_HIT = {
     type: 'close-hit-questions',
     preamble: close_instruct_text_close_HIT_q,
     questions: [
-        { prompt: "Would you like to receive information on the outcomes of the research?", horizontal: true, name: 'response', options: ['Yes', 'No'] },
-        { prompt: "Could we contact you about future research projects?", horizontal: true, name: 'response', options: ['Yes', 'No'] },
-        { prompt: "Do you have any suggestions for how we can improve the research?", horizontal: true, name: 'response', options: ['Yes', 'No'] }
+        {
+            prompt: "We would really value your thoughts on how we can improve our research. Please take a moment to provide us with feedback regarding anything we could do differently or anything you enjoyed about this research.<br><br>Thank you.",
+            name: 'response',
+            horizontal: true,
+            options: []
+        }
     ],
     button_label: 'submit answer',
     event_type: 'questions appears',

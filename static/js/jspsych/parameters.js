@@ -47,9 +47,9 @@ var browser_inactivated_notif_text =
 var popup_translator = true;
 var popup_text_translator = "This HIT is not designed to be used with any translation softwares. Please turn off any translation software. Otherwise, you will not be paid for this HIT."
 var translator_detected_notif = true;
-var translator_detected_nofit_text = 
-"<p>The experiment has ended because you didn't turn the translator off.</p><br>" +
-"<p>You will not be paid for this HIT. Please close this window.</p>"
+var translator_detected_nofit_text =
+    "<p>The experiment has ended because you didn't turn the translator off.</p><br>" +
+    "<p>You will not be paid for this HIT. Please close this window.</p>"
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -494,6 +494,8 @@ var transfer_popup_text = "Please provide us with a little more information.";
  * Close HIT Questions
  ************************************************************/
 var close_instruct_text_close_HIT_q = "Thank you for your participation!";
+var participant_feedback_popup_text = "Please provide us with feedback."
+var participant_feedback_text_limit = 50
 
 /************************************************************
  * Thanks
