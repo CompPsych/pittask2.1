@@ -526,7 +526,7 @@ var answer_latency_ceiling_SI = 180000;
 
 /* _SDS */
 var popup_answer_latency_floor_SDS = true;
-var answer_latency_floor_SDS = 1230;
+var answer_latency_floor_SDS = 1430;
 
 var popup_answer_latency_ceiling_SDS = true;
 var answer_latency_ceiling_SDS = 180000;
@@ -534,7 +534,7 @@ var answer_latency_ceiling_SDS = 180000;
 
 /* _ICAR */
 var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 630;
+var answer_latency_floor_ICAR = 2230;
 
 var popup_answer_latency_ceiling_ICAR = true;
 var answer_latency_ceiling_ICAR = 180000;
