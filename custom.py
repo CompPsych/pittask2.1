@@ -272,7 +272,10 @@ def saveLink():
         next(csv_input)
         unique_links = []
         for row in csv_input:
-            if len(row) > 3:
+            if len(row) > 3 and row[3] != '':
+                continue
+
+            if (len(row) == 0):
                 continue
             link = generateUniqueLink()
             unique_link_attributes = dict(

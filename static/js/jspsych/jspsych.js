@@ -2083,7 +2083,9 @@ jsPsych.pluginAPI = (function () {
 
         parameters.callback_function({
           key: e.keyCode,
-          rt: key_time - start_time
+          rt: key_time - start_time,
+          el: e.target,
+          e: e
         });
 
         if (keyboard_listeners.includes(listener_id)) {
@@ -2216,6 +2218,7 @@ jsPsych.pluginAPI = (function () {
       type: 'mousedown',
       fn: listener_function
     };
+
 
     // add this keyboard listener to the list of listeners
     click_listeners.push(listener_id);
@@ -3054,6 +3057,7 @@ jsPsych.pluginAPI = (function () {
       popupCeiling: popup_answer_latency_ceiling_SI,
       timeFloor: answer_latency_floor_SI,
       timeCeiling: answer_latency_ceiling_SI,
+      testName: 'SI'
     };
 
     switch (testName) {
@@ -3062,12 +3066,14 @@ jsPsych.pluginAPI = (function () {
         params.popupCeiling = popup_answer_latency_ceiling_ICAR;
         params.timeFloor = answer_latency_floor_ICAR;
         params.timeCeiling = answer_latency_ceiling_ICAR;
+        params.testName = 'ICAR';
         break;
       case 'SDS':
         params.popupFloor = popup_answer_latency_floor_SDS;
         params.popupCeiling = popup_answer_latency_ceiling_SDS;
         params.timeFloor = answer_latency_floor_SDS;
         params.timeCeiling = answer_latency_ceiling_SDS;
+        params.testName = 'SDS'
         break;
       default:
         break;
@@ -3086,7 +3092,7 @@ jsPsych.pluginAPI = (function () {
    *
    * @return {Object} timer module.
    */
-  module.timerModuleFactory = function (responseStore, timestamp, isOnFloor, isOnCeil) {
+  module.timerModuleFactory = function (responseStore, timestamp, isOnFloor, isOnCeil, testName) {
     var firstTime = 0;
     var tmpAnswerTime = 0;
     var ceilingTime = 0;
@@ -3102,7 +3108,39 @@ jsPsych.pluginAPI = (function () {
     var microModalConfig = {
       disableScroll: true,
       onShow: function () {
-        var text = 'popup triggered by' + openEventName + 'a floor threshold value...';
+        var triggeringEvent = {}
+        var currentTimestamp = jsPsych.totalTime()
+        for (var i = responseStore.trial_events.length - 1; i >= 0; i--) {
+          var evt = responseStore.trial_events[i]
+          if (openEventName !== 'floor' && evt.timestamp > currentTimestamp - maxAnswerTime) continue
+          var expectKeyCodes = [37, 38, 39, 40, 1, 32]
+          if (evt.event_type === 'key release') {
+            for (var j = 0; j < expectKeyCodes.length; j++) {
+              if (evt.event_raw_details == expectKeyCodes[j]) {
+                triggeringEvent = evt
+                break
+              }
+            }
+          } else if (evt.event_type === 'popup closed') {
+            triggeringEvent = evt
+          }
+          if (triggeringEvent.event_type) {
+            break
+          }
+        }
+
+        var text = 'popup triggered';
+
+        var eventText = triggeringEvent.event_type === 'popup closed' ? triggeringEvent.event_type : triggeringEvent.event_converted_details
+
+        if (openEventName === 'floor') {
+          text += ' by ' + eventText + ' at timestamp ' + triggeringEvent.timestamp + ' within answer_latency_floor_' + testName;
+        } else {
+          if (!triggeringEvent.timestamp) {
+            triggeringEvent = responseStore.trial_events.length && responseStore.trial_events[0]
+          }
+          text += ' as ' + maxAnswerTime + 'ms has lapsed since ' + eventText + ' at timestamp ' + triggeringEvent.timestamp
+        }
 
         responseStore.trial_events.push({
           'event_type': 'error message',
@@ -3309,7 +3347,8 @@ jsPsych.pluginAPI = (function () {
       responseStore,
       timestamp,
       params.popupFloor,
-      params.popupCeiling
+      params.popupCeiling,
+      params.testName
     );
 
     moduleApp.setPopupFloorText(params.textFloor);
@@ -3371,7 +3410,6 @@ jsPsych.pluginAPI = (function () {
    * @param {object} timerModule - jsPsych.pluginAPI.timerModule
    */
   module.initializeWindowChangeListeners = function (responseStore, timestamp, dataProccess, timerModule = null, modalCallbacks = null) {
-
     if (timeCheckInterval) {
       clearInterval(timeCheckInterval);
     }

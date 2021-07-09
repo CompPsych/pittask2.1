@@ -47,9 +47,9 @@ var browser_inactivated_notif_text =
 var popup_translator = true;
 var popup_text_translator = "This HIT is not designed to be used with any translation softwares. Please turn off any translation software. Otherwise, you will not be paid for this HIT."
 var translator_detected_notif = true;
-var translator_detected_nofit_text = 
-"<p>The experiment has ended because you didn't turn the translator off.</p><br>" +
-"<p>You will not be paid for this HIT. Please close this window.</p>"
+var translator_detected_nofit_text =
+    "<p>The experiment has ended because you didn't turn the translator off.</p><br>" +
+    "<p>You will not be paid for this HIT. Please close this window.</p>"
 
 /************************************************************
  * ==================== WEB-BASED FORMS ====================
@@ -419,11 +419,11 @@ var popup_text_machine_deval_test = "You can tip the machine anytime in this sta
  * VOR Virtual Outcome Reinstatement
  ************************************************************/
 var VOR_block_num = 3;
-var extinct_duration = 2;
+var extinct_duration = 4;
 var OI_duration_A = 6000; //default: 6000
 var OI_duration_B = 1500;
-var OI_threshold = 15;
-var VOR_duration = 180;
+var OI_threshold = 30;
+var VOR_duration = 300;
 
 var open_instruct_VOR = true;
 var close_instruct_VOR = false;
@@ -494,6 +494,8 @@ var transfer_popup_text = "Please provide us with a little more information.";
  * Close HIT Questions
  ************************************************************/
 var close_instruct_text_close_HIT_q = "Thank you for your participation!";
+var participant_feedback_popup_text = "Please provide us with feedback."
+var participant_feedback_text_limit = 50
 
 /************************************************************
  * Thanks
@@ -516,7 +518,7 @@ var answer_latency_text_ceiling = 'There are no incorrect answers in this questi
 
 /* _SI */
 var popup_answer_latency_floor_SI = true;
-var answer_latency_floor_SI = 870;
+var answer_latency_floor_SI = 630;
 
 var popup_answer_latency_ceiling_SI = true;
 var answer_latency_ceiling_SI = 180000;
@@ -524,7 +526,7 @@ var answer_latency_ceiling_SI = 180000;
 
 /* _SDS */
 var popup_answer_latency_floor_SDS = true;
-var answer_latency_floor_SDS = 1230;
+var answer_latency_floor_SDS = 1430;
 
 var popup_answer_latency_ceiling_SDS = true;
 var answer_latency_ceiling_SDS = 180000;
@@ -532,7 +534,7 @@ var answer_latency_ceiling_SDS = 180000;
 
 /* _ICAR */
 var popup_answer_latency_floor_ICAR = true;
-var answer_latency_floor_ICAR = 870;
+var answer_latency_floor_ICAR = 2230;
 
 var popup_answer_latency_ceiling_ICAR = true;
 var answer_latency_ceiling_ICAR = 180000;

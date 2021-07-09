@@ -100,13 +100,13 @@ jsPsych.plugins['close-hit-questions'] = (function () {
     html += '<style id="jspsych-survey-multi-choice-css">';
     html += ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; }" +
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}" +
-      ".jspsych-survey-multi-choice-text { font-size: 2rem;}" +
-      ".jspsych-survey-multi-choice-preamble { font-size: 2.1rem; font-weight: bold; text-align: center;}" +
+      ".jspsych-survey-multi-choice-text { font-size: 2rem;max-width:800px;text-align: justify;margin: auto;}" +
+      ".jspsych-survey-multi-choice-preamble { margin: auto; font-size: 2.1rem; font-weight: bold; text-align: center;}" +
       "input[type=radio] { margin: 0;}" +
       ".form-radio { top: 0;}" +
       "label.jspsych-survey-multi-choice-text { font-size: 18px; }" +
       "textarea { padding: 1rem; color: #111; margin-bottom: 2rem; }" +
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}" +
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: justify;}" +
       ".jspsych-survey-multi-choice-option { line-height: 2; }" +
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-flex;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
       "label.jspsych-survey-multi-choice-text {margin-right: .7em;}";
@@ -190,6 +190,23 @@ jsPsych.plugins['close-hit-questions'] = (function () {
     // add submit button
     html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input>';
     html += '</form>';
+
+    html +=
+      `<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+              <div class="modal__overlay" tabindex="-1">
+                <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                  <header class="modal__header">
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                  </header>
+                  <main class="modal__content" id="modal-1-content">
+                    <p>${participant_feedback_popup_text}</p>
+                  </main>
+                  <footer class="modal__footer">
+                    <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                  </footer>
+                </div>
+              </div>
+          </div>`;
 
     // render
     display_element.innerHTML = html;
@@ -277,11 +294,13 @@ jsPsych.plugins['close-hit-questions'] = (function () {
     // form functionality
     document.querySelector('form').addEventListener('submit', function (event) {
       event.preventDefault();
+
       // create object to hold responses
       var question_data = {};
       var timestamp_data = {};
 
       for (var i = 0; i < trial.questions.length; i++) {
+        if (!trial.questions[i].options.length) continue;
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = trial.questions[i].prompt;
 
@@ -300,40 +319,69 @@ jsPsych.plugins['close-hit-questions'] = (function () {
       var text_box = $('.text_box').val();
       var obj = {};
       if (text_box) {
-        obj['Text Response'] = text_box;
-        timestamp_data['Text Response'] = trial.time_stamp['Q4'] ? trial.time_stamp['Q4'] : 'NA';
+        if (text_box.length < participant_feedback_text_limit) {
+          $('.text_box').parent().prev().addClass('survey-error-text');
+        } else {
+          obj['Text Response'] = text_box;
+          timestamp_data['Text Response'] = trial.time_stamp['Q4'] ? trial.time_stamp['Q4'] : 'NA';
+          $('.text_box').parent().prev().removeClass('survey-error-text');
+        }
       } else {
-        obj['Text Response'] = 'NA';
-        timestamp_data['Text Response'] = 'NA';
+        $('.text_box').parent().prev().addClass('survey-error-text');
       }
 
       Object.assign(question_data, obj);
 
-      // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-        jsPsych.pluginAPI.cancelClickResponse(clickListener);
+      if ($('.survey-error-text').length < 1) {
+
+        // kill keyboard listeners
+        if (typeof keyboardListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+          jsPsych.pluginAPI.cancelClickResponse(clickListener);
+        }
+
+        // kill mouse listener
+        if (typeof mouseMoveListener !== 'undefined') {
+          jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
+        }
+
+        // save data
+        var trial_data = {
+          "stage_name": JSON.stringify(trial.stage_name),
+          "responses": JSON.stringify(question_data),
+          "timestamp": JSON.stringify(timestamp_data),
+          "events": JSON.stringify(response.trial_events),
+          "mouse_events": JSON.stringify(response.mouse_events)
+        };
+
+        // clear the display
+        display_element.innerHTML = '';
+
+        // next trial
+        jsPsych.finishTrial(trial_data);
+      } else {
+        // show modal, register events
+        MicroModal.show('modal-1', {
+          onShow() {
+            response.trial_events.push({
+              'event_type': 'error message',
+              'event_raw_details': 'Error message',
+              'event_converted_details': 'popup triggered by incomplete participant feedback item',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
+            });
+          },
+          onClose() {
+            response.trial_events.push({
+              'event_type': 'popup closed',
+              'event_raw_details': 'Close',
+              'event_converted_details': 'participant feedback item appears',
+              'timestamp': jsPsych.totalTime(),
+              'time_elapsed': jsPsych.totalTime() - timestamp_onload
+            });
+          }
+        });
       }
-
-      // kill mouse listener
-      if (typeof mouseMoveListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelMouseEnterResponse(mouseMoveListener);
-      }
-
-      // save data
-      var trial_data = {
-        "stage_name": JSON.stringify(trial.stage_name),
-        "responses": JSON.stringify(question_data),
-        "timestamp": JSON.stringify(timestamp_data),
-        "events": JSON.stringify(response.trial_events),
-        "mouse_events": JSON.stringify(response.mouse_events)
-      };
-
-      // clear the display
-      display_element.innerHTML = '';
-
-      // next trial
-      jsPsych.finishTrial(trial_data);
     });
 
 

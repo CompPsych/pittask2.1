@@ -194,6 +194,8 @@ jsPsych.plugins['parameters'] = (function () {
             close_instruct_text_recall: close_instruct_text_recall,
 
             close_instruct_text_close_HIT_q: close_instruct_text_close_HIT_q,
+            participant_feedback_popup_text: participant_feedback_popup_text,
+            participant_feedback_text_limit: participant_feedback_text_limit,
 
             popup_machine_VVR1: popup_machine_VVR1,
             popup_duration_machine_VVR1: popup_duration_machine_VVR1,
