@@ -43,6 +43,9 @@ jsPsych.plugins["vor"] = (function () {
         var OI_interval_timer;
         var OI_threshold_interval;
         var OI_threshold_timer;
+        var OI_threshold_duration = OI_threshold
+        var OI_interval_start;
+        var OI_threshold_interval_start;
         var OI_interval = 0;
 
         var VOR_outcome_array = [];
@@ -87,13 +90,31 @@ jsPsych.plugins["vor"] = (function () {
 
         var $outcome_container = $(".outcome-container");
 
-        function start_OI() {
+        function start_OI_timer() {
+            jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
 
+            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
+                if (block_number === VOR_block_num) {
+                    // terminate VOR stage
+                    jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
+                    end_trial();
+                } else {
+                    // continue VOR stage
+                    start_OI();
+                    threshold_interval();
+                }
+            }, OI_duration);
+
+            OI_interval_start = jsPsych.totalTime()
+
+        }
+
+        function start_OI() {
             $interval_number = interval_number + 1;
             $block_number = block_number + 1;
             var outcome_OI = outcome_arr[$interval_number - 1];
 
-            clearTimeout(OI_interval_timer);
+            jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
             OI_duration = OI_duration_A;
 
             // display outcome
@@ -136,51 +157,42 @@ jsPsych.plugins["vor"] = (function () {
                 outcome_arr = jsPsych.randomization.shuffle(VOR_outcome_array);
             }
 
-            OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
-                if (block_number === VOR_block_num) {
-                    // terminate VOR stage
-                    clearTimeout(OI_interval_timer);
-                    end_trial();
-                } else {
-                    // continue VOR stage
-                    start_OI();
-                    threshold_interval();
-                    
-                }
-            }, OI_duration + outcome_duration);
+            start_OI_timer();
         }
 
 
         function reset_OI() {
-
             OI_threshold_timer = jsPsych.totalTime();
-            clearTimeout(OI_interval_timer);
+            OI_interval_start = jsPsych.totalTime()
+            jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
 
             OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
                 if (block_number === VOR_block_num) {
-                    clearTimeout(OI_interval_timer);
+                    jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
                     end_trial();
                 } else {
                     start_OI();
                     threshold_interval();
                 }
-            }, OI_duration + outcome_duration);
+            }, OI_duration);
         }
 
         function threshold_interval() {
 
-            clearTimeout(OI_threshold_interval);
+            jsPsych.pluginAPI.clearTimeout(OI_threshold_interval);
+
             OI_threshold_interval = jsPsych.pluginAPI.setTimeout(function () {
+                OI_threshold_duration = OI_threshold
                 OI_duration = OI_duration_B;
                 var time_elapsed = jsPsych.totalTime() - OI_threshold_timer;
                 if (time_elapsed >= OI_duration_B) {
                     start_OI();
                     threshold_interval();
                 } else {
-                    clearTimeout(OI_interval_timer);
+                    jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
                     OI_interval_timer = jsPsych.pluginAPI.setTimeout(function () {
                         if (block_number === VOR_block_num) {
-                            clearTimeout(OI_interval_timer);
+                            jsPsych.pluginAPI.clearTimeout(OI_interval_timer);
                             end_trial();
                         } else {
                             start_OI();
@@ -188,24 +200,28 @@ jsPsych.plugins["vor"] = (function () {
                         }
                     }, OI_duration_B - time_elapsed);
                 }
-            }, OI_threshold * 1000);
+            }, OI_threshold_duration * 1000);
+
+            OI_threshold_interval_start = jsPsych.totalTime()
         }
 
         // extinction interval
-        function extinct_interval() {
+        function extinct_interval(duration) {
 
-            clearTimeout(OI_interval);
+            jsPsych.pluginAPI.clearTimeout(OI_interval);
 
             if (!extinct_lockout) {
                 OI_interval = jsPsych.pluginAPI.setTimeout(function () {
                     extinct_lockout = true;
                     start_OI();
                     threshold_interval();
-                }, extinct_duration * 1000);
+                }, duration * 1000);
+
+                OI_interval_start = jsPsych.totalTime()
             }
         }
         // call extinction interval
-        extinct_interval();
+        extinct_interval(extinct_duration);
 
         // function to handle responses by the subject
         var after_response = function (info) {
@@ -300,7 +316,7 @@ jsPsych.plugins["vor"] = (function () {
 
             if (info.key === left_tilt || info.key === right_tilt) {
                 if (!extinct_lockout) {
-                    extinct_interval();
+                    extinct_interval(extinct_duration);
                 } else {
                     reset_OI();
                 }
@@ -317,7 +333,7 @@ jsPsych.plugins["vor"] = (function () {
             };
         }
 
-        jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+        jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit, null);
         const translatorTarget = document.getElementById('translation-listener')
         jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);
 

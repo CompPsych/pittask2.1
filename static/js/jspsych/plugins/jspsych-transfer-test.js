@@ -256,7 +256,7 @@ jsPsych.plugins["transfer-test"] = (function () {
     // function to end trial when it is time
     var end_trial = function () {
       // clear popup timer
-      clearTimeout(timer)
+      jsPsych.pluginAPI.clearTimeout(timer)
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -496,7 +496,7 @@ jsPsych.plugins["transfer-test"] = (function () {
         return
       }
 
-      clearTimeout(timer)
+      jsPsych.pluginAPI.clearTimeout(timer)
 
       timer = jsPsych.pluginAPI.setTimeout(function () {
         isStoppedTest = true
