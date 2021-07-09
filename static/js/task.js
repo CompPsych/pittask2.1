@@ -45,89 +45,101 @@ var DEGRAD_PATTERN = {
 // Each game launching has 
 // a randomly chosen game version
 var counter_balancing_input = [
-    a = {
+    {
         game_version: 'A',
         left: 'MM',
         right: 'BBQ',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    b = {
+    {
         game_version: 'B',
         left: 'BBQ',
         right: 'MM',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    c = {
+    {
         game_version: 'C',
         left: 'TT',
         right: 'BBQ',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    d = {
+    {
         game_version: 'D',
         left: 'BBQ',
         right: 'TT',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    e = {
+    {
         game_version: 'E',
         left: 'MM',
         right: 'TT',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    f = {
+    {
         game_version: 'F',
         left: 'TT',
         right: 'MM',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    g = {
+    {
         game_version: 'G',
         left: 'MM',
         right: 'BBQ',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    h = {
+    {
         game_version: 'H',
         left: 'BBQ',
         right: 'MM',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    i = {
+    {
         game_version: 'I',
         left: 'TT',
         right: 'BBQ',
         video: '/static/video/BBQ',
-        converted_details: "BBQ"
+        converted_details: "BBQ",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    j = {
+    {
         game_version: 'J',
         left: 'BBQ',
         right: 'TT',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    k = {
+    {
         game_version: 'K',
         left: 'MM',
         right: 'TT',
         video: '/static/video/TT',
-        converted_details: "TT"
+        converted_details: "TT",
+        outcomes: ["MM", "BBQ", "TT"]
     },
-    l = {
+    {
         game_version: 'L',
         left: 'TT',
         right: 'MM',
         video: '/static/video/MM',
-        converted_details: "MM"
+        converted_details: "MM",
+        outcomes: ["MM", "BBQ", "TT"]
     }
 ];
 

@@ -127,7 +127,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
 
       timerId = jsPsych.pluginAPI.setTimeout(function request() {
         if (isStoppedTest) {
-          clearTimeout(timerId);
+          jsPsych.pluginAPI.clearTimeout(timerId);
           timerId = jsPsych.pluginAPI.setTimeout(request, duration);
           return
         }
@@ -166,7 +166,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
           // terminate stage
           if (x === VVR_INTERVAL_NUM) {
             jsPsych.pluginAPI.setTimeout(function () {
-              clearTimeout(timerId);
+              jsPsych.pluginAPI.clearTimeout(timerId);
               end_trial();
             }, VVR_OUTCOME_DURATION);
           }
@@ -188,7 +188,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
           });
 
           if (x === VVR_INTERVAL_NUM) {
-            clearTimeout(timerId);
+            jsPsych.pluginAPI.clearTimeout(timerId);
             end_trial();
           }
 
@@ -350,7 +350,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
     // function to end trial when it is time
     var end_trial = function () {
       // clear popup timer
-      clearTimeout(timer);
+      jsPsych.pluginAPI.clearTimeout(timer);
 
       var trial_data = proccessDataBeforeSubmit();
 
@@ -358,7 +358,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
       jsPsych.pluginAPI.clearAllTimeouts();
       // hack to kill all remaining setTimeouts
       while (timerId--) {
-        window.clearTimeout(timerId); // will do nothing if no timeout with id is present
+        jsPsych.pluginAPI.clearTimeout(timerId); // will do nothing if no timeout with id is present
       }
 
       // kill keyboard listeners
@@ -475,7 +475,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
         return
       }
 
-      clearTimeout(timer)
+      jsPsych.pluginAPI.clearTimeout(timer)
 
       timer = jsPsych.pluginAPI.setTimeout(function () {
         isStoppedTest = true

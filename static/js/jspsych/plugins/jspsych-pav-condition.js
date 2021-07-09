@@ -120,7 +120,7 @@ jsPsych.plugins.animation = (function () {
         isShowColor = false;
         // show blank machine at the end of the stage
         jsPsych.pluginAPI.setTimeout(function () {
-          window.clearTimeout(animate_interval);
+          jsPsych.pluginAPI.clearTimeout(animate_interval);
           endTrial();
         }, ITI_duration);
       }
@@ -260,7 +260,7 @@ jsPsych.plugins.animation = (function () {
 
       // clear all timeouts
       while (animate_interval--) {
-        window.clearTimeout(animate_interval);
+        jsPsych.pluginAPI.clearTimeout(animate_interval);
       }
 
       // move on to the next trial
@@ -303,92 +303,92 @@ jsPsych.plugins.animation = (function () {
     });
 
     // Patches setInterval, clearInterval, setTimeout and clearTimeout to avoid browser throttling these functions when tab is inactive.
-    (function () {
-      var $momentum;
+    // (function () {
+    //   var $momentum;
 
-      function createWorker() {
-        var containerFunction = function () {
-          var idMap = {};
+    //   function createWorker() {
+    //     var containerFunction = function () {
+    //       var idMap = {};
 
-          self.onmessage = function (e) {
-            if (e.data.type === 'setInterval') {
-              idMap[e.data.id] = setInterval(function () {
-                self.postMessage({
-                  type: 'fire',
-                  id: e.data.id
-                });
-              }, e.data.delay);
-            } else if (e.data.type === 'clearInterval') {
-              clearInterval(idMap[e.data.id]);
-              delete idMap[e.data.id];
-            } else if (e.data.type === 'setTimeout') {
-              idMap[e.data.id] = setTimeout(function () {
-                self.postMessage({
-                  type: 'fire',
-                  id: e.data.id
-                });
-                // remove reference to this timeout after is finished
-                delete idMap[e.data.id];
-              }, e.data.delay);
-            } else if (e.data.type === 'clearCallback') {
-              clearTimeout(idMap[e.data.id]);
-              delete idMap[e.data.id];
-            }
-          };
-        };
+    //       self.onmessage = function (e) {
+    //         if (e.data.type === 'setInterval') {
+    //           idMap[e.data.id] = setInterval(function () {
+    //             self.postMessage({
+    //               type: 'fire',
+    //               id: e.data.id
+    //             });
+    //           }, e.data.delay);
+    //         } else if (e.data.type === 'clearInterval') {
+    //           clearInterval(idMap[e.data.id]);
+    //           delete idMap[e.data.id];
+    //         } else if (e.data.type === 'setTimeout') {
+    //           idMap[e.data.id] = setTimeout(function () {
+    //             self.postMessage({
+    //               type: 'fire',
+    //               id: e.data.id
+    //             });
+    //             // remove reference to this timeout after is finished
+    //             delete idMap[e.data.id];
+    //           }, e.data.delay);
+    //         } else if (e.data.type === 'clearCallback') {
+    //           clearTimeout(idMap[e.data.id]);
+    //           delete idMap[e.data.id];
+    //         }
+    //       };
+    //     };
 
-        return new Worker(URL.createObjectURL(new Blob([
-          '(',
-          containerFunction.toString(),
-          ')();'
-        ], { type: 'application/javascript' })));
-      }
+    //     return new Worker(URL.createObjectURL(new Blob([
+    //       '(',
+    //       containerFunction.toString(),
+    //       ')();'
+    //     ], { type: 'application/javascript' })));
+    //   }
 
-      $momentum = {
-        worker: createWorker(),
-        idToCallback: {},
-        currentId: 0
-      };
+    //   $momentum = {
+    //     worker: createWorker(),
+    //     idToCallback: {},
+    //     currentId: 0
+    //   };
 
-      function generateId() {
-        return $momentum.currentId++;
-      }
+    //   function generateId() {
+    //     return $momentum.currentId++;
+    //   }
 
-      function patchedSetTimeout(callback, delay) {
-        var intervalId = generateId();
+    //   function patchedSetTimeout(callback, delay) {
+    //     var intervalId = generateId();
 
-        $momentum.idToCallback[intervalId] = function () {
-          callback();
-          delete $momentum.idToCallback[intervalId];
-        };
+    //     $momentum.idToCallback[intervalId] = function () {
+    //       callback();
+    //       delete $momentum.idToCallback[intervalId];
+    //     };
 
-        $momentum.worker.postMessage({
-          type: 'setTimeout',
-          delay: delay,
-          id: intervalId
-        });
-        return intervalId;
-      }
+    //     $momentum.worker.postMessage({
+    //       type: 'setTimeout',
+    //       delay: delay,
+    //       id: intervalId
+    //     });
+    //     return intervalId;
+    //   }
 
-      function patchedClearTimeout(intervalId) {
-        $momentum.worker.postMessage({
-          type: 'clearInterval',
-          id: intervalId
-        });
+    //   function patchedClearTimeout(intervalId) {
+    //     $momentum.worker.postMessage({
+    //       type: 'clearInterval',
+    //       id: intervalId
+    //     });
 
-        delete $momentum.idToCallback[intervalId];
-      }
+    //     delete $momentum.idToCallback[intervalId];
+    //   }
 
-      $momentum.worker.onmessage = function (e) {
-        if (e.data.type === 'fire') {
-          $momentum.idToCallback[e.data.id]();
-        }
-      };
+    //   $momentum.worker.onmessage = function (e) {
+    //     if (e.data.type === 'fire') {
+    //       $momentum.idToCallback[e.data.id]();
+    //     }
+    //   };
 
-      window.$momentum = $momentum;
-      window.setTimeout = patchedSetTimeout;
-      window.clearTimeout = patchedClearTimeout;
-    })();
+    //   window.$momentum = $momentum;
+    //   window.setTimeout = patchedSetTimeout;
+    //   window.clearTimeout = patchedClearTimeout;
+    // })();
   };
 
   return plugin;

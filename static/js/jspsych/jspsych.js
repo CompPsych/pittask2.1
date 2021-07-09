@@ -2147,7 +2147,6 @@ jsPsych.pluginAPI = (function () {
 
     var listener_id;
     var listener_function = function (e) {
-
       var key_time;
       if (parameters.rt_method == 'date') {
         key_time = (new Date()).getTime();
@@ -2637,16 +2636,56 @@ jsPsych.pluginAPI = (function () {
   var timeout_handlers = [];
 
   module.setTimeout = function (callback, delay) {
-    var handle = setTimeout(callback, delay);
-    timeout_handlers.push(handle);
+    var updatedCallback = function () {
+      timeoutObj.finished = true
+
+      callback()
+    }
+    var handle = setTimeout(updatedCallback, delay);
+    var timeoutObj = {
+      id: handle,
+      handle: handle,
+      callback: updatedCallback,
+      delay: delay,
+      start: jsPsych.totalTime(),
+      finished: false,
+    }
+    timeout_handlers.push(timeoutObj);
     return handle;
+  }
+
+  module.clearTimeout = function (handle) {
+
+    for (var i = 0; i < timeout_handlers.length; i++) {
+      if (timeout_handlers[i].id === handle) {
+        clearTimeout(timeout_handlers[i].handle)
+        timeout_handlers[i].finished = true
+      }
+    }
   }
 
   module.clearAllTimeouts = function () {
     for (var i = 0; i < timeout_handlers.length; i++) {
-      clearTimeout(timeout_handlers[i]);
+      clearTimeout(timeout_handlers[i].handle);
     }
     timeout_handlers = [];
+  }
+
+  module.pauseTrial = function () {
+    var totalTime = jsPsych.totalTime()
+    for (var i = 0; i < timeout_handlers.length; i++) {
+      clearTimeout(timeout_handlers[i].handle)
+
+      timeout_handlers[i].delay -= totalTime - timeout_handlers[i].start
+    }
+  }
+
+  module.resumeTrial = function () {
+    for (var i = 0; i < timeout_handlers.length; i++) {
+      if (timeout_handlers[i].finished) continue
+      timeout_handlers[i].handle = setTimeout(timeout_handlers[i].callback, timeout_handlers[i].delay)
+      timeout_handlers[i].start = jsPsych.totalTime()
+    }
   }
 
   // video //
@@ -3370,18 +3409,38 @@ jsPsych.pluginAPI = (function () {
    * @param {function} dataProccess - get trial data that needs to be saved before the end
    * @param {object} timerModule - jsPsych.pluginAPI.timerModule
    */
-  module.initializeWindowChangeListeners = function (responseStore, timestamp, dataProccess, timerModule = null) {
-
+  module.initializeWindowChangeListeners = function (responseStore, timestamp, dataProccess, timerModule = null, modalCallbacks = null) {
     if (timeCheckInterval) {
       clearInterval(timeCheckInterval);
     }
 
     var modalConfig = {
       onShow() {
-        if (!timerModule) return;
-        timerModule.stopTimerModule();
+        responseStore.trial_events.push({
+          event_type: 'error message',
+          event_raw_details: 'Error message',
+          event_converted_details: 'popup triggered by popup_browser',
+          interval_number: 'NA',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp
+        });
       },
       onClose() {
+        responseStore.trial_events.push({
+          event_type: 'popup closed',
+          event_raw_details: 'Close',
+          event_converted_details: '',
+          interval_number: 'NA',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp
+        });
+
+        jsPsych.pluginAPI.resumeTrial()
+
+        if (modalCallbacks && typeof modalCallbacks.onClose === 'function') {
+          modalCallbacks.onClose()
+        }
+
         if (!timerModule) return;
         timerModule.restartTimerModule();
       }
@@ -3435,6 +3494,7 @@ jsPsych.pluginAPI = (function () {
 
     function onWindowBlur() {
       if (isTimerActive) return;
+
       responseStore.trial_events.push({
         event_type: 'window change',
         event_raw_details: 'window deactivated',
@@ -3450,9 +3510,20 @@ jsPsych.pluginAPI = (function () {
         return;
       }
 
+      jsPsych.pluginAPI.pauseTrial()
+
+      if (modalCallbacks && typeof modalCallbacks.onShow === 'function') {
+        modalCallbacks.onShow()
+      }
+
+      if (timerModule) {
+        timerModule.stopTimerModule();
+      }
+
       if (popup_browser) {
         jsPsych.pluginAPI.showModal('window-blur', modalConfig);
       }
+
       startTimer();
     }
 
@@ -3505,6 +3576,15 @@ jsPsych.pluginAPI = (function () {
 
     var modalConfig = {
       onShow() {
+        responseStore.trial_events.push({
+          event_type: 'error message',
+          event_raw_details: 'Error message',
+          event_converted_details: 'popup triggered by popup_translator',
+          interval_number: 'NA',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp
+        });
+
         if (!timerModule) return;
         timerModule.stopTimerModule();
       },
@@ -3512,6 +3592,16 @@ jsPsych.pluginAPI = (function () {
         if (target.innerHTML !== expectedValue) {
           return stopExperiment();
         }
+
+        responseStore.trial_events.push({
+          event_type: 'popup closed',
+          event_raw_details: 'Close',
+          event_converted_details: '',
+          interval_number: 'NA',
+          timestamp: jsPsych.totalTime(),
+          time_elapsed: jsPsych.totalTime() - timestamp
+        });
+
         if (!timerModule) return;
         timerModule.restartTimerModule();
       }
