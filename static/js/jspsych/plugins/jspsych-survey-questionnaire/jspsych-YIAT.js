@@ -306,22 +306,6 @@ jsPsych.plugins['YIAT'] = (function () {
           'timestamp': jsPsych.totalTime(),
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
-
-        if (info.el) {
-          if (info.el.dataset.timeStamp) {
-            trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
-          }
-
-          if (info.el.dataset.questionNumber) {
-            response.trial_events.push({
-              'event_type': 'answer displayed',
-              'event_raw_details': info.el.dataset.questionNumber,
-              'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
-              'timestamp': jsPsych.totalTime(),
-              'time_elapsed': jsPsych.totalTime() - timestamp_onload
-            });
-          }
-        }
       } else {
         response.trial_events.push({
           'event_type': 'key release',
@@ -347,6 +331,17 @@ jsPsych.plugins['YIAT'] = (function () {
         timestamp: jsPsych.totalTime(),
       });
     }
+
+    function onAnswerDisplayed(event, current_timestamp) {
+      response.trial_events.push({
+        'event_type': 'answer displayed',
+        'event_raw_details': event.target.dataset.questionNumber,
+        'event_converted_details': event.target.dataset.questionNumber + ' answer displayed',
+        'timestamp': current_timestamp,
+        'time_elapsed': current_timestamp - timestamp_onload
+      });
+    }
+
     // save timestamp on input click
     $('input[type=radio]').on('click touchstart', function (event) {
       if (event.type === 'click' || event.type === 'touchstart') {
@@ -356,15 +351,18 @@ jsPsych.plugins['YIAT'] = (function () {
         if (isSuccess) {
           time_stamp_key = $(this).data('time-stamp');
 
+          var current_timestamp = jsPsych.totalTime()
+
           if (time_stamp_key) {
-            trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+            trial.time_stamp[time_stamp_key] = current_timestamp;
           }
+
+          onAnswerDisplayed(event, current_timestamp)
         }
 
         return isSuccess;
       }
     });
-
 
     function proccessDataBeforeSubmit(validate = false) {
       // create object to hold responses

@@ -310,22 +310,6 @@ jsPsych.plugins['OCI-R'] = (function () {
           'timestamp': jsPsych.totalTime(),
           'time_elapsed': jsPsych.totalTime() - timestamp_onload
         });
-
-        if (info.el) {
-          if (info.el.dataset.timeStamp) {
-            trial.time_stamp[info.el.dataset.timeStamp] = jsPsych.totalTime();
-          }
-
-          if (info.el.dataset.questionNumber) {
-            response.trial_events.push({
-              'event_type': 'answer displayed',
-              'event_raw_details': info.el.dataset.questionNumber,
-              'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
-              'timestamp': jsPsych.totalTime(),
-              'time_elapsed': jsPsych.totalTime() - timestamp_onload
-            });
-          }
-        }
       } else {
         response.trial_events.push({
           'event_type': 'key release',
@@ -352,8 +336,18 @@ jsPsych.plugins['OCI-R'] = (function () {
       });
     }
 
+    function onAnswerDisplayed(event, current_timestamp) {
+      response.trial_events.push({
+        'event_type': 'answer displayed',
+        'event_raw_details': event.target.dataset.questionNumber,
+        'event_converted_details': event.target.dataset.questionNumber + ' answer displayed',
+        'timestamp': current_timestamp,
+        'time_elapsed': current_timestamp - timestamp_onload
+      });
+    }
+
     // highlight input
-    $('.jspsych-survey-highlight').on('click touchstart', function () {
+    $('.jspsych-survey-highlight').on('click touchstart', function (event) {
       var time_stamp_key;
       var isSuccess = timerModule ? timerModule.check() : true;
 
@@ -364,9 +358,13 @@ jsPsych.plugins['OCI-R'] = (function () {
         // save timestamp on input click
         time_stamp_key = $(this).parent().find('input[type=radio]');
 
+        var current_timestamp = jsPsych.totalTime()
+
         if (time_stamp_key) {
-          trial.time_stamp[time_stamp_key] = jsPsych.totalTime();
+          trial.time_stamp[time_stamp_key] = current_timestamp;
         }
+
+        onAnswerDisplayed(event, current_timestamp)
       }
 
       return isSuccess;
