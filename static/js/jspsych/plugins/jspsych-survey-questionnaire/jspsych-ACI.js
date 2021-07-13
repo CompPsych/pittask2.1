@@ -206,12 +206,10 @@ jsPsych.plugins['ACI'] = (function () {
 
         // timer module init
         if (trial.enable_timed_popups) {
-            // console.log(trial.enable_timed_popups, trial.type, trial.name, jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, trial.name))
             if (jsPsych.pluginAPI.isNeedToStartTimerModuleInitialization(trial.type, trial.name)) {
                 timerModule = jsPsych.pluginAPI.initializeTimerModule(response, timestamp_onload, '');
             }
         }
-        // console.log(timerModule)
 
         response.trial_events.push({
             'event_type': trial.event_type,
@@ -383,22 +381,6 @@ jsPsych.plugins['ACI'] = (function () {
                     'timestamp': jsPsych.totalTime(),
                     'time_elapsed': jsPsych.totalTime() - timestamp_onload
                 });
-
-                if (info.el) {
-                    if (info.el.dataset.timeStamp) {
-                        time_stamps[info.el.dataset.timeStamp] = jsPsych.totalTime();
-                    }
-
-                    if (info.el.dataset.questionNumber) {
-                        response.trial_events.push({
-                            'event_type': 'answer displayed',
-                            'event_raw_details': info.el.dataset.questionNumber,
-                            'event_converted_details': info.el.dataset.questionNumber + ' answer displayed',
-                            'timestamp': jsPsych.totalTime(),
-                            'time_elapsed': jsPsych.totalTime() - timestamp_onload
-                        });
-                    }
-                }
             } else {
                 response.trial_events.push({
                     'event_type': 'key release',
@@ -426,19 +408,38 @@ jsPsych.plugins['ACI'] = (function () {
             });
         }
 
+
+        function onAnswerDisplayed(event, current_timestamp) {
+            response.trial_events.push({
+                'event_type': 'answer displayed',
+                'event_raw_details': event.target.dataset.questionNumber,
+                'event_converted_details': event.target.dataset.questionNumber + ' answer displayed',
+                'timestamp': current_timestamp,
+                'time_elapsed': current_timestamp - timestamp_onload
+            });
+        }
+
         // save timestamp on input click
         $('input[type=radio]').on('click touchstart', function (event) {
             if (event.type === 'click' || event.type === 'touchstart') {
                 var isSuccess = timerModule ? timerModule.check() : true;
-                // console.log('success?', isSuccess, trial.checkbox_appearance)
                 var time_stamp_key;
 
                 if (isSuccess) {
                     if (trial.checkbox_appearance === 'circle') {
-                        // console.log($(this).parent().find('.jspsych-survey-highlight'))
                         $(this).parent().parent().find('.jspsych-survey-highlight').removeClass('bg-primary');
                         $(this).parent().find('label').addClass('bg-primary');
                     }
+
+                    time_stamp_key = $(this).data('time-stamp');
+
+                    var current_timestamp = jsPsych.totalTime()
+
+                    if (time_stamp_key) {
+                        time_stamps[time_stamp_key] = current_timestamp;
+                    }
+
+                    onAnswerDisplayed(event, current_timestamp)
 
                 }
 

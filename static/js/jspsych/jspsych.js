@@ -3105,6 +3105,7 @@ jsPsych.pluginAPI = (function () {
     var ceilingTimer = null;
     var timer = null;
     var openEventName = ''
+    var isActive = true
     var microModalConfig = {
       disableScroll: true,
       onShow: function () {
@@ -3233,6 +3234,8 @@ jsPsych.pluginAPI = (function () {
         return firstTime;
       },
       check: function () {
+        if (!isActive) return true
+
         if (!wasFirstClick) {
           wasFirstClick = true;
           firstTime = tmpAnswerTime;
@@ -3316,6 +3319,12 @@ jsPsych.pluginAPI = (function () {
           restartCeilingTimer();
         }
       },
+      deactivate: function () {
+        isActive = false
+      },
+      activate: function () {
+        isActive = true
+      }
     };
   };
 
