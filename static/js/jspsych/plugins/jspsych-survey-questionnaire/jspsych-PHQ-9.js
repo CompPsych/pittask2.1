@@ -250,6 +250,57 @@ jsPsych.plugins['PHQ-9'] = (function () {
       });
     }
 
+    var checkbox_order = [];
+
+    for (var i = 0; i < trial.checkboxes.length; i++) {
+      checkbox_order.push(i);
+    }
+
+    for (var i = 0; i < trial.checkboxes.length; i++) {
+      var checkbox = trial.checkboxes[checkbox_order[i]];
+      var checkbox_id = checkbox_order[i];
+
+      html += '<div id="jspsych-survey-multi-choice-checkbox"   data-name="' + checkbox.name + '">';
+
+      // add question text
+      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice" style="padding: 4rem 0; text-align: left"><span>' + checkbox.prompt + '</span></p>'
+
+      html += '<div style="display: flex; justify-content: space-around; height: 150px; align-items: baseline; font-size: 18px;">';
+
+      for (var j = 0; j < checkbox.options.length; j++) {
+        // add label and question text
+        var checkbox_id_name = 'jspsych-survey-multi-choice-option-' + checkbox_id + '-' + j;
+        var input_name = 'jspsych-survey-multi-choice-response-checkbox-' + checkbox_id;
+        var input_id = 'jspsych-survey-multi-choice-response-checkbox-' + checkbox_id + '-' + j;
+
+        var required_attr = checkbox.required ? 'required' : '';
+
+        // add radio button container
+        html += '<div id="' + checkbox_id_name + '" class="jspsych-survey-multi-choice-option-checkbox" style="width: 116px">';
+        html += '<label class="jspsych-survey-multi-choice-text" data-time-stamp="Q10" for="' + input_id + '">' + checkbox.options[j] + '</label>';
+        html += '<input type="radio" name="' + input_name + '" class="form-radio" data-time-stamp="Q10" data-question-number="Q10A' + (j + 1) + '" id="' + input_id + '" value="' + checkbox.options[j] + '" ' + required_attr + '></input>';
+        html += '</div>';
+
+        elementsMapping.push(
+          {
+            element: 'C' + (i + 1) + 'A' + (j + 1) + ' input',
+            value: [checkbox.options[j]]
+          },
+          {
+            element: 'C' + (i + 1) + 'A' + (j + 1) + ' label',
+            for: [input_id]
+          }
+        );
+      }
+      html += '</div>';
+      html += '</div>';
+
+      elementsMapping.push({
+        element: 'C' + (i + 1),
+        text: [checkbox.prompt]
+      });
+    }
+
     // add submit button
     html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input>';
     html += '</form>';
@@ -354,6 +405,10 @@ jsPsych.plugins['PHQ-9'] = (function () {
       return isSuccess;
     });
 
+    $('#jspsych-survey-multi-choice-checkbox input[type=radio]').on('click touchstart', function (event) {
+      onAnswerDisplayed(event, jsPsych.totalTime())
+    });
+
     function proccessDataBeforeSubmit(validate = false) {
       // create object to hold responses
       var question_data = {};
@@ -387,6 +442,27 @@ jsPsych.plugins['PHQ-9'] = (function () {
         timestamp_data[name] = trial.time_stamp['Q' + id];
         Object.assign(question_data, obje);
       }
+
+      (function () {
+        var match = display_element.querySelector('#jspsych-survey-multi-choice-checkbox');
+        var id = 'last';
+        var val;
+
+        if (match && match.querySelector('input[type=radio]:checked') !== null) {
+          val = match.querySelector('input[type=radio]:checked').value;
+          timestamp_data[id] = trial.time_stamp['Q10'];
+        } else {
+          val = 'NA';
+          timestamp_data[id] = 0;
+        }
+
+        if (match) {
+          var name = id;
+          obje[name] = val;
+
+          Object.assign(question_data, obje);
+        }
+      }());
 
       return {
         'stage_name': JSON.stringify(plugin.info.name),
