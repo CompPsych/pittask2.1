@@ -418,6 +418,10 @@ jsPsych.plugins['GAD-7'] = (function () {
       return isSuccess;
     });
 
+    $('#jspsych-survey-multi-choice-checkbox input[type=radio]').on('click touchstart', function (event) {
+      onAnswerDisplayed(event, jsPsych.totalTime())
+    });
+
 
     function proccessDataBeforeSubmit(validate = false) {
 
