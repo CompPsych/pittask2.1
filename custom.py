@@ -23,7 +23,7 @@ import random
 import csv
 import os
 import io
-from datetime import datetime
+from datetime import datetime, tzinfo
 from datetime import timedelta
 from psiturk.psiturk_statuses import *
 from flask_mail import Mail, Message
@@ -176,7 +176,7 @@ def generateUniqueLink():
     return text
 
 
-def createLinksFile(filename):
+def createLinksFile(filename, offset):
     try:
         unique_links_path = config.get(
             'Unique Links Parameters', 'unique_links_path')
@@ -184,19 +184,20 @@ def createLinksFile(filename):
         filepath = os.path.join(dirname, unique_links_path, filename)
         unique_links = UniqueLink.query.\
             filter(UniqueLink.file == filename)
+        timezone = CustomTimezone(offset)
         with open(filepath, 'wb') as file:
             writer = csv.writer(file)
             writer.writerow(
                 ['name', 'unique_identifier', 'email', 'link', 'expiration_date', 'expiration_time', 'status'])
             for unique_link in unique_links:
-                if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.now():
+                if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.utcnow():
                     unique_link.status = LINK_EXPIRED
                     db_session.add(unique_link)
                 status = LINK_STATUSES[unique_link.status]
-                expiration_date = unique_link.expiresAt.strftime(
-                    '%d-%m-%Y') if unique_link.expiresAt != None else 'NA'
-                expiration_time = unique_link.expiresAt.strftime(
-                    '%H:%M') if unique_link.expiresAt != None else 'NA'
+                expiration_date = unique_link.expiresAt.replace(tzinfo=GMT()).astimezone(
+                    timezone).strftime('%d-%m-%Y') if unique_link.expiresAt != None else 'NA'
+                expiration_time = unique_link.expiresAt.replace(tzinfo=GMT()).astimezone(
+                    timezone).strftime('%H:%M %Z') if unique_link.expiresAt != None else 'NA'
                 writer.writerow([
                     unique_link.name,
                     unique_link.unique_identifier,
@@ -214,11 +215,12 @@ def createLinksFile(filename):
         return ''
 
 
-def sendMail(recipients):
+def sendMail(recipients, offset):
     isMailEnabled = config.get('Mail Parameters', 'mail_enabled')
     if not isMailEnabled:
         return
 
+    timezone = CustomTimezone(offset)
     with mail.connect() as conn:
         for recipient in recipients:
             sender = (config.get('Mail Parameters', 'mail_sender_name'),
@@ -227,9 +229,11 @@ def sendMail(recipients):
             html_text_param = 'mail_text_with_expiration' if recipient.expiresAt != None else 'mail_text_without_expiration'
             unique_link = url_for('custom_code.useUniqueLink',
                                   link=recipient.link, _external=True)
+            expiresAt = recipient.expiresAt.replace(tzinfo=GMT()).astimezone(
+                timezone).strftime('%d-%m-%Y %H:%M %Z') if recipient.expiresAt != None else ''
             html = config.get('Mail Parameters', html_text_param).\
                 format(name=recipient.name, link=unique_link,
-                       expiresAt=recipient.expiresAt)
+                       expiresAt=expiresAt)
             msg = Message(subject=subject, sender=sender,
                           recipients=[recipient.email], html=html)
             conn.send(msg)
@@ -288,13 +292,14 @@ def saveLink():
             )
             if 'expires' in request.form and 'expiresAt' in request.form:
                 expiresAt = int(request.form['expiresAt'])
-                unique_link_attributes['expiresAt'] = datetime.now(
+                unique_link_attributes['expiresAt'] = datetime.utcnow(
                 ) + timedelta(hours=expiresAt)
             unique_link = UniqueLink(**unique_link_attributes)
             db_session.add(unique_link)
             unique_links.append(unique_link)
         db_session.commit()
-        sendMail(unique_links)
+        offset = int(request.form['offset'])
+        sendMail(unique_links, offset)
         return redirect(url_for('custom_code.generateLink'))
     except Exception as e:
         app.logger.error(e)
@@ -306,7 +311,7 @@ def useUniqueLink(link):
     try:
         unique_link = UniqueLink.query.\
             filter(UniqueLink.link == link).one()
-        if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.now():
+        if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.utcnow():
             unique_link.status = LINK_EXPIRED
         elif unique_link.status == LINK_PENDING:
             unique_link.status = LINK_EXPIRED
@@ -345,7 +350,7 @@ def complete_override():
             user = Participant.query.\
                 filter(Participant.uniqueid == unique_id).one()
             user.status = COMPLETED
-            user.endhit = datetime.now()
+            user.endhit = datetime.utcnow()
             db_session.add(user)
             db_session.commit()
         except:
@@ -373,10 +378,41 @@ def complete_override():
 @myauth.requires_auth
 def export_unique_links(filename):
     try:
-        filepath = createLinksFile(filename)
+        offset = int(request.args.get('offset'))
+        filepath = createLinksFile(filename, offset)
         if filepath == '':
             raise Exception('File not found')
         return send_file(filepath, mimetype='text/csv', as_attachment=True)
     except Exception as e:
         app.logger.error(e)
         abort(404)
+
+
+class CustomTimezone(tzinfo):
+    offset = 0
+    sign = '+'
+
+    def __init__(self, offset):
+        self.offset = offset
+        self.sign = '-' if offset < 0 else '+'
+
+    def utcoffset(self, dt):
+        return timedelta(minutes=self.offset)
+
+    def dst(self, dt):
+        return timedelta(0)
+
+    def tzname(self, dt):
+        return 'GMT {}{}'.format(self.sign, abs(self.offset / 60))
+
+
+class GMT(tzinfo):
+
+    def utcoffset(self, dt):
+        return timedelta(hours=0)
+
+    def dst(self, dt):
+        return timedelta(0)
+
+    def tzname(self, dt):
+        return 'GMT +0'
