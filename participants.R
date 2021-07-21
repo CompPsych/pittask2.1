@@ -13,7 +13,7 @@ library(jsonlite)
 library(data.table)
 library(stringr)
 
-output_folder <- "/media/sergey/Data/Upwork/Iain/pittask2.1/Participants"
+output_folder <- "~/mydata/pittask/pittask2.1/Participants"
 
 # Options ------------------------------------------------------------------
 options(useFancyQuotes = FALSE)
@@ -556,8 +556,12 @@ if(isClass(query))
   links_query <- tryCatch(
     dbSendQuery(connection, "SELECT * FROM unique_links"),
     error = function(e){ NA })
-
-  links <- ifelse(is.na(links_query),data.frame(),dbFetch(links_query, n = -1))
+    
+  if (!is.na(links_query)) {
+    links <- dbFetch(links_query, n = -1)
+  } else {
+    links <- data.frame()
+  }
   
   # Parsing non-empty trialdata events and counting CompleteData size
   
@@ -645,7 +649,6 @@ if(isClass(query))
       next
     }
     
-    #isUsedLink <- which(sapply(links$link, function(y) data$workerid[[i]] %in% y))
     isUsedLink <- which(links$link %in% data$workerid[[i]])
     usedLink <- ifelse(length(isUsedLink) == 0, "NA", data$workerid[[i]])
     
