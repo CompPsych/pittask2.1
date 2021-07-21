@@ -2635,6 +2635,8 @@ jsPsych.pluginAPI = (function () {
 
   var timeout_handlers = [];
 
+  var isPaused = false;
+
   module.setTimeout = function (callback, delay) {
     var updatedCallback = function () {
       timeoutObj.finished = true
@@ -2672,6 +2674,8 @@ jsPsych.pluginAPI = (function () {
   }
 
   module.pauseTrial = function () {
+    isPaused = true
+
     var totalTime = jsPsych.totalTime()
     for (var i = 0; i < timeout_handlers.length; i++) {
       clearTimeout(timeout_handlers[i].handle)
@@ -2686,6 +2690,12 @@ jsPsych.pluginAPI = (function () {
       timeout_handlers[i].handle = setTimeout(timeout_handlers[i].callback, timeout_handlers[i].delay)
       timeout_handlers[i].start = jsPsych.totalTime()
     }
+
+    isPaused = false
+  }
+
+  module.isTrialPaused = function () {
+    return isPaused
   }
 
   // video //
