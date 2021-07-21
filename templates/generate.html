@@ -9,10 +9,7 @@
     </head>
 
     <body>
-        <div class="files-list">
-            {% for file in files %}
-            <a href="/export-links/{{file[0]}}">{{file[0]}}</a>
-            {% endfor %}
+        <div class="files-list" id="files">
         </div>
         <div class="form">
             <form method="POST" action="/generate" class="unique-links-form" enctype="multipart/form-data">
@@ -33,12 +30,33 @@
                         <input id="expiresAt" type="number" name="expiresAt" min="0" class="form-control">
                         <span>hours</span>
                     </div>
+                    <input type="hidden" name="offset" id="timezone">
                 </div>
                 <div class="unique-links-form-submit">
                     <button type="submit" class="btn btn-primary">SUBMIT</button>
                 </div>
             </form>
         </div>
+        <script>
+            (function () {
+                var timezoneInput = document.getElementById('timezone')
+                var timezone = (new Date()).getTimezoneOffset() * (-1)
+
+                if (timezoneInput) {
+                    timezoneInput.value = timezone
+                }
+
+                var list = document.getElementById('files')
+
+                if (list) {
+                    list.innerHTML = `
+                        {% for file in files %}
+                        <a href="/export-links/{{file[0]}}?offset=${timezone}">{{file[0]}}</a>
+                        {% endfor %}
+                    `
+                }
+            })()
+        </script>
     </body>
 
 </html>
