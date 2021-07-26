@@ -3103,10 +3103,7 @@ jsPsych.pluginAPI = (function () {
    * @return {Object} timer module.
    */
   module.timerModuleFactory = function (responseStore, timestamp, isOnFloor, isOnCeil, testName) {
-    var firstTime = 0;
-    var tmpAnswerTime = 0;
-    var ceilingTime = 0;
-    var wasFirstClick = false;
+    var reachedFloor = false;
     var popupText = '';
     var popupFloorText = '';
     var popupCeilingText = '';
@@ -3189,39 +3186,33 @@ jsPsych.pluginAPI = (function () {
     }
 
     function startFloorTimer() {
-      timer = setInterval(function () {
-        tmpAnswerTime += 10;
-      }, 10);
+      timer = setTimeout(function () {
+        reachedFloor = true
+      }, minAnswerTime)
     }
 
     function startCeilingTimer() {
-      ceilingTimer = setInterval(function () {
-        ceilingTime += 10;
-
-        if (ceilingTime >= maxAnswerTime) {
-          setOpenPopupEventText('ceiling');
-          setPopupText(popupCeilingText);
-          showPopup();
-          stopTimer(ceilingTimer);
-        }
-      }, 10);
+      ceilingTimer = setTimeout(function () {
+        setOpenPopupEventText('ceiling');
+        setPopupText(popupCeilingText);
+        showPopup();
+      }, maxAnswerTime)
     }
 
     function stopTimer(timer) {
-      clearInterval(timer);
+      clearTimeout(timer);
     }
 
     function restartFloorTimer() {
-      tmpAnswerTime = 0;
-      clearInterval(timer);
+      clearTimeout(timer);
+      reachedFloor = false
 
       startFloorTimer();
       openEventName = '';
     }
 
     function restartCeilingTimer() {
-      ceilingTime = 0;
-      clearInterval(ceilingTimer);
+      clearTimeout(ceilingTimer);
       startCeilingTimer();
       openEventName = '';
     }
@@ -3240,18 +3231,10 @@ jsPsych.pluginAPI = (function () {
     }
 
     return {
-      getFirstTime: function () {
-        return firstTime;
-      },
       check: function () {
         if (!isActive) return true
 
-        if (!wasFirstClick) {
-          wasFirstClick = true;
-          firstTime = tmpAnswerTime;
-        }
-
-        if (isOnFloor !== true) {
+        if (!isOnFloor) {
           if (isOnCeil) {
             restartCeilingTimer();
           }
@@ -3262,11 +3245,11 @@ jsPsych.pluginAPI = (function () {
         // Stop timer before check
         stopTimer(timer);
 
-        if (tmpAnswerTime < minAnswerTime) {
+        if (!reachedFloor) {
+          stopTimer(ceilingTimer);
           setOpenPopupEventText('floor');
           setPopupText(popupFloorText);
           showPopup();
-          stopTimer(ceilingTimer);
 
           return false;
         }
@@ -3375,6 +3358,8 @@ jsPsych.pluginAPI = (function () {
 
     moduleApp.setMinAnswerTime(params.timeFloor);
     moduleApp.setMaxAnswerTime(params.timeCeiling);
+
+    moduleApp.restartTimerModule()
 
     return moduleApp;
   }
