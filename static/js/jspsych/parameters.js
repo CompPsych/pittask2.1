@@ -517,7 +517,7 @@ var answer_latency_text_ceiling = 'There are no incorrect answers in this questi
 /* Default */
 
 /* _SI */
-var popup_answer_latency_floor_SI = false;
+var popup_answer_latency_floor_SI = true;
 var answer_latency_floor_SI = 630;
 
 var popup_answer_latency_ceiling_SI = true;
