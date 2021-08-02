@@ -1405,6 +1405,8 @@ if(isClass(query))
     
     for (k in seq_along(aci_index)) {
       if(length(aci_index[k]) != 0){
+        aci_trial_name <- fromJSON(trialdata[aci_index[k],]$stage_name)
+        aci_item_name <-substring(aci_trial_name, nchar(aci_trial_name))
         aci_responses <- fromJSON(trialdata[aci_index[k],]$responses)
         aci_timestamps <- fromJSON(trialdata[aci_index[k],]$timestamp)
         
@@ -1425,7 +1427,7 @@ if(isClass(query))
             PIN, usedLink, complete, date,
             calendar_time,
             timestamp, country, commit, version,
-            names(aci_responses)[j],
+            aci_item_name,
             response
           )))
         }

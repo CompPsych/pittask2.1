@@ -81,7 +81,7 @@ jsPsych.plugins["transfer-test"] = (function () {
     // plugin used for transfer_test and deva_test stages
     var html = "";
     var timer;
-    var isStoppedTest = false;
+    // var isStoppedTest = false;
     var popupConfig = {
       isShow: trial.popup_machine,
       duration: trial.popup_machine_duration * 1000,
@@ -183,8 +183,8 @@ jsPsych.plugins["transfer-test"] = (function () {
       update_color();
 
       function update_color() {
-        if (isStoppedTest) {
-          setTimeout(update_color, trial.transfer_test_color_duration);
+        if (jsPsych.pluginAPI.isTrialPaused()) {
+          jsPsych.pluginAPI.setTimeout(update_color, trial.transfer_test_color_duration);
           return
         }
 
@@ -210,7 +210,7 @@ jsPsych.plugins["transfer-test"] = (function () {
 
           i++;
 
-          setTimeout(update_color, duration);
+          jsPsych.pluginAPI.setTimeout(update_color, duration);
         } else {
           reps_counter++;
           $block_number++;
@@ -286,7 +286,7 @@ jsPsych.plugins["transfer-test"] = (function () {
 
       var $vending_machine = $(".vending-machine");
 
-      if (!isStoppedTest) {
+      if (!jsPsych.pluginAPI.isTrialPaused()) {
         setModalShowTimer();
       }
 
@@ -347,7 +347,7 @@ jsPsych.plugins["transfer-test"] = (function () {
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
-        if (!isStoppedTest) {
+        if (!jsPsych.pluginAPI.isTrialPaused()) {
           machine_tilt();
         }
       } else {
@@ -442,16 +442,19 @@ jsPsych.plugins["transfer-test"] = (function () {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      devalTestLoop = setInterval(function () {
-        if (!isStoppedTest) {
-          devalTestDuration -= 1000
+      devalTestLoop = jsPsych.pluginAPI.setTimeout(function () {
+        end_trial()
+      }, devalTestDuration)
+      // devalTestLoop = setInterval(function () {
+      //   if (!isStoppedTest) {
+      //     devalTestDuration -= 1000
 
-          if (devalTestDuration <= 0) {
-            clearInterval(devalTestLoop)
-            end_trial()
-          }
-        }
-      }, 1000)
+      //     if (devalTestDuration <= 0) {
+      //       clearInterval(devalTestLoop)
+      //       end_trial()
+      //     }
+      //   }
+      // }, 1000)
     }
 
     // end trial if trial_duration is set
@@ -482,7 +485,8 @@ jsPsych.plugins["transfer-test"] = (function () {
           time_elapsed: jsPsych.totalTime() - timestamp_onload,
         });
 
-        isStoppedTest = false;
+        // isStoppedTest = false;
+        jsPsych.pluginAPI.resumeTrial()
         setModalShowTimer();
       },
     };
@@ -499,7 +503,8 @@ jsPsych.plugins["transfer-test"] = (function () {
       jsPsych.pluginAPI.clearTimeout(timer)
 
       timer = jsPsych.pluginAPI.setTimeout(function () {
-        isStoppedTest = true
+        // isStoppedTest = true
+        jsPsych.pluginAPI.pauseTrial()
         MicroModal.show('modal-1', microModalConfig);
       }, popupConfig.duration);
     }
