@@ -312,10 +312,16 @@ def useUniqueLink(link):
         unique_link = UniqueLink.query.\
             filter(UniqueLink.link == link).one()
         if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.utcnow():
+            app.logger.warning(
+                '[unique_links] %s tried accessing the experiment after the link has expired', unique_link.link)
             unique_link.status = LINK_EXPIRED
         elif unique_link.status == LINK_PENDING:
+            app.logger.warning(
+                '[unique_links] %s tried accessing the experiment after the link has been already used', unique_link.link)
             unique_link.status = LINK_EXPIRED
         elif unique_link.status == LINK_UNUSED:
+            app.logger.warning(
+                '[unique_links] %s accessed the experiment for the first time', unique_link.link)
             unique_link.status = LINK_PENDING
 
         db_session.add(unique_link)
