@@ -69,6 +69,9 @@ def get_commits():
         if line.startswith('commit '):
             current_commit = line.split('commit ')[1]
 
+    app.logger.warning(
+        '[unique_links] current version %s', current_commit
+    )
     return current_commit
 
 
@@ -309,11 +312,18 @@ def saveLink():
 @custom_code.route('/lab/<link>', methods=['GET'])
 def useUniqueLink(link):
     try:
+        app.logger.warning(
+            '[unique_links] the link was opened'
+        )
         unique_link = UniqueLink.query.\
             filter(UniqueLink.link == link).one()
         if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.utcnow():
             app.logger.warning(
                 '[unique_links] %s tried accessing the experiment after the link has expired', unique_link.link)
+            app.logger.warning('[unique_links] status: %d, expires at: %s, now: %s', 
+                unique_link.status,
+                unique_link.expiresAt,
+                datetime.utcnow())
             unique_link.status = LINK_EXPIRED
         elif unique_link.status == LINK_PENDING:
             app.logger.warning(
@@ -327,11 +337,17 @@ def useUniqueLink(link):
         db_session.add(unique_link)
         db_session.commit()
 
+        app.logger.warning(
+            '[unique_links] link status updated'
+        )
         if unique_link.status == LINK_EXPIRED:
             return render_template('expired.html')
         elif unique_link.status == LINK_SUBMITTED:
             return render_template('thanks.html')
 
+        app.logger.warning(
+            '[unique_links] redirecting to the experiment'
+        )
         link = unique_link.link
         show_consent = config.get('Unique Links Parameters', 'show_consent')
         redirect_to = 'give_consent' if show_consent else 'start_exp'
