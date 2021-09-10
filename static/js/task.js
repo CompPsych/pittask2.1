@@ -1978,6 +1978,8 @@ jsPsych.init({
     timeline: timeline,
     preload_images: preload_images,
     preload_video: preload_video,
+    max_load_time: 1000 * 60 * 10,
+    max_preload_attempts: 100,
     // on_finish: function(){
     //     // Debug mode, on_finish and on_data_update must be commented out in debug mode
     //     $(window).off("beforeunload");
@@ -1996,5 +1998,4 @@ jsPsych.init({
         psiTurk.recordTrialData(data);
         psiTurk.saveData();
     }
-}
-);
+});
