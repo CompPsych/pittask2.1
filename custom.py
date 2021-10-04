@@ -26,7 +26,6 @@ import io
 from datetime import datetime, tzinfo
 from datetime import timedelta
 from psiturk.psiturk_statuses import *
-from flask_mail import Mail, Message
 
 # load the configuration options
 config = PsiturkConfig()
@@ -38,15 +37,20 @@ myauth = PsiTurkAuthorization(config)
 custom_code = Blueprint('custom_code', __name__,
                         template_folder='templates', static_folder='static')
 
-app.config.update(
-    MAIL_SERVER=config.get('Mail Parameters', 'mail_server'),
-    MAIL_PORT=config.get('Mail Parameters', 'mail_port'),
-    MAIL_USE_SSL=config.get('Mail Parameters', 'mail_use_ssl'),
-    MAIL_USE_TLS=config.get('Mail Parameters', 'mail_use_tls'),
-    MAIL_USERNAME=config.get('Mail Parameters', 'mail_username'),
-    MAIL_PASSWORD=config.get('Mail Parameters', 'mail_password')
-)
-mail = Mail(app)
+try:
+    if config.get('Mail Parameters', 'mail_enabled'):
+        from flask_mail import Mail, Message
+        app.config.update(
+            MAIL_SERVER=config.get('Mail Parameters', 'mail_server'),
+            MAIL_PORT=config.get('Mail Parameters', 'mail_port'),
+            MAIL_USE_SSL=config.get('Mail Parameters', 'mail_use_ssl'),
+            MAIL_USE_TLS=config.get('Mail Parameters', 'mail_use_tls'),
+            MAIL_USERNAME=config.get('Mail Parameters', 'mail_username'),
+            MAIL_PASSWORD=config.get('Mail Parameters', 'mail_password')
+        )
+        mail = Mail(app)
+except Exception as error:
+    app.logger.error('[flask_mail] %s' % error)
 
 
 ###########################################################
@@ -320,10 +324,10 @@ def useUniqueLink(link):
         if unique_link.status < LINK_SUBMITTED and unique_link.expiresAt != None and unique_link.expiresAt < datetime.utcnow():
             app.logger.warning(
                 '[unique_links] %s tried accessing the experiment after the link has expired', unique_link.link)
-            app.logger.warning('[unique_links] status: %d, expires at: %s, now: %s', 
-                unique_link.status,
-                unique_link.expiresAt,
-                datetime.utcnow())
+            app.logger.warning('[unique_links] status: %d, expires at: %s, now: %s',
+                               unique_link.status,
+                               unique_link.expiresAt,
+                               datetime.utcnow())
             unique_link.status = LINK_EXPIRED
         elif unique_link.status == LINK_PENDING:
             app.logger.warning(
