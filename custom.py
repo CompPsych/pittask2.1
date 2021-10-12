@@ -22,6 +22,7 @@ from json import dumps, loads
 import random
 import csv
 import os
+import sys
 import io
 from datetime import datetime, tzinfo
 from datetime import timedelta
@@ -65,7 +66,7 @@ leading_4_spaces = re.compile('^    ')
 def get_commits():
     lines = subprocess.check_output(
         ['git', 'log', "-1"], stderr=subprocess.STDOUT
-    ).split('\n')
+    ).decode(sys.stdout.encoding).strip().split('\n')
 
     current_commit = {}
 
