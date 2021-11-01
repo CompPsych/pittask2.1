@@ -334,10 +334,6 @@ def useUniqueLink(link):
             app.logger.warning(
                 '[unique_links] %s tried accessing the experiment after the link has been already used', unique_link.link)
             unique_link.status = LINK_EXPIRED
-        elif unique_link.status == LINK_UNUSED:
-            app.logger.warning(
-                '[unique_links] %s accessed the experiment for the first time', unique_link.link)
-            unique_link.status = LINK_PENDING
 
         db_session.add(unique_link)
         db_session.commit()
@@ -350,13 +346,9 @@ def useUniqueLink(link):
         elif unique_link.status == LINK_SUBMITTED:
             return render_template('thanks.html')
 
-        app.logger.warning(
-            '[unique_links] redirecting to the experiment'
-        )
-        link = unique_link.link
         show_consent = config.get('Unique Links Parameters', 'show_consent')
-        redirect_to = 'give_consent' if show_consent else 'start_exp'
-        return redirect(url_for(redirect_to, hitId=link, assignmentId=link, workerId=link, mode='lab'))
+
+        return redirect(url_for('give_consent', hitId=link, assignmentId=link, workerId=link, mode='lab', show_consent=show_consent))
     except Exception as e:
         app.logger.error(e)
         abort(404)
@@ -443,3 +435,32 @@ class GMT(tzinfo):
 
     def tzname(self, dt):
         return 'GMT +0'
+
+
+@custom_code.route('/confirm-recaptcha', methods=['POST'])
+def confirmRecaptcha():
+    try:
+        link = request.form['link']
+
+        app.logger.warning(
+            '[unique_links] the link was opened'
+        )
+        unique_link = UniqueLink.query.\
+            filter(UniqueLink.link == link).one()
+        app.logger.warning(
+            '[unique_links] %s accessed the experiment for the first time', unique_link.link)
+        unique_link.status = LINK_PENDING
+
+        db_session.add(unique_link)
+        db_session.commit()
+
+        app.logger.warning(
+            '[unique_links] link status updated'
+        )
+        app.logger.warning(
+            '[unique_links] redirecting to the experiment'
+        )
+
+        return '', 200
+    except:
+        abort(400)
