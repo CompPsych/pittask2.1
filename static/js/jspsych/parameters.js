@@ -38,6 +38,9 @@ var popup_text_browser = "Please focus on the experiment by keeping the applicat
 //unit is second for browser_inactivated_duration
 var browser_inactivated_duration = 1800;
 var browser_inactivated_num = 10;
+
+var terminate_app_instruct = "Please close all applications and browser windows that are not in use to ensure optimal experience with this experiment. Please press any key to proceed after terminating background apps."
+
 var popup_exit = true;
 var popup_text_exit = "Are you sure you want to leave the experiment?";
 var browser_inactivated_notif = true;

@@ -309,6 +309,23 @@ var ICAR = {
     ]
 };
 
+var TERMINATE_APP_INSTRUCT = {
+    timeline: [
+        {
+            stage_name: 'terminate_app_instruct',
+            type: 'html-keyboard-response',
+            stimulus: terminate_app_instruct,
+            trial_latency: open_instruct_latency,
+            trial_duration: null,
+            response_ends_trial: false,
+            event_type: 'text appears',
+            event_raw_details: 'terminate_app_instruct',
+            event_converted_details: 'terminate_app_instruct text appears',
+            detect_window_change: false,
+        },
+    ]
+}
+
 // key testing stage with instructions before/after
 var KEY_TESTING = {
     timeline: [
@@ -1915,7 +1932,7 @@ timeline.push({
     stage_name: 'parameters',
 });
 
-
+timeline.push(TERMINATE_APP_INSTRUCT);
 // Key-testing
 timeline.push(KEY_TESTING);
 // Food & Hunger Questions pre-rating

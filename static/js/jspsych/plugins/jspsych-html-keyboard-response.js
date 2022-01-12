@@ -72,8 +72,13 @@ jsPsych.plugins["html-keyboard-response"] = (function () {
         pretty_name: 'Event converted details',
         default: null,
         description: 'Event converted details'
+      },
+      detect_window_change: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Detect window change',
+        default: true,
+        description: 'Detect window change'
       }
-
     }
   }
 
@@ -122,7 +127,9 @@ jsPsych.plugins["html-keyboard-response"] = (function () {
       };
     }
 
-    jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+    if (trial.detect_window_change) {
+      jsPsych.pluginAPI.initializeWindowChangeListeners(response, timestamp_onload, proccessDataBeforeSubmit);
+    }
 
     const translatorTarget = document.getElementById('translation-listener')
     jsPsych.pluginAPI.initializeTranslatorDetector(translatorTarget, 'translate', response, timestamp_onload, proccessDataBeforeSubmit);

@@ -68,6 +68,8 @@ jsPsych.plugins['parameters'] = (function () {
             stim3_colour: stim3_colour,
             stim4_colour: stim4_colour,
 
+            terminate_app_instruct: terminate_app_instruct,
+
             open_instruct_text_key_testing: open_instruct_text_key_testing,
             close_instruct_text_key_testing: close_instruct_text_key_testing,
 
@@ -308,6 +310,7 @@ jsPsych.plugins['parameters'] = (function () {
             screen_resolution:
                 window.screen.availHeight + "x" + window.screen.availWidth,
             viewport_size: $(window).height() + "x" + $(window).width(),
+            ram: navigator.deviceMemory
         };
 
         // gather the data to store for the trial

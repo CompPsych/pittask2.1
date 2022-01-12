@@ -43,6 +43,7 @@ Specs <- data.table(
   commit = character(),
   version = character(),
   hardware = character(),
+  RAM = character(),
   screen_resolution = character(),
   viewport_size = character(),
   `OS(version)` = character(),
@@ -691,11 +692,13 @@ if(isClass(query))
       specs <- fromJSON(trialdata[parameters_index,]$specs)
       date <- format(as.IDate(dateTime[specs_index]), "%d-%m-%Y")
       time <- as.character(as.ITime(dateTime[specs_index]))
+      
+      ram <- ifelse(length(specs) < 6, 'NA', specs[[6]])
  
       Specs <- rbindlist(list(Specs, list(
         PIN, usedLink, complete, date, time,
         country, commit, version,
-        specs[[3]], specs[[4]], specs[[5]], specs[[1]], specs[[2]]
+        specs[[3]], ram, specs[[4]], specs[[5]], specs[[1]], specs[[2]]
       )))
     }
     
