@@ -26,7 +26,7 @@
 /************************************************************
 * General Parameters (including instructions and popups)
 ***********************************************************/
-var re_captcha = false;
+var re_captcha = true;
 var re_captcha_duration = 180;
 var full_screen_mode = false;
 var open_instruct_latency = 1500;
@@ -107,7 +107,7 @@ var close_instruct_ICAR = false;
 var open_instruct_text_ICAR =
     "<h2>Thank you! You are nearly finished.</h2><br>" +
     "<h2>There is only a final set of questions</h2>" +
-    "<h2>which takes less 15 minutes.</h2><br>" +
+    "<h2>which takes less than 15 minutes.</h2><br>" +
     "<h2></h2><br>" +
     "<h2>Press any key to begin.</h2>";
 var close_instruct_text_ICAR = "ICAR close";
@@ -497,8 +497,8 @@ var transfer_popup_text = "Please provide us with a little more information.";
  * Close HIT Questions
  ************************************************************/
 var close_instruct_text_close_HIT_q = "Thank you for your participation!";
-var participant_feedback_popup_text = "Please provide us with feedback."
-var participant_feedback_text_limit = 50
+var participant_feedback_popup_text = "Please provide us with a little more feedback."
+var participant_feedback_text_limit = 15
 
 /************************************************************
  * Thanks
