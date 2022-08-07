@@ -152,7 +152,15 @@ var symptom_inventory = [
     // Insomnia Severity Index
     ISI,
     // The Personality Inventory for DSM-5—Brief Form (PID-5-BF)— Adult
-    PID
+    PID,
+    // BED (binge eating disorder)
+	BEDS7,
+	// Exteroception
+    GSQ,
+    // Interoception
+    ISQ,
+    // ARFID (avoidant/restrictive feeding intake disorder)
+    NIAS
 ];
 
 /************************************************************

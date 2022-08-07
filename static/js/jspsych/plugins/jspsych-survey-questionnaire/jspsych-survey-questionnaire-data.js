@@ -1768,3 +1768,373 @@ var ACI2 = {
     enable_timed_popups: false,
     force_answer: false,
 }
+
+var BEDS7 = {
+    type: 'BEDS-7',
+    preamble:
+        '<p>The following questions ask about your eating patterns and behaviours within the last 3 months. For each question, choose the answer that best applies to you.</p>',
+    questions: [
+        {
+            prompt: 'During the last 3 months, did you have any episodes of excessive overeating (i.e., eating significantly more than what most people would eat in a similar period of time)?',
+            options: ['Yes', 'No'],
+            horizontal: true
+        }, {
+            prompt: 'Do you feel distressed about your episodes of excessive overeating?',
+            options: ['Yes', 'No'],
+            horizontal: true
+        }, 
+        
+        {
+            prompt: 'During your episodes of excessive overeating, how often did you feel like you had no control over your eating (e.g., not being able to stop eating, feel compelled to eat, or going back and forth for more food)?',
+            options: ['Never or rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        }, {
+            prompt: 'During your episodes of excessive overeating, how often did you continue eating even though you were not hungry?',
+            options: ['Never or rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        }, {
+            prompt: 'During your episodes of excessive overeating, how often were you embarrassed by how much you ate?',
+            options: ['Never or rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        }, {
+            prompt: 'During your episodes of excessive overeating, how often did you feel disgusted with yourself or guilty afterward?',
+            options: ['Never or rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        }, {
+            prompt: 'During the last 3 months, how often did you make yourself vomit as a means to control your weight or shape?',
+            options: ['Never or rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },
+
+    ],
+    button_label: 'submit answers',
+    event_type: 'questions appears',
+    event_raw_details: "BEDS-7, options",
+    event_converted_details: 'BEDS-7 questions appears'
+};
+
+var GSQ = {
+    type: 'GSQ',
+    preamble:
+        '<p>Please fill out the below form as accurately, honestly and completely as possible. There are no right or wrong answers.</p>',
+    questions: [
+        {
+            prompt: 'Do you dislike the physical sensation you get when people hug you?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you gag when you are eating certain foods, perhaps feeling as if you are going to be sick?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find it difficult to manipulate your hands when completing a delicate task (for example, picking up small objects or transferring objects from one hand to the other)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you ever run your hand around the outside of an object before picking it up?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you stand very close (for example, less than 1 metre/3 feet away) or very far (for example, more than 3 metres/9 feet away) when you are talking to someone?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find certain noises/pitches of sound annoying?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you smell your food before you eat it?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do bright lights ever hurt your eyes/cause a headache?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you like to listen to the same piece of music/part of a DVD over and over again?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you feel ill/dizzy/peculiar if you have to reach up high or bend down low for something?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find yourself fascinated by small particles (for example, little ‘bits’ of dust in the air)? ',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you like to spin yourself round and round?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you ever feel ill just from smelling a certain odour?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find it difficult to hear what people are saying?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true 
+        },{
+            prompt: 'Do you dislike having a haircut (for example, because little bits of hair go down your back)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you notice that you have hurt yourself but did not feel any pain?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Are you ever told by others that you wear too much perfume/after-shave?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do lights ever seem to flicker* when you look at them? *‘Flickering’ in this question means appearing to turn on and off very quickly instead of appearing constant.',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you like lining objects up?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you rock yourself backwards and forwards?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true 
+        },{
+            prompt: 'Do you find it difficult to go into a strong-smelling shop (for example “Lush” and “The Body Shop”)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you cut the labels out of your clothes?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you hate the feel or texture of certain foods in your mouth?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you avoid going to restaurants because you can smell a certain odour?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you dislike loud noises?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you use the tip of your tongue to taste your food before eating it?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true 
+        },{
+            prompt: 'Does your body ever feel ‘numb’ - like you can’t feel anything against your skin?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you think you have a weak sense of taste? One example of this would be if most food taste of ‘nothing’.',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find that you are unaware of your body’s signals (for example, don’t often feel hungry/tired/thirsty)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you ever feel dizzy/ill when playing fast-paced sports, for example basketball or football?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you react very strongly when you hear an unexpected sound?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you dislike walking on uneven surfaces?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true 
+        },{
+            prompt: 'Do you really like listening to certain sounds (for example, the sound of paper rustling)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you like to run about – perhaps up and down in straight lines or round in circles?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you chew and lick objects that aren’t food (for example pen lids or bottle tops) because you like the way they feel in your mouth?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you enjoy wearing very strong perfumes/after-shaves?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true
+        },{
+            prompt: 'Do you find that you position your body in a way that is different to most people (for example, lie on your back on a sofa with your legs straight up in the air at a 90° angle)?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true    
+        },{
+            prompt: 'Do you find it difficult to tie your shoelaces or button up your clothes?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true      
+        },{
+            prompt: 'Do you find that you are able to go outside without a coat or a jacket when other people think that it is too cold?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true    
+        },{
+            prompt: 'Do you eat the same foods most of the time?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true  
+        },{
+            prompt: 'Do you like to wear something/hold something (for example, a hat or a pencil) so that you know where your body ‘ends’?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true    
+        },{
+            prompt: 'Do you flick your fingers in front of your eyes?',
+            options: ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'],
+            horizontal: true  
+        },            
+    ],
+    button_label: 'submit answers',
+    event_type: 'questions appears',
+    event_raw_details: "GSQ, options",
+    event_converted_details: 'GSQ questions appears'
+};
+
+var ISQ = {
+    type: 'ISQ',
+    preamble:
+        '<p>Following are questions that relate to how you feel and interpret sensations that come from within your body. For each statement, indicate on a scale from 1 to 7 how much this statement applies to you, where 1 = “not at all true of me” through to 7 = “very true of me”.</p>',
+    questions: [
+                
+        {
+            prompt: 'I have difficulty making sense of my body’s signals unless they are very strong',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'I tend to rely on visual reminders (e.g. times on the clock) to help me know when to eat and drink',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'I have difficulty feeling my bodily need for food',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I’m not sure how my body feels when it’s a hot day',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I find it difficult to describe feelings like hunger, thirst, hot or cold ',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'Sometimes I don’t know how to interpret sensations I feel within my body',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'If I injure myself badly, even though I can feel it, I don’t feel the need to do much about it',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I only notice I need to eat when I’m in pain or feeling nauseous or weak',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'There are times when I am only aware of changes in my body because of the reactions of other people',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I find it difficult to read the signs and signals within my own body (e.g. when I have hurt myself or I need to rest)',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I have difficulty understanding when I am hungry or thirsty',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'I find it difficult to identify some of the signals that my body is telling me (e.g. If I’m about to faint or I’ve over exerted myself)',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'It is difficult for me to describe what it feels like to be hungry, thirsty, hot, cold or in pain',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I am confused about my bodily sensations',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'I have difficulty locating injury in my body',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'Sometimes, when my body signals a problem, I have difficulty working out what the problem might be',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'I don’t tend to notice feelings in my body until they’re very intense',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true
+        },{
+            prompt: 'I find it difficult to put my internal bodily sensations into words',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'Even when I know that I am hungry, thirsty, in pain, hot or cold, I don’t feel the need to do anything about it',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },{
+            prompt: 'Even when I know that I am physically uncomfortable, I do not act to change my situation',
+            options: ['Not at all true of me 1', '2', '3', '4', '5', '6', 'Very true of me 7'],
+            horizontal: true      
+        },              
+    ],
+    button_label: 'submit answers',
+    event_type: 'questions appears',
+    event_raw_details: "ISQ, options",
+    event_converted_details: 'ISQ questions appears'
+};
+
+
+var NIAS = {
+    type: 'NIAS',
+    preamble:
+        '<p>Please answer the following questions about your current eating habits.</p>',
+    questions: [
+                
+        {
+            prompt: 'I am a picky eater.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I dislike most foods that other people eat easily.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'The list of foods that I will eat is shorter than the list of foods I won’t eat.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I am not very interested in eating; I seem to have a smaller appetite than other people.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I have to push myself to eat regular meals throughout the day, or to eat a large enough amount of food at meals.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'Even when I am eating a food I really like, it is hard for me to eat a large enough volume at meals.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I avoid or put off eating because I am afraid of discomfort, choking, or vomiting.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I restrict myself to certain foods because I am afraid that other foods will cause discomfort, choking, or vomiting.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },{
+            prompt: 'I eat small portions and/or infrequent meals because I am afraid of discomfort, choking, or vomiting.',
+            options: ['Strongly disagree', 'Disagree', 'Slightly disagree', 'Slightly agree', 'Agree', 'Strongly agree'],
+            horizontal: true
+        },                                  
+    ],
+    button_label: 'submit answers',
+    event_type: 'questions appears',
+    event_raw_details: "NIAS, options",
+    event_converted_details: 'NIAS questions appears'
+};

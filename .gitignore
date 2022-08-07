@@ -4,3 +4,11 @@ node_modules
 server.log
 __pycache__
 git_commits.txt
+Participants/
+SQL_files/
+custom.pyc
+static/js/jspsych/parameters.js.save
+config.txt.save
+static/js/task.js^C
+templates/git_commits.txt
+config.txt

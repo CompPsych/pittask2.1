@@ -422,6 +422,62 @@ ConsentFeedback <- data.table(
   `Y/N` = character()
 )
 
+BEDS_7 <- data.table(
+  PIN = character(),
+  unique_link = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  item = character(),
+  response = character()
+)
+
+GSQ <- data.table(
+  PIN = character(),
+  unique_link = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  item = character(),
+  response = character()
+)
+
+ISQ <- data.table(
+  PIN = character(),
+  unique_link = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  item = character(),
+  response = character()
+)
+
+NIAS <- data.table(
+  PIN = character(),
+  unique_link = character(),
+  complete = character(),
+  date = character(),
+  calendar_time = character(),
+  timestamp = numeric(),
+  location = character(),
+  commit = character(),
+  version = character(),
+  item = character(),
+  response = character()
+)
+
 PavCondition <- data.table(
   PIN = character(),
   unique_link = character(),
@@ -1578,6 +1634,130 @@ if(isClass(query))
 
     }
 
+	# BEDS_7 --------------------------------------------------------------------
+    
+    bed7_index <- which(trialdata$stage_name %in% "\"BEDS-7\"")
+    
+    if(length(bed7_index) != 0){
+      bed7_responses <- fromJSON(trialdata[bed7_index,]$responses)
+      bed7_timestamps <- fromJSON(trialdata[bed7_index,]$timestamp)
+      
+      date <- format(as.IDate(dateTime[bed7_index]), "%d-%m-%Y")
+      time <- as.character(as.ITime(dateTime[bed7_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[bed7_index]
+      time_ms <- dateTime_ms[bed7_index] - time_elapsed
+
+      for(j in seq_along(bed7_responses)){
+        timestamp <- ifelse(is.na(names(bed7_timestamps)[j]), 'NA', bed7_timestamps[[j]])
+        calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
+            time_ms + as.numeric(if(timestamp != 'NA') timestamp)))))
+        response <- ifelse(nchar(bed7_responses[[j]]) == 0, 'NA', bed7_responses[[j]])
+
+        BEDS_7 <- rbindlist(list(BEDS_7, list(
+          PIN, usedLink, complete, date,
+          calendar_time,
+          timestamp,
+          country, commit, version,
+          names(bed7_responses)[j],
+          response
+        )))
+      }
+    } 
+    
+    # GSQ --------------------------------------------------------------------
+    
+    gsq_index <- which(trialdata$stage_name %in% "\"GSQ\"")                                                                                                                        
+    
+    if(length(gsq_index) != 0){
+      gsq_responses <- fromJSON(trialdata[gsq_index,]$responses)
+      gsq_timestamps <- fromJSON(trialdata[gsq_index,]$timestamp)
+      
+      date <- format(as.IDate(dateTime[gsq_index]), "%d-%m-%Y")
+      time <- as.character(as.ITime(dateTime[gsq_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[gsq_index]
+      time_ms <- dateTime_ms[gsq_index] - time_elapsed
+
+      for(j in seq_along(gsq_responses)){
+        timestamp <- ifelse(is.na(names(gsq_timestamps)[j]), 'NA', gsq_timestamps[[j]])
+        calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
+            time_ms + as.numeric(if(timestamp != 'NA') timestamp)))))
+        response <- ifelse(nchar(gsq_responses[[j]]) == 0, 'NA', gsq_responses[[j]])
+
+        GSQ <- rbindlist(list(GSQ, list(
+          PIN, usedLink, complete, date,
+          calendar_time,
+          timestamp,
+          country, commit, version,
+          names(gsq_responses)[j],
+          response
+        )))
+      }
+    } 
+
+    # ISQ --------------------------------------------------------------------
+    
+    isq_index <- which(trialdata$stage_name %in% "\"ISQ\"")                                                                                                                        
+    
+    if(length(isq_index) != 0){
+      isq_responses <- fromJSON(trialdata[isq_index,]$responses)
+      isq_timestamps <- fromJSON(trialdata[isq_index,]$timestamp)
+      
+      date <- format(as.IDate(dateTime[isq_index]), "%d-%m-%Y")
+      time <- as.character(as.ITime(dateTime[isq_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[isq_index]
+      time_ms <- dateTime_ms[isq_index] - time_elapsed
+
+      for(j in seq_along(isq_responses)){
+        timestamp <- ifelse(is.na(names(isq_timestamps)[j]), 'NA', isq_timestamps[[j]])
+        calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
+            time_ms + as.numeric(if(timestamp != 'NA') timestamp)))))
+        response <- ifelse(nchar(isq_responses[[j]]) == 0, 'NA', isq_responses[[j]])
+
+        ISQ <- rbindlist(list(ISQ, list(
+          PIN, usedLink, complete, date,
+          calendar_time,
+          timestamp,
+          country, commit, version,
+          names(isq_responses)[j],
+          response
+        )))
+      }
+    } 
+
+    # NIAS --------------------------------------------------------------------
+    
+    nias_index <- which(trialdata$stage_name %in% "\"NIAS\"")                                                                                                                        
+    
+    if(length(nias_index) != 0){
+      nias_responses <- fromJSON(trialdata[nias_index,]$responses)
+      nias_timestamps <- fromJSON(trialdata[nias_index,]$timestamp)
+      
+      date <- format(as.IDate(dateTime[nias_index]), "%d-%m-%Y")
+      time <- as.character(as.ITime(dateTime[nias_index]))
+      
+      time_elapsed <- trialdata$time_elapsed[nias_index]
+      time_ms <- dateTime_ms[nias_index] - time_elapsed
+
+      for(j in seq_along(nias_responses)){
+        timestamp <- ifelse(is.na(names(nias_timestamps)[j]), 'NA', nias_timestamps[[j]])
+        calendar_time <- ifelse(timestamp == 'NA', 'NA', as.character(as.ITime(formatDateTime(
+            time_ms + as.numeric(if(timestamp != 'NA') timestamp)))))
+        response <- ifelse(nchar(nias_responses[[j]]) == 0, 'NA', nias_responses[[j]])
+
+        NIAS <- rbindlist(list(NIAS, list(
+          PIN, usedLink, complete, date,
+          calendar_time,
+          timestamp,
+          country, commit, version,
+          names(nias_responses)[j],
+          response
+        )))
+      }
+    } 
+																			 
     # Transfer_q --------------------------------------------------------------
 
     transfer_q_index <- which(trialdata$stage_name %in% "\"transfer_q\"")
@@ -1705,6 +1885,10 @@ if(isClass(query))
     "DASS" = DASS,
     "ASRS-5" = ASRS5,
     "EAT-26" = EAT_26,
+	"BEDS_7" = BEDS_7,
+    "GSQ" = GSQ,
+    "ISQ" = ISQ,
+    "NIAS" = NIAS,				  
     "RAADS-14" = RAADS_14,
     "PHQ-9" = PHQ_9,
     "GAD-7" = GAD_7,
