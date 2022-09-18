@@ -665,7 +665,7 @@ jsPsych.plugins['Demographics'] = (function () {
         var name = id;
 
         if (match.attributes['data-name'].value !== '') {
-          name = match.attributes['data-name'].value;
+          name = '1. Gender';
         }
 
         timestamp_data[name] = trial.time_stamp['Q' + (i + 1)];
@@ -808,6 +808,9 @@ jsPsych.plugins['Demographics'] = (function () {
         }
       })();
 
+      const item_names = new Array("5. Education level", "6. Marital status", "7. Employment status", "8. Gross annual household income (US dollars)",
+      "9. English language");
+
       for (var i = 4; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
         var id = $(match).find('.jspsych-survey-multi-choice-question').text();
@@ -826,7 +829,7 @@ jsPsych.plugins['Demographics'] = (function () {
         var name = id;
 
         if (match.attributes['data-name'].value !== '') {
-          name = match.attributes['data-name'].value;
+          name = item_names[i - 4];
         }
 
         timestamp_data[name] = trial.time_stamp['Q' + (i + 1)];

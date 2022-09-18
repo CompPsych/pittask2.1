@@ -13,3 +13,4 @@ static/js/task.js^C
 templates/git_commits.txt
 config.txt
 templates/git_commits.txt
+.idea

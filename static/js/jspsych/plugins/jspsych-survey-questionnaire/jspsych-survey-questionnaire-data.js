@@ -1453,7 +1453,7 @@ var PGSI = {
     title: [
         'Never',
         'Sometimes',
-        'Most of the &nbsp; time',
+        'Most of the time',
         'Almost always'
     ],
     preamble: 'We would like to ask you about your gambling. Thinking about the past 12 months, please answer the following questions.',
