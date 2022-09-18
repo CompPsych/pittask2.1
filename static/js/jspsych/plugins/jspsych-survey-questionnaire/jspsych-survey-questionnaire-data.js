@@ -588,14 +588,6 @@ var PHQ9 = {
     type: 'PHQ-9',
     preamble:
         '<p>Over the <b>last 2 weeks</b>, how often have you been bothered by any of the following problems?</p>',
-    checkboxes: [
-        {
-            prompt: 'If you checked off <u>any</u> problems, how <u>difficult</u> have these problems made it for you to do your work, take care of things at home, or get along with other people?',
-            options: [
-                'Not difficult at all', 'Somewhat difficult', 'Very difficult', 'Extremely difficult'
-            ]
-        }
-    ],
     questions: [
         {
             prompt: 'Little interest or pleasure in doing things.',
