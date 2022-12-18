@@ -338,16 +338,16 @@
 }
 /* transfer_q <= */
 
-/* Vending machine VVR */
-.vvr-question-container {
+/* Vending machine RL */
+.rl-question-container {
   display: flex;
 }
 
-.vvr-question-container > div {
+.rl-question-container > div {
   padding: 0 5rem;
 }
 
-.vvr-question-b {
+.rl-question-b {
   display: flex;
   flex-direction: column;
   justify-content: center;

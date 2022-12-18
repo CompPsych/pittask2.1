@@ -1,8 +1,8 @@
-jsPsych.plugins['survey-vvr'] = (function () {
+jsPsych.plugins['survey-rl'] = (function () {
   var plugin = {};
 
   plugin.info = {
-    name: 'survey-vvr',
+    name: 'survey-rl',
     parameters: {
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
@@ -34,11 +34,11 @@ jsPsych.plugins['survey-vvr'] = (function () {
 
   plugin.trial = function (display_element, trial) {
     var _trial$variables = trial.variables,
-      VVR_INTERVAL_DURATION = _trial$variables.VVR_INTERVAL_DURATION,
-      VVR_INTERVAL_NUM = _trial$variables.VVR_INTERVAL_NUM,
-      VVR_OUTCOME_DURATION = _trial$variables.VVR_OUTCOME_DURATION,
-      VVR_DEGRAD_PATTERN = _trial$variables.VVR_DEGRAD_PATTERN,
-      VVR_PROB_VALUE = _trial$variables.VVR_PROB_VALUE;
+      RL_INTERVAL_DURATION = _trial$variables.RL_INTERVAL_DURATION,
+      RL_INTERVAL_NUM = _trial$variables.RL_INTERVAL_NUM,
+      RL_OUTCOME_DURATION = _trial$variables.RL_OUTCOME_DURATION,
+      RL_DEGRAD_PATTERN = _trial$variables.RL_DEGRAD_PATTERN,
+      RL_PROB_VALUE = _trial$variables.RL_PROB_VALUE;
 
     var interval_number_holder = 1;
     var interval_holder_key_press = {};
@@ -49,8 +49,8 @@ jsPsych.plugins['survey-vvr'] = (function () {
       BBQ: '/static/images/BBQ.png',
     };
 
-    var degradation_pattern_condition = VVR_DEGRAD_PATTERN[degrad_pattern_loop_counter]; // Default condition degradation pattern
-    var probability_value = VVR_PROB_VALUE[prob_value_loop_counter];
+    var degradation_pattern_condition = RL_DEGRAD_PATTERN[degrad_pattern_loop_counter]; // Default condition degradation pattern
+    var probability_value = RL_PROB_VALUE[prob_value_loop_counter];
     var timerId;
     var condition_outcome = 'A0';
     var condition_outcome_handler = false;
@@ -68,14 +68,14 @@ jsPsych.plugins['survey-vvr'] = (function () {
       mouse_events: [],
     };
 
-    if (vvr_timer <= 0) {
-      vvr_timer = jsPsych.totalTime();
+    if (rl_timer <= 0) {
+      rl_timer = jsPsych.totalTime();
     }
 
-    var timestamp_onload = vvr_timer;
+    var timestamp_onload = rl_timer;
 
     var new_html =
-      '<div id="jspsych-stimulus" class="vvr_stage">' +
+      '<div id="jspsych-stimulus" class="rl_stage">' +
       '<svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
       '<rect x="27" y="20" width="203" height="359" fill="#000"/>' +
       '<path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>' +
@@ -123,7 +123,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
       var x = 0;
       var random_boolean = Math.random() < probability_value;
       var outcome_present = DEGRAD_PATTERN[condition_outcome][degradation_pattern_condition];
-      var duration = VVR_INTERVAL_DURATION;
+      var duration = RL_INTERVAL_DURATION;
 
       timerId = jsPsych.pluginAPI.setTimeout(function request() {
         if (isStoppedTest) {
@@ -164,19 +164,19 @@ jsPsych.plugins['survey-vvr'] = (function () {
           });
 
           // terminate stage
-          if (x === VVR_INTERVAL_NUM) {
+          if (x === RL_INTERVAL_NUM) {
             jsPsych.pluginAPI.setTimeout(function () {
               jsPsych.pluginAPI.clearTimeout(timerId);
               end_trial();
-            }, VVR_OUTCOME_DURATION);
+            }, RL_OUTCOME_DURATION);
           }
 
           // clear outcome
           jsPsych.pluginAPI.setTimeout(function () {
             $outcome_container.html('');
-          }, VVR_OUTCOME_DURATION);
+          }, RL_OUTCOME_DURATION);
 
-          duration = VVR_OUTCOME_DURATION + VVR_INTERVAL_DURATION;
+          duration = RL_OUTCOME_DURATION + RL_INTERVAL_DURATION;
         } else {
           response.trial_events.push({
             timestamp: jsPsych.totalTime(),
@@ -187,26 +187,26 @@ jsPsych.plugins['survey-vvr'] = (function () {
             event_converted_details: 'no outcome'
           });
 
-          if (x === VVR_INTERVAL_NUM) {
+          if (x === RL_INTERVAL_NUM) {
             jsPsych.pluginAPI.clearTimeout(timerId);
             end_trial();
           }
 
-          duration = VVR_INTERVAL_DURATION;
+          duration = RL_INTERVAL_DURATION;
         }
 
-        if (x < VVR_INTERVAL_NUM) {
+        if (x < RL_INTERVAL_NUM) {
           timerId = jsPsych.pluginAPI.setTimeout(request, duration);
         }
 
-        if (interval_number_holder < VVR_INTERVAL_NUM) {
+        if (interval_number_holder < RL_INTERVAL_NUM) {
           interval_number_holder += 1;
         }
 
         // reset degrad pattern
         condition_outcome = 'A0';
         condition_outcome_handler = false;
-      }, VVR_INTERVAL_DURATION);
+      }, RL_INTERVAL_DURATION);
     }());
 
     setModalShowTimer()
@@ -318,16 +318,16 @@ jsPsych.plugins['survey-vvr'] = (function () {
 
     function proccessDataBeforeSubmit() {
       // increase counter
-      loop_node_counter_vvr++;
-      loop_node_counter_vvr_determination++;
+      loop_node_counter_rl++;
+      loop_node_counter_rl_determination++;
 
-      if ((VVR_DEGRAD_PATTERN.length - 1) === degrad_pattern_loop_counter) {
+      if ((RL_DEGRAD_PATTERN.length - 1) === degrad_pattern_loop_counter) {
         degrad_pattern_loop_counter = 0;
       } else {
         degrad_pattern_loop_counter++;
       }
 
-      if ((VVR_PROB_VALUE.length - 1) === prob_value_loop_counter) {
+      if ((RL_PROB_VALUE.length - 1) === prob_value_loop_counter) {
         prob_value_loop_counter = 0;
       } else {
         prob_value_loop_counter++;
@@ -336,7 +336,7 @@ jsPsych.plugins['survey-vvr'] = (function () {
       return {
         stage_name: trial.stage_name,
         stimulus: trial.stimulus,
-        block_number: loop_node_counter_vvr,
+        block_number: loop_node_counter_rl,
         events: JSON.stringify(response.trial_events),
         mouse_events: JSON.stringify(response.mouse_events),
       };

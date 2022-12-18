@@ -9,8 +9,8 @@ At the bottom of the page you can find a list of the stages:
 timeline.push(FHQ_PRE_INSTRUCT_OPEN, FHQ_PRE_1, FHQ_PRE_2, FHQ_PRE_3, FHQ_PRE_4, FHQ_PRE_INSTRUCT_CLOSE);
 // Pavlovian Condition
 timeline.push(PAV_CONDITIONING);
-//  Instrumental Conditioning (VVR_copy_1)
-timeline.push(VVR_1);
+//  Instrumental Conditioning (RL_copy_1)
+timeline.push(RL_1);
 // Transfer Test
 timeline.push(TRANSFER_TEST);
 ...

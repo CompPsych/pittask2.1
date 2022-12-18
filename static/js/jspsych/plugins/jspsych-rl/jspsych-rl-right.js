@@ -1,8 +1,8 @@
-jsPsych.plugins['survey-vvr-questions-right'] = (function () {
+jsPsych.plugins['survey-rl-questions-right'] = (function () {
     var plugin = {};
 
     plugin.info = {
-        name: 'survey-vvr-questions-right',
+        name: 'survey-rl-questions-right',
         parameters: {
             choices: {
                 type: jsPsych.plugins.parameterType.KEYCODE,
@@ -96,24 +96,24 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
 
         // add question
         var new_html =
-            `<div id="jspsych-stimulus" class='vvr-question-container vvr-question-right'>
-            <div class='vvr-question-a'>
-            <p>${trial.vars.VVR_q_text_a1}</p>
+            `<div id="jspsych-stimulus" class='rl-question-container rl-question-right'>
+            <div class='rl-question-a'>
+            <p>${trial.vars.RL_q_text_a1}</p>
             <div class="outcome-container-learning"><img src='${OUTCOME}'/></div>
-            <p class="answer_latency" style='padding:2rem 0'>${trial.vars.VVR_q_text_a2}</p>
+            <p class="answer_latency" style='padding:2rem 0'>${trial.vars.RL_q_text_a2}</p>
             <svg class="vending-machine" viewBox="0 0 253 459" x="10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="27" y="20" width="203" height="359" fill="#000"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M253 0V440.506H209.527V459H44.6212V440.506H0V0H253ZM222 279H32V363H222V279ZM59.957 282.531L133.253 309.209L118.546 349.616L45.2501 322.938L59.957 282.531ZM86 210H32V256H86V210ZM154 210H100V256H154V210ZM222 210H168V256H222V210ZM86 148H32V194H86V148ZM154 148H100V194H154V148ZM222 148H168V194H222V148ZM86 86H32V132H86V86ZM154 86H100V132H154V86ZM222 86H168V132H222V86ZM86 24H32V70H86V24ZM154 24H100V70H154V24ZM222 24H168V70H222V24Z" fill="white"/>
             </svg>
             </div>
-            <div class='vvr-question-b' style='display: none'>
+            <div class='rl-question-b' style='display: none'>
             <div>
-            <p style="padding-bottom: 5rem;">${trial.vars.VVR_q_text_b1}</p>
+            <p style="padding-bottom: 5rem;">${trial.vars.RL_q_text_b1}</p>
             <div class="votes-container">
             <div class="description">
-            <div class="description--left">${trial.vars.VVR_q_text_b2}</div>
+            <div class="description--left">${trial.vars.RL_q_text_b2}</div>
             <div class="description--center"></div>
-            <div class="description--right">${trial.vars.VVR_q_text_b3}</div>
+            <div class="description--right">${trial.vars.RL_q_text_b3}</div>
             </div>
             <div id="slider"><span class="line"></span></div>
             </div>
@@ -121,7 +121,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
             <div>
             <button class="jspsych-btn" style="margin-bottom: 3rem;">Submit answer</button>
             <div class="instructions-wrap">
-            <ul class="instructions">${trial.vars.VVR_q_text_b4}</ul>
+            <ul class="instructions">${trial.vars.RL_q_text_b4}</ul>
             </div>
             </div>
             </div>
@@ -131,7 +131,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
         new_html += jsPsych.pluginAPI.getPopupHTML('window-blur', popup_text_browser);
         new_html += jsPsych.pluginAPI.getPopupHTML('translator-detected', popup_text_translator);
 
-        var timestamp_onload = vvr_timer;
+        var timestamp_onload = rl_timer;
         var question_number = item_id + 1;
 
         response.trial_events.push({
@@ -184,13 +184,13 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
         if (item_id === 0 && answer_latency_countdown) {
             $('.answer_latency').text(answer_latency_text);
             setTimeout(function () {
-                $('.answer_latency').text(trial.vars.VVR_q_text_a2);
+                $('.answer_latency').text(trial.vars.RL_q_text_a2);
             }, answer_latency);
         }
 
         // show a second part of the question with VAS
         function showNextQuestion() {
-            $('.vvr-question-b').fadeIn('slow');
+            $('.rl-question-b').fadeIn('slow');
             response.trial_events.push({
                 event_type: trial.details.b.event_type,
                 event_raw_details: "question " + question_number + "(b) appears",
@@ -229,7 +229,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
                     transform: "rotate(" + shake_left_rotate + "deg) translateX(" + shake_left_translateX + "%)",
                     transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
                 });
-                vvrIsCorrect = false;
+                rlIsCorrect = false;
                 isMachineTilted = true;
                 ++loop_node_counter_max_num_incorrect;
 
@@ -243,7 +243,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
                     transform: "rotate(" + shake_right_rotate + "deg) translateX(" + shake_right_translateX + "%)",
                     transition: "all " + shake_transition + "s cubic-bezier(0.65, 0.05, 0.36, 1)"
                 });
-                vvrIsCorrect = true;
+                rlIsCorrect = true;
                 isMachineTilted = true;
                 ++loop_node_counter_max_num_correct;
                 showNextQuestion();
@@ -271,19 +271,19 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
                 stage_name: JSON.stringify(trial.stage_name),
                 stimulus: trial.stimulus,
                 timestamp: jsPsych.totalTime(),
-                block_number: loop_node_counter_vvr,
+                block_number: loop_node_counter_rl,
                 item_id: ++item_id,
                 food_item: OUTCOME.slice(15),
-                correct: vvrIsCorrect ? "y" : "n",
+                correct: rlIsCorrect ? "y" : "n",
                 strength_of_belief: vas_holder,
                 events: JSON.stringify(response.trial_events),
                 mouse_events: JSON.stringify(response.mouse_events),
             };
 
-            // add VVR stage name if plugin was called by VVR stage
+            // add RL stage name if plugin was called by RL stage
             // make exception for Recall stage
-            if (trial.vvr_stage !== null) {
-                trial_data.vvr_stage = JSON.stringify(trial.vvr_stage);
+            if (trial.rl_stage !== null) {
+                trial_data.rl_stage = JSON.stringify(trial.rl_stage);
             } else {
                 // required for Recall stage
                 trial_data.block_number = trial.stage_type;
@@ -371,11 +371,11 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
         },
         {
             element: 'instruction text (a) top',
-            text: [trial.vars.VVR_q_text_a1]
+            text: [trial.vars.RL_q_text_a1]
         },
         {
             element: 'instruction text (a) bottom',
-            text: [trial.vars.VVR_q_text_a2]
+            text: [trial.vars.RL_q_text_a2]
         },
         {
             element: 'slider',
@@ -384,7 +384,7 @@ jsPsych.plugins['survey-vvr-questions-right'] = (function () {
         },
         {
             element: 'instruction text (b) top',
-            text: [trial.vars.VVR_q_text_b1]
+            text: [trial.vars.RL_q_text_b1]
         },
         {
             element: 'instruction text (b) bottom',

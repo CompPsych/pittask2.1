@@ -1,6 +1,6 @@
 # Pavlovian-instrumental transfer (PIT)
 
-### VVR variables
+### Reinforcement Learning (RL) variables
 ```
 degrad_pattern - 
 interval_num -

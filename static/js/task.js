@@ -23,7 +23,7 @@ $(window).on("beforeunload", function (event) {
     }
 });
 
-// determining the presence of outcome for VVR stage
+// determining the presence of outcome for RL stage
 var DEGRAD_PATTERN = {
     A0: {
         d0: false,
@@ -553,69 +553,69 @@ var FHQ2_CLOSE = {
     }
 };
 
-var loop_node_counter_vvr = 0;
-var loop_node_counter_vvr_determination = 0;
+var loop_node_counter_rl = 0;
+var loop_node_counter_rl_determination = 0;
 var loop_node_counter_max_num_correct = 0;
 var loop_node_counter_max_num_incorrect = 0;
 var degrad_pattern_loop_counter = 0;
 var prob_value_loop_counter = 0;
-var vvrIsCorrect = false;
+var rlIsCorrect = false;
 var item_id = 0;
-var vvr_timer = 0;
+var rl_timer = 0;
 
-// pass variables from parameters.js through vvr_*_vars objects
-var vvr_1_vars = {
-    stage_name: 'VVR1',
-    min_blocks_num: min_blocks_num_VVR1,
-    min_num_correct: min_num_correct_VVR1,
-    max_num_incorrect: max_num_incorrect_VVR1,
-    prob_value: prob_value_VVR1,
-    degrad_pattern: degrad_pattern_VVR1,
-    popup_machine: popup_machine_VVR1,
-    popup_machine_duration: popup_duration_machine_VVR1,
-    popup_machine_text: popup_text_machine_VVR1
+// pass variables from parameters.js through rl_*_vars objects
+var rl_1_vars = {
+    stage_name: 'RL1',
+    min_blocks_num: min_blocks_num_RL1,
+    min_num_correct: min_num_correct_RL1,
+    max_num_incorrect: max_num_incorrect_RL1,
+    prob_value: prob_value_RL1,
+    degrad_pattern: degrad_pattern_RL1,
+    popup_machine: popup_machine_RL1,
+    popup_machine_duration: popup_duration_machine_RL1,
+    popup_machine_text: popup_text_machine_RL1
 };
 
-var vvr_2_vars = {
-    stage_name: 'VVR2',
-    min_blocks_num: min_blocks_num_VVR2,
-    min_num_correct: min_num_correct_VVR2,
-    max_num_incorrect: max_num_incorrect_VVR2,
-    prob_value: prob_value_VVR2,
-    degrad_pattern: degrad_pattern_VVR2,
-    popup_machine: popup_machine_VVR2,
-    popup_machine_duration: popup_duration_machine_VVR2,
-    popup_machine_text: popup_text_machine_VVR2
+var rl_2_vars = {
+    stage_name: 'RL2',
+    min_blocks_num: min_blocks_num_RL2,
+    min_num_correct: min_num_correct_RL2,
+    max_num_incorrect: max_num_incorrect_RL2,
+    prob_value: prob_value_RL2,
+    degrad_pattern: degrad_pattern_RL2,
+    popup_machine: popup_machine_RL2,
+    popup_machine_duration: popup_duration_machine_RL2,
+    popup_machine_text: popup_text_machine_RL2
 };
 
-var vvr_3_vars = {
-    stage_name: 'VVR3',
-    min_blocks_num: min_blocks_num_VVR3,
-    min_num_correct: min_num_correct_VVR3,
-    max_num_incorrect: max_num_incorrect_VVR3,
-    prob_value: prob_value_VVR3,
-    degrad_pattern: degrad_pattern_VVR3,
-    popup_machine: popup_machine_VVR3,
-    popup_machine_duration: popup_duration_machine_VVR3,
-    popup_machine_text: popup_text_machine_VVR3
+var rl_3_vars = {
+    stage_name: 'RL3',
+    min_blocks_num: min_blocks_num_RL3,
+    min_num_correct: min_num_correct_RL3,
+    max_num_incorrect: max_num_incorrect_RL3,
+    prob_value: prob_value_RL3,
+    degrad_pattern: degrad_pattern_RL3,
+    popup_machine: popup_machine_RL3,
+    popup_machine_duration: popup_duration_machine_RL3,
+    popup_machine_text: popup_text_machine_RL3
 };
 
-// main function used for all VVR stages
-var VVR = function (data) {
+// main function used for all RL stages
+var RL = function (data) {
     var min_blocks_num = data.min_blocks_num;
     var min_num_correct = data.min_num_correct;
     var max_num_incorrect = data.max_num_incorrect;
     var stage_name = data.stage_name;
 
-    var vvr_a = {
-        type: 'survey-vvr',
+    var rl_a = {
+        type: 'survey-rl',
         stage_name: stage_name,
         variables: {
-            VVR_INTERVAL_NUM: interval_num,
-            VVR_INTERVAL_DURATION: interval_duration,
-            VVR_OUTCOME_DURATION: outcome_duration,
-            VVR_PROB_VALUE: data.prob_value,
-            VVR_DEGRAD_PATTERN: data.degrad_pattern,
+            RL_INTERVAL_NUM: interval_num,
+            RL_INTERVAL_DURATION: interval_duration,
+            RL_OUTCOME_DURATION: outcome_duration,
+            RL_PROB_VALUE: data.prob_value,
+            RL_DEGRAD_PATTERN: data.degrad_pattern,
         },
         popup_machine: data.popup_machine,
         popup_machine_duration: data.popup_machine_duration,
@@ -625,9 +625,9 @@ var VVR = function (data) {
     var questions_a = {
         timeline: [
             {
-                type: 'survey-vvr-questions-left',
+                type: 'survey-rl-questions-left',
                 stage_name: stage_name,
-                vvr_stage: stage_name,
+                rl_stage: stage_name,
                 details: {
                     a: {
                         event_type: 'question appears',
@@ -641,12 +641,12 @@ var VVR = function (data) {
                     }
                 },
                 vars: {
-                    VVR_q_text_a1: VVR_q_text_a1,
-                    VVR_q_text_a2: VVR_q_text_a2,
-                    VVR_q_text_b1: VVR_q_text_b1,
-                    VVR_q_text_b2: VVR_q_text_b2,
-                    VVR_q_text_b3: VVR_q_text_b3,
-                    VVR_q_text_b4: VVR_q_text_b4,
+                    RL_q_text_a1: RL_q_text_a1,
+                    RL_q_text_a2: RL_q_text_a2,
+                    RL_q_text_b1: RL_q_text_b1,
+                    RL_q_text_b2: RL_q_text_b2,
+                    RL_q_text_b3: RL_q_text_b3,
+                    RL_q_text_b4: RL_q_text_b4,
                     max_num_correct_consecutive_questions: min_num_correct
                 },
                 popup_machine: data.popup_machine,
@@ -657,17 +657,17 @@ var VVR = function (data) {
                 stage_name: stage_name,
                 type: 'survey-feedback',
                 stimulus: function () {
-                    return vvrIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
+                    return rlIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
                 },
                 choices: jsPsych.NO_KEYS,
                 trial_duration: feedback_duration,
-                vvr_timer: true,
+                rl_timer: true,
                 event_type: 'text appears',
                 event_raw_details: function () {
-                    return vvrIsCorrect ? 'correct_text' : 'incorrect_text';
+                    return rlIsCorrect ? 'correct_text' : 'incorrect_text';
                 },
                 event_converted_details: function () {
-                    return vvrIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
+                    return rlIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
                 }
             }
         ]
@@ -676,9 +676,9 @@ var VVR = function (data) {
     var questions_b = {
         timeline: [
             {
-                type: 'survey-vvr-questions-right',
+                type: 'survey-rl-questions-right',
                 stage_name: stage_name,
-                vvr_stage: stage_name,
+                rl_stage: stage_name,
                 details: {
                     a: {
                         event_type: 'question appears',
@@ -692,12 +692,12 @@ var VVR = function (data) {
                     }
                 },
                 vars: {
-                    VVR_q_text_a1: VVR_q_text_a1,
-                    VVR_q_text_a2: VVR_q_text_a2,
-                    VVR_q_text_b1: VVR_q_text_b1,
-                    VVR_q_text_b2: VVR_q_text_b2,
-                    VVR_q_text_b3: VVR_q_text_b3,
-                    VVR_q_text_b4: VVR_q_text_b4,
+                    RL_q_text_a1: RL_q_text_a1,
+                    RL_q_text_a2: RL_q_text_a2,
+                    RL_q_text_b1: RL_q_text_b1,
+                    RL_q_text_b2: RL_q_text_b2,
+                    RL_q_text_b3: RL_q_text_b3,
+                    RL_q_text_b4: RL_q_text_b4,
                     max_num_correct_consecutive_questions: min_num_correct
                 },
                 popup_machine: data.popup_machine,
@@ -708,59 +708,59 @@ var VVR = function (data) {
                 stage_name: stage_name,
                 type: 'survey-feedback',
                 stimulus: function () {
-                    return vvrIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
+                    return rlIsCorrect ? '<p style="font-size: 24px;">' + correct_text + '</p>' : '<p style="font-size: 24px;">' + incorrect_text + '</p>';
                 },
                 choices: jsPsych.NO_KEYS,
                 trial_duration: feedback_duration,
-                vvr_timer: true,
+                rl_timer: true,
                 event_type: 'text appears',
                 event_raw_details: function () {
-                    return vvrIsCorrect ? 'correct_text' : 'incorrect_text';
+                    return rlIsCorrect ? 'correct_text' : 'incorrect_text';
                 },
                 event_converted_details: function () {
-                    return vvrIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
+                    return rlIsCorrect ? correct_text + ' text appears' : incorrect_text + ' text appears'
                 }
             }
         ]
     };
 
-    var vvr_a_cond = false;
-    var vvr_b_cond = false;
-    var vvr_c_cond = false;
+    var rl_a_cond = false;
+    var rl_b_cond = false;
+    var rl_c_cond = false;
 
-    function vvr_shuffle_questions() {
+    function rl_shuffle_questions() {
         var rand = jsPsych.randomization.sampleWithoutReplacement(['right', 'left'], 1);
         if (rand[0] === 'right') {
-            vvr_a_cond = false;
-            vvr_b_cond = true;
-            vvr_c_cond = true;
+            rl_a_cond = false;
+            rl_b_cond = true;
+            rl_c_cond = true;
         } else if (rand[0] === 'left') {
-            vvr_a_cond = true;
-            vvr_b_cond = true;
-            vvr_c_cond = false;
+            rl_a_cond = true;
+            rl_b_cond = true;
+            rl_c_cond = false;
         };
     };
 
-    vvr_shuffle_questions();
+    rl_shuffle_questions();
 
-    var loop_node_VVR = {
-        timeline: [vvr_a,
+    var loop_node_RL = {
+        timeline: [rl_a,
             {
                 timeline: [questions_a],
                 conditional_function: function () {
-                    return vvr_a_cond;
+                    return rl_a_cond;
                 }
             },
             {
                 timeline: [questions_b],
                 conditional_function: function () {
-                    return vvr_b_cond;
+                    return rl_b_cond;
                 }
             },
             {
                 timeline: [questions_a],
                 conditional_function: function () {
-                    return vvr_c_cond;
+                    return rl_c_cond;
                 }
             }
         ],
@@ -768,134 +768,134 @@ var VVR = function (data) {
             function reset_vars() {
                 degrad_pattern_loop_counter = 0;
                 prob_value_loop_counter = 0;
-                loop_node_counter_vvr = 0;
-                loop_node_counter_vvr_determination = 0;
-                vvr_timer = 0;
+                loop_node_counter_rl = 0;
+                loop_node_counter_rl_determination = 0;
+                rl_timer = 0;
                 item_id = 0;
             };
 
-            if (loop_node_counter_vvr_determination >= min_blocks_num && max_num_incorrect <= loop_node_counter_max_num_incorrect) {
+            if (loop_node_counter_rl_determination >= min_blocks_num && max_num_incorrect <= loop_node_counter_max_num_incorrect) {
                 reset_vars();
                 return false;
-            } else if (loop_node_counter_vvr_determination >= min_blocks_num && min_num_correct <= loop_node_counter_max_num_correct) {
+            } else if (loop_node_counter_rl_determination >= min_blocks_num && min_num_correct <= loop_node_counter_max_num_correct) {
                 reset_vars();
                 return false;
             } else {
-                vvr_shuffle_questions();
+                rl_shuffle_questions();
                 return true;
             }
         }
     };
 
-    return loop_node_VVR;
+    return loop_node_RL;
 };
 
-var VVR1 = {
+var RL1 = {
     timeline: [
         {
             timeline: [{
-                stage_name: 'VVR1_open',
+                stage_name: 'RL1_open',
                 type: 'html-keyboard-response',
-                stimulus: open_instruct_text_VVR1,
+                stimulus: open_instruct_text_RL1,
                 trial_latency: open_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                event_raw_details: 'open_instruct_text_VVR1',
-                event_converted_details: 'VVR1_open text appears'
+                event_raw_details: 'open_instruct_text_RL1',
+                event_converted_details: 'RL1_open text appears'
             }],
             conditional_function: function () {
-                return open_instruct_VVR1;
+                return open_instruct_RL1;
             }
         },
-        VVR(vvr_1_vars),
+        RL(rl_1_vars),
         {
             timeline: [{
-                stage_name: 'VVR1_close',
+                stage_name: 'RL1_close',
                 type: 'html-keyboard-response',
-                stimulus: close_instruct_text_VVR1,
+                stimulus: close_instruct_text_RL1,
                 trial_latency: close_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                class: 'vvr_close_instruct',
-                event_raw_details: 'close_instruct_text_VVR1',
-                event_converted_details: 'VVR1_close text appears'
+                class: 'rl_close_instruct',
+                event_raw_details: 'close_instruct_text_RL1',
+                event_converted_details: 'RL1_close text appears'
             }],
             conditional_function: function () {
-                return close_instruct_VVR1;
+                return close_instruct_RL1;
             }
         }
     ]
 };
 
-var VVR2 = {
+var RL2 = {
     timeline: [
         {
             timeline: [{
-                stage_name: 'VVR2_open',
+                stage_name: 'RL2_open',
                 type: 'html-keyboard-response',
-                stimulus: open_instruct_text_VVR2,
+                stimulus: open_instruct_text_RL2,
                 trial_latency: open_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                event_raw_details: 'open_instruct_text_VVR2',
-                event_converted_details: 'VVR2_open text appears'
+                event_raw_details: 'open_instruct_text_RL2',
+                event_converted_details: 'RL2_open text appears'
             }],
             conditional_function: function () {
-                return open_instruct_VVR2;
+                return open_instruct_RL2;
             }
         },
-        VVR(vvr_2_vars),
+        RL(rl_2_vars),
         {
             timeline: [{
-                stage_name: 'VVR2_close',
+                stage_name: 'RL2_close',
                 type: 'html-keyboard-response',
-                stimulus: close_instruct_text_VVR2,
+                stimulus: close_instruct_text_RL2,
                 trial_latency: close_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                id: 'vvr_close_instruct',
-                event_raw_details: 'close_instruct_text_VVR2',
-                event_converted_details: 'VVR2_close text appears'
+                id: 'rl_close_instruct',
+                event_raw_details: 'close_instruct_text_RL2',
+                event_converted_details: 'RL2_close text appears'
             }],
             conditional_function: function () {
-                return close_instruct_VVR2;
+                return close_instruct_RL2;
             }
         }
     ]
 };
 
-var VVR3 = {
+var RL3 = {
     timeline: [
         {
             timeline: [{
-                stage_name: 'VVR3_open',
+                stage_name: 'RL3_open',
                 type: 'html-keyboard-response',
-                stimulus: open_instruct_text_VVR3,
+                stimulus: open_instruct_text_RL3,
                 trial_latency: open_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                event_raw_details: 'open_instruct_text_VVR3',
-                event_converted_details: 'VVR3_open text appears'
+                event_raw_details: 'open_instruct_text_RL3',
+                event_converted_details: 'RL3_open text appears'
             }],
             conditional_function: function () {
-                return open_instruct_VVR3;
+                return open_instruct_RL3;
             }
         },
-        VVR(vvr_3_vars),
+        RL(rl_3_vars),
         {
             timeline: [{
-                stage_name: 'VVR3_close',
+                stage_name: 'RL3_close',
                 type: 'html-keyboard-response',
-                stimulus: close_instruct_text_VVR3,
+                stimulus: close_instruct_text_RL3,
                 trial_latency: close_instruct_latency,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                id: 'vvr_close_instruct',
-                event_raw_details: 'close_instruct_text_VVR3',
-                event_converted_details: 'VVR3_close text appears'
+                id: 'rl_close_instruct',
+                event_raw_details: 'close_instruct_text_RL3',
+                event_converted_details: 'RL3_close text appears'
             }],
             conditional_function: function () {
-                return close_instruct_VVR3;
+                return close_instruct_RL3;
             }
         }
     ]
@@ -1381,45 +1381,45 @@ var DEVAL_TEST = {
     ]
 };
 
-// VOR
-var VOR = {
+// OR
+var OR = {
     timeline: [
         {
             timeline: [{
-                stage_name: 'VOR_open',
+                stage_name: 'OR_open',
                 type: 'html-keyboard-response',
-                stimulus: open_instruct_text_VOR,
+                stimulus: open_instruct_text_OR,
                 trial_latency: open_instruct_latency,
                 trial_duration: null,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                event_raw_details: 'open_instruct_text_VOR',
-                event_converted_details: "open_instruct_text_VOR text appears",
+                event_raw_details: 'open_instruct_text_OR',
+                event_converted_details: "open_instruct_text_OR text appears",
             }],
             conditional_function: function () {
-                return open_instruct_VOR;
+                return open_instruct_OR;
             }
         },
         {
-            stage_name: 'VOR',
-            type: 'vor',
+            stage_name: 'OR',
+            type: 'or',
             stimulus: 'vending machine',
-            trial_duration: VOR_duration * 1000,
+            trial_duration: OR_duration * 1000,
         },
         {
             timeline: [{
-                stage_name: 'VOR_close',
+                stage_name: 'OR_close',
                 type: 'html-keyboard-response',
-                stimulus: close_instruct_text_VOR,
+                stimulus: close_instruct_text_OR,
                 trial_latency: close_instruct_latency,
                 trial_duration: null,
                 response_ends_trial: false,
                 event_type: 'text appears',
-                event_raw_details: 'close_instruct_text_VOR',
-                event_converted_details: "close_instruct_text_VOR text appears",
+                event_raw_details: 'close_instruct_text_OR',
+                event_converted_details: "close_instruct_text_OR text appears",
             }],
             conditional_function: function () {
-                return close_instruct_VOR;
+                return close_instruct_OR;
             }
         },
     ]
@@ -1497,56 +1497,56 @@ var RECALL = {
         {
             timeline: jsPsych.randomization.shuffle([
                 {
-                    type: 'survey-vvr-questions-left',
+                    type: 'survey-rl-questions-left',
                     stage_name: 'recall',
-                    stage_type: 'VVR',
-                    vvr_stage: null,
+                    stage_type: 'RL',
+                    rl_stage: null,
                     details: {
                         a: {
                             event_type: 'question appears',
                             event_raw_details: 'question 1(a) appears',
-                            event_converted_details: 'VVR' + ' text appears',
+                            event_converted_details: 'RL' + ' text appears',
                         },
                         b: {
                             event_type: 'question appears',
                             event_raw_details: 'question 1(b) appears',
-                            event_converted_details: 'VVR' + ' text appears',
+                            event_converted_details: 'RL' + ' text appears',
                         }
                     },
                     vars: {
-                        VVR_q_text_a1: VVR_q_text_a1,
-                        VVR_q_text_a2: VVR_q_text_a2,
-                        VVR_q_text_b1: VVR_q_text_b1,
-                        VVR_q_text_b2: VVR_q_text_b2,
-                        VVR_q_text_b3: VVR_q_text_b3,
-                        VVR_q_text_b4: VVR_q_text_b4,
+                        RL_q_text_a1: RL_q_text_a1,
+                        RL_q_text_a2: RL_q_text_a2,
+                        RL_q_text_b1: RL_q_text_b1,
+                        RL_q_text_b2: RL_q_text_b2,
+                        RL_q_text_b3: RL_q_text_b3,
+                        RL_q_text_b4: RL_q_text_b4,
                         max_num_correct_consecutive_questions: 1
                     }
                 },
                 {
-                    type: 'survey-vvr-questions-right',
+                    type: 'survey-rl-questions-right',
                     stage_name: 'recall',
-                    stage_type: 'VVR',
-                    vvr_stage: null,
+                    stage_type: 'RL',
+                    rl_stage: null,
                     details: {
                         a: {
                             event_type: 'question appears',
                             event_raw_details: 'question 1(a) appears',
-                            event_converted_details: 'VVR' + ' text appears',
+                            event_converted_details: 'RL' + ' text appears',
                         },
                         b: {
                             event_type: 'question appears',
                             event_raw_details: 'question 1(b) appears',
-                            event_converted_details: 'VVR' + ' text appears',
+                            event_converted_details: 'RL' + ' text appears',
                         }
                     },
                     vars: {
-                        VVR_q_text_a1: VVR_q_text_a1,
-                        VVR_q_text_a2: VVR_q_text_a2,
-                        VVR_q_text_b1: VVR_q_text_b1,
-                        VVR_q_text_b2: VVR_q_text_b2,
-                        VVR_q_text_b3: VVR_q_text_b3,
-                        VVR_q_text_b4: VVR_q_text_b4,
+                        RL_q_text_a1: RL_q_text_a1,
+                        RL_q_text_a2: RL_q_text_a2,
+                        RL_q_text_b1: RL_q_text_b1,
+                        RL_q_text_b2: RL_q_text_b2,
+                        RL_q_text_b3: RL_q_text_b3,
+                        RL_q_text_b4: RL_q_text_b4,
                         max_num_correct_consecutive_questions: 1
                     }
                 }
@@ -1937,24 +1937,24 @@ timeline.push(TERMINATE_APP_INSTRUCT);
 timeline.push(KEY_TESTING);
 // Food & Hunger Questions pre-rating
 timeline.push(FHQ1_OPEN, FHQ1_1, FHQ1_2, FHQ1_3, FHQ1_4, FHQ1_CLOSE);
-// Instrumental Conditioning (VVR1)
-timeline.push(VVR1);
+// Instrumental Conditioning (RL1)
+timeline.push(RL1);
 // Pavlovian Condition
 timeline.push(PAV_CON);
 // Deval Video
 timeline.push(DEVAL_VIDEO);			  
 // Deval Test
-// timeline.push(DEVAL_TEST);			 
-// Instrumental Degradation (VVR2)
-// timeline.push(VVR2);
+// timeline.push(DEVAL_TEST);
+// Instrumental Degradation (RL2)
+// timeline.push(RL2);
 // Transfer Test
 timeline.push(TRANSFER1);				
 // Transfer Test 2
 // timeline.push(TRANSFER2);
-// Instrumental Restoration (VVR3)
-// timeline.push(VVR3);
-// VOR
-// timeline.push(VOR);
+// Instrumental Restoration (RL3)
+// timeline.push(RL3);
+// OR
+// timeline.push(OR);
 // Food & Hunger Questions post-rating
 timeline.push(FHQ2_OPEN, FHQ2_1, FHQ2_2, FHQ2_3, FHQ2_4, FHQ2_CLOSE);
 // Recall
@@ -1983,7 +1983,7 @@ timeline.push(SDS);
 // ICAR
 timeline.push(ICAR);
 // Close: That's it for the symptom questions. Now we're ready to start the online game
-// timeline.push(WBF_CLOSE);
+timeline.push(WBF_CLOSE);
 // Attention check 2
 timeline.push(ACI2);
 // Close HIT Questions

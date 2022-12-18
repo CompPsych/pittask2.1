@@ -4,7 +4,7 @@ window.$ = require('../../../../lib/jquery-min');
 
 
 beforeEach(() => {
-	window.loop_node_counter_vvr = 0,
+	window.loop_node_counter_rl = 0,
 	window.left_tilt = 37;
 	window.right_tilt = 39;
 	window.shake_right_rotate = 15;
@@ -44,36 +44,36 @@ beforeEach(() => {
 beforeEach(() => {
 	require(root + 'jspsych.js');
 	require(root + 'parameters');
-	require(root + 'plugins/jspsych-learning-vvr/jspsych-learning-vvr.js');
+	require(root + 'plugins/jspsych-learning-rl/jspsych-learning-rl.js');
 
 });
 
 jest.useFakeTimers();
 
-describe('vvr-learning-plugin', () => {
+describe('rl-learning-plugin', () => {
 
 
 
 	test('plugin loads correctly', () => {
-		expect(typeof window.jsPsych.plugins['survey-vvr']).not.toBe('undefined');
+		expect(typeof window.jsPsych.plugins['survey-rl']).not.toBe('undefined');
 	});
 
 	test('default parameters work correctly', () => {
 
-		var vvr_a = {
-			type: 'survey-vvr',
+		var rl_a = {
+			type: 'survey-rl',
 			stage_name: 'instrumental conditioning',
 			variables: {
-				VVR_INTERVAL_NUM: 2,
-				VVR_INTERVAL_DURATION: 2000,
-				VVR_OUTCOME_DURATION: 1000,
-				VVR_PROB_VALUE: [1],
-				VVR_DEGRAD_PATTERN: ['d1'],
+				RL_INTERVAL_NUM: 2,
+				RL_INTERVAL_DURATION: 2000,
+				RL_OUTCOME_DURATION: 1000,
+				RL_PROB_VALUE: [1],
+				RL_DEGRAD_PATTERN: ['d1'],
 			}
 		}
 
 		jsPsych.init({
-			timeline: [vvr_a]
+			timeline: [rl_a]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id=\"jspsych-stimulus\"><img class=\"vending-machine\" src=\"/static/images/vending_machine.svg/\"><div class=\"outcome-container\"></div></div>');		
@@ -82,20 +82,20 @@ describe('vvr-learning-plugin', () => {
 
 	test('key press works correctly', () => {
 
-		var vvr_a = {
-			type: 'survey-vvr',
+		var rl_a = {
+			type: 'survey-rl',
 			stage_name: 'instrumental conditioning',
 			variables: {
-				VVR_INTERVAL_NUM: 2,
-				VVR_INTERVAL_DURATION: 2000,
-				VVR_OUTCOME_DURATION: 1000,
-				VVR_PROB_VALUE: [1],
-				VVR_DEGRAD_PATTERN: ['d1'],
+				RL_INTERVAL_NUM: 2,
+				RL_INTERVAL_DURATION: 2000,
+				RL_OUTCOME_DURATION: 1000,
+				RL_PROB_VALUE: [1],
+				RL_DEGRAD_PATTERN: ['d1'],
 			}
 		}
 
 		jsPsych.init({
-			timeline: [vvr_a]
+			timeline: [rl_a]
 		});
 
 		utils.pressKey(37);

@@ -282,88 +282,88 @@ var close_instruct_text_pav =
     "<h2>Press any key to begin. </h2>";
 
 /************************************************************
- * ======================== VVR =============================
+ * ======================== RL =============================
  ************************************************************/
 var interval_duration = 500;
 var interval_num = 60;
 var answer_latency_countdown = false;
 var answer_latency = 1000;
 var answer_latency_text = "Please wait a second to answer the question...";
-var VVR_q_text_a1 = "Which direction did you tip to get";
-var VVR_q_text_a2 = "Press left or right arrow";
-var VVR_q_text_b1 = "How confident are you in your answer?";
-var VVR_q_text_b2 = "not confident";
-var VVR_q_text_b3 = "very confident";
-var VVR_q_text_b4 =
+var RL_q_text_a1 = "Which direction did you tip to get";
+var RL_q_text_a2 = "Press left or right arrow";
+var RL_q_text_b1 = "How confident are you in your answer?";
+var RL_q_text_b2 = "not confident";
+var RL_q_text_b3 = "very confident";
+var RL_q_text_b4 =
     "<li><span>Please select your answer on the scale.</span></li>" +
     "<li><span>Click 'Submit answer' when ready.</span></li>";
 
 /************************************************************
- * Instrumental conditioning [VVR_1]
+ * Instrumental conditioning [RL_1]
  ************************************************************/
-var degrad_pattern_VVR1 = ["d0"];
-var prob_value_VVR1 = [0.2];
-var min_blocks_num_VVR1 = 2;
-var min_num_correct_VVR1 = 6;
-var max_num_incorrect_VVR1 = 100;
-var open_instruct_VVR1 = true;
-var close_instruct_VVR1 = false;
-var open_instruct_text_VVR1 =
+var degrad_pattern_RL1 = ["d0"];
+var prob_value_RL1 = [0.2];
+var min_blocks_num_RL1 = 2;
+var min_num_correct_RL1 = 6;
+var max_num_incorrect_RL1 = 100;
+var open_instruct_RL1 = true;
+var close_instruct_RL1 = false;
+var open_instruct_text_RL1 =
     "<h2>A vending machine is malfunctioning.</h2><br>" +
     "<h2>You can tip the machine and </h2>" +
     "<h2>see what snacks fall out.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2></h2><br>" +
     "<h2>Press any key to begin.</h2>";
-var close_instruct_text_VVR1 = "Thank you for your input. Proceeding to the next stage.";
+var close_instruct_text_RL1 = "Thank you for your input. Proceeding to the next stage.";
 
-var popup_machine_VVR1 = true;
-var popup_duration_machine_VVR1 = 15; // (seconds)
-var popup_text_machine_VVR1 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
+var popup_machine_RL1 = true;
+var popup_duration_machine_RL1 = 15; // (seconds)
+var popup_text_machine_RL1 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
 
 /************************************************************
- * Contingency degradation [VVR_2]
+ * Contingency degradation [RL_2]
  ************************************************************/
-var degrad_pattern_VVR2 = ["d1"];
-var prob_value_VVR2 = [0.2];
-var min_blocks_num_VVR2 = 3;
-var min_num_correct_VVR2 = 0;
-var max_num_incorrect_VVR2 = 0;
-var open_instruct_VVR2 = true;
-var close_instruct_VVR2 = false;
-var open_instruct_text_VVR2 =
+var degrad_pattern_RL2 = ["d1"];
+var prob_value_RL2 = [0.2];
+var min_blocks_num_RL2 = 3;
+var min_num_correct_RL2 = 0;
+var max_num_incorrect_RL2 = 0;
+var open_instruct_RL2 = true;
+var close_instruct_RL2 = false;
+var open_instruct_text_RL2 =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
     "<h2>You can tip the machine and </h2>" +
     "<h2>see what snacks fall out.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
-var close_instruct_text_VVR2 = "Thank you for your input. Proceeding to the next stage.";
+var close_instruct_text_RL2 = "Thank you for your input. Proceeding to the next stage.";
 
-var popup_machine_VVR2 = true;
-var popup_duration_machine_VVR2 = 15; //(seconds)
-var popup_text_machine_VVR2 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
+var popup_machine_RL2 = true;
+var popup_duration_machine_RL2 = 15; //(seconds)
+var popup_text_machine_RL2 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
 
 /************************************************************
- * Contingency restoration [VVR_3]
+ * Contingency restoration [RL_3]
  ************************************************************/
-var degrad_pattern_VVR3 = ["d0"];
-var prob_value_VVR3 = [0.2];
-var min_blocks_num_VVR3 = 3;
-var min_num_correct_VVR3 = 6;
-var max_num_incorrect_VVR3 = 100;
-var open_instruct_VVR3 = true;
-var close_instruct_VVR3 = false;
-var open_instruct_text_VVR3 =
+var degrad_pattern_RL3 = ["d0"];
+var prob_value_RL3 = [0.2];
+var min_blocks_num_RL3 = 3;
+var min_num_correct_RL3 = 6;
+var max_num_incorrect_RL3 = 100;
+var open_instruct_RL3 = true;
+var close_instruct_RL3 = false;
+var open_instruct_text_RL3 =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
     "<h2>You can tip the machine and </h2>" +
     "<h2>see what snacks fall out.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
-var close_instruct_text_VVR3 = "Thank you for your input. Proceeding to the next stage.";
+var close_instruct_text_RL3 = "Thank you for your input. Proceeding to the next stage.";
 
-var popup_machine_VVR3 = true;
-var popup_duration_machine_VVR3 = 15; //(seconds)
-var popup_text_machine_VVR3 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
+var popup_machine_RL3 = true;
+var popup_duration_machine_RL3 = 15; //(seconds)
+var popup_text_machine_RL3 = 'Don’t forget, you can tip the vending machine anytime in this stage to earn snacks.';
 
 /************************************************************
  * Transfer Test
@@ -428,25 +428,25 @@ var popup_duration_machine_deval_test = 9; // (seconds)
 var popup_text_machine_deval_test = "You can tip the machine anytime in this stage. Any snacks you earn will be recorded.";
 
 /************************************************************
- * VOR Virtual Outcome Reinstatement
+ * OR Virtual Outcome Reinstatement
  ************************************************************/
-var VOR_block_num = 3;
+var OR_block_num = 3;
 var extinct_duration = 4;
 var OI_duration_A = 6000; //default: 6000
 var OI_duration_B = 1500;
 var OI_threshold = 30;
-var VOR_duration = 300;
+var OR_duration = 300;
 
-var open_instruct_VOR = true;
-var close_instruct_VOR = false;
-var open_instruct_text_VOR =
+var open_instruct_OR = true;
+var close_instruct_OR = false;
+var open_instruct_text_OR =
     "<h2>The vending machine is still malfunctioning.</h2><br>" +
     "<h2>You can tip the machine and </h2>" +
     "<h2>see what happens.</h2><br>" +
     "<h2>Get all the snacks that you want!</h2><br>" +
     "<h2>Press any key to begin.</h2>";
-var close_instruct_text_VOR =
-    "<h2>Close instruction for VOR</h2>";
+var close_instruct_text_OR =
+    "<h2>Close instruction for OR</h2>";
 
 /************************************************************
  * Recall(memory test)

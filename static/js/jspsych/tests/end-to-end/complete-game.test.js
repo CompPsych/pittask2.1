@@ -108,18 +108,18 @@ describe('key testing', () => {
     close_instruct_FHQ_post_rating = await page.evaluate(() => close_instruct_FHQ_post_rating);
     open_instruct_text_FHQ_post_rating = await page.evaluate(() => open_instruct_text_FHQ_post_rating);
     close_instruct_text_FHQ_post_rating = await page.evaluate(() => close_instruct_text_FHQ_post_rating);
-    open_instruct_VVR1 = await page.evaluate(() => open_instruct_VVR1);
-    close_instruct_VVR1 = await page.evaluate(() => close_instruct_VVR1);
-    open_instruct_text_VVR1 = await page.evaluate(() => open_instruct_text_VVR1);
-    close_instruct_text_VVR1 = await page.evaluate(() => close_instruct_text_VVR1);
-    open_instruct_VVR2 = await page.evaluate(() => open_instruct_VVR2);
-    close_instruct_VVR2 = await page.evaluate(() => close_instruct_VVR2);
-    open_instruct_text_VVR2 = await page.evaluate(() => open_instruct_text_VVR2);
-    close_instruct_text_VVR2 = await page.evaluate(() => close_instruct_text_VVR2);
-    open_instruct_VVR3 = await page.evaluate(() => open_instruct_VVR3);
-    close_instruct_VVR3 = await page.evaluate(() => close_instruct_VVR3);
-    open_instruct_text_VVR3 = await page.evaluate(() => open_instruct_text_VVR3);
-    close_instruct_text_VVR3 = await page.evaluate(() => close_instruct_text_VVR3);
+    open_instruct_RL1 = await page.evaluate(() => open_instruct_RL1);
+    close_instruct_RL1 = await page.evaluate(() => close_instruct_RL1);
+    open_instruct_text_RL1 = await page.evaluate(() => open_instruct_text_RL1);
+    close_instruct_text_RL1 = await page.evaluate(() => close_instruct_text_RL1);
+    open_instruct_RL2 = await page.evaluate(() => open_instruct_RL2);
+    close_instruct_RL2 = await page.evaluate(() => close_instruct_RL2);
+    open_instruct_text_RL2 = await page.evaluate(() => open_instruct_text_RL2);
+    close_instruct_text_RL2 = await page.evaluate(() => close_instruct_text_RL2);
+    open_instruct_RL3 = await page.evaluate(() => open_instruct_RL3);
+    close_instruct_RL3 = await page.evaluate(() => close_instruct_RL3);
+    open_instruct_text_RL3 = await page.evaluate(() => open_instruct_text_RL3);
+    close_instruct_text_RL3 = await page.evaluate(() => close_instruct_text_RL3);
     open_instruct_inventory = await page.evaluate(() => open_instruct_inventory);
     close_instruct_inventory = await page.evaluate(() => close_instruct_inventory);
     open_instruct_text_key_testing = await page.evaluate(() => open_instruct_text_key_testing);
@@ -247,13 +247,13 @@ describe('FHQ1', () => {
 
 });
 
-describe('VVR1', () => {
+describe('RL1', () => {
 
   test('open instruction', async () => {
-    if(open_instruct_VVR1) {
+    if(open_instruct_RL1) {
       await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
-      const VVR_1_text_instr_open = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
-      await expect(VVR_1_text_instr_open).toContain(open_instruct_text_VVR1);
+      const RL_1_text_instr_open = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
+      await expect(RL_1_text_instr_open).toContain(open_instruct_text_RL1);
       await delay(open_instruct_latency);
       await page.click("#jspsych-html-keyboard-response-stimulus");
     }
@@ -261,9 +261,9 @@ describe('VVR1', () => {
 
   test('stage', async () => {
 
-    let is_vvr_1 = await raceSelectors(page, ['.vvr_stage', '.vvr_close_instruct']);
+    let is_rl_1 = await raceSelectors(page, ['.rl_stage', '.rl_close_instruct']);
 
-    while (is_vvr_1 === '.vvr_stage') {
+    while (is_rl_1 === '.rl_stage') {
       await page.waitForSelector('.vending-machine');
       for (let index = 0; index < interval_num; index++) {
         var items = ['ArrowLeft', 'ArrowRight'];
@@ -276,12 +276,12 @@ describe('VVR1', () => {
       }
 
       await delay(feedback_duration);
-      await page.waitForSelector(".vvr-question-a");
+      await page.waitForSelector(".rl-question-a");
       await delay(answer_latency);
-      const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-      if (innerTextOfButton_inst_cond_first === '.vvr-question-left') {
+      const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+      if (innerTextOfButton_inst_cond_first === '.rl-question-left') {
         await page.keyboard.press('ArrowLeft');
-      } else if(innerTextOfButton_inst_cond_first === '.vvr-question-right') {
+      } else if(innerTextOfButton_inst_cond_first === '.rl-question-right') {
         await page.keyboard.press('ArrowRight');
       }
       await page.waitForSelector('.ui-slider-handle');
@@ -293,12 +293,12 @@ describe('VVR1', () => {
       await page.mouse.up();
 
       await delay(feedback_duration);
-      await page.waitForSelector(".vvr-question-a");
+      await page.waitForSelector(".rl-question-a");
       await delay(answer_latency);
-      const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-      if (innerTextOfButton_inst_cond_second === '.vvr-question-left') {
+      const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+      if (innerTextOfButton_inst_cond_second === '.rl-question-left') {
         await page.keyboard.press('ArrowLeft');
-      } else if(innerTextOfButton_inst_cond_second === '.vvr-question-right') {
+      } else if(innerTextOfButton_inst_cond_second === '.rl-question-right') {
         await page.keyboard.press('ArrowRight');
       }
       await page.waitForSelector('.ui-slider-handle');
@@ -310,8 +310,8 @@ describe('VVR1', () => {
       await page.mouse.up();
       await delay(feedback_duration);
 
-      is_vvr_1 = await raceSelectors(page, ['.vvr_stage', '#jspsych-html-keyboard-response-stimulus']);
-      if(is_vvr_1 === '#jspsych-html-keyboard-response-stimulus') {
+      is_rl_1 = await raceSelectors(page, ['.rl_stage', '#jspsych-html-keyboard-response-stimulus']);
+      if(is_rl_1 === '#jspsych-html-keyboard-response-stimulus') {
         break;
       }
     }
@@ -319,10 +319,10 @@ describe('VVR1', () => {
   }, timeout);
 
   test('close instruction', async () => {
-    if(close_instruct_VVR1) {
+    if(close_instruct_RL1) {
       await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
-      const VVR_1_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
-      await expect(VVR_1_text_instr_close).toContain(close_instruct_text_VVR1);
+      const RL_1_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
+      await expect(RL_1_text_instr_close).toContain(close_instruct_text_RL1);
       await delay(close_instruct_latency);
       await page.click("#jspsych-html-keyboard-response-stimulus");
     }
@@ -370,10 +370,10 @@ describe('transfer_test1', () => {
 
 });
 
-describe('VVR2', () => {
+describe('RL2', () => {
 
   test('open instruction', async () => {
-    if(open_instruct_VVR2) {
+    if(open_instruct_RL2) {
       await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
       await delay(open_instruct_latency);
       await page.click("#jspsych-html-keyboard-response-stimulus");
@@ -382,8 +382,8 @@ describe('VVR2', () => {
 
   test('stage', async () => {
 
-    let is_vvr_2 = await raceSelectors(page, ['.vvr_stage', '.vvr_close_instruct']);
-    while (is_vvr_2 === '.vvr_stage') {
+    let is_rl_2 = await raceSelectors(page, ['.rl_stage', '.rl_close_instruct']);
+    while (is_rl_2 === '.rl_stage') {
       await page.waitForSelector('.vending-machine');
       for (let index = 0; index < interval_num; index++) {
         var items = ['ArrowLeft', 'ArrowRight'];
@@ -396,12 +396,12 @@ describe('VVR2', () => {
       }
 
       await delay(feedback_duration);
-      await page.waitForSelector(".vvr-question-a");
+      await page.waitForSelector(".rl-question-a");
       await delay(answer_latency);
-      const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-      if (innerTextOfButton_inst_cond_first === '.vvr-question-left') {
+      const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+      if (innerTextOfButton_inst_cond_first === '.rl-question-left') {
         await page.keyboard.press('ArrowLeft');
-      } else if(innerTextOfButton_inst_cond_first === '.vvr-question-right') {
+      } else if(innerTextOfButton_inst_cond_first === '.rl-question-right') {
         await page.keyboard.press('ArrowRight');
       }
       await page.waitForSelector('.ui-slider-handle');
@@ -413,12 +413,12 @@ describe('VVR2', () => {
       await page.mouse.up();
       await delay(feedback_duration);
 
-      await page.waitForSelector(".vvr-question-a");
+      await page.waitForSelector(".rl-question-a");
       await delay(answer_latency);
-      const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-      if (innerTextOfButton_inst_cond_second === '.vvr-question-left') {
+      const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+      if (innerTextOfButton_inst_cond_second === '.rl-question-left') {
         await page.keyboard.press('ArrowLeft');
-      } else if(innerTextOfButton_inst_cond_second === '.vvr-question-right') {
+      } else if(innerTextOfButton_inst_cond_second === '.rl-question-right') {
         await page.keyboard.press('ArrowRight');
       }
       await page.waitForSelector('.ui-slider-handle');
@@ -430,8 +430,8 @@ describe('VVR2', () => {
       await page.mouse.up();
       await delay(feedback_duration);
 
-      is_vvr_2 = await raceSelectors(page, ['.vvr_stage', '#jspsych-html-keyboard-response-stimulus']);
-      if(is_vvr_2 === '#jspsych-html-keyboard-response-stimulus') {
+      is_rl_2 = await raceSelectors(page, ['.rl_stage', '#jspsych-html-keyboard-response-stimulus']);
+      if(is_rl_2 === '#jspsych-html-keyboard-response-stimulus') {
         break;
       }
     }
@@ -440,10 +440,10 @@ describe('VVR2', () => {
   }, timeout);
 
   test('close instruction', async () => {
-    if(close_instruct_VVR2) {
+    if(close_instruct_RL2) {
       await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
-      const VVR_2_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
-      await expect(VVR_2_text_instr_close).toContain(close_instruct_text_VVR2);
+      const RL_2_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
+      await expect(RL_2_text_instr_close).toContain(close_instruct_text_RL2);
       await delay(close_instruct_latency);
       await page.click("#jspsych-html-keyboard-response-stimulus");
     };
@@ -559,21 +559,21 @@ describe('transfer_test2', () => {
 
 });
 
-describe('VVR3', () => {
+describe('RL3', () => {
 
   test('open instruction', async () => {
-      if(open_instruct_VVR3) {
+      if(open_instruct_RL3) {
         await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
-        const VVR_3_text_instr_open = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
-        await expect(VVR_3_text_instr_open).toContain(open_instruct_text_VVR3);
+        const RL_3_text_instr_open = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
+        await expect(RL_3_text_instr_open).toContain(open_instruct_text_RL3);
         await delay(open_instruct_latency);
         await page.click("#jspsych-html-keyboard-response-stimulus");
       }
   });
 
   test('stage', async () => {
-      let is_vvr_3 = await raceSelectors(page, ['.vvr_stage', '.vvr_close_instruct']);
-      while (is_vvr_3 === '.vvr_stage') {
+      let is_rl_3 = await raceSelectors(page, ['.rl_stage', '.rl_close_instruct']);
+      while (is_rl_3 === '.rl_stage') {
         await page.waitForSelector('.vending-machine');
         for (let index = 0; index < interval_num; index++) {
           var items = ['ArrowLeft', 'ArrowRight'];
@@ -586,12 +586,12 @@ describe('VVR3', () => {
         }
 
         await delay(1000);
-        await page.waitForSelector(".vvr-question-a");
+        await page.waitForSelector(".rl-question-a");
         await delay(answer_latency);
-        const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-        if (innerTextOfButton_inst_cond_first === '.vvr-question-left') {
+        const innerTextOfButton_inst_cond_first = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+        if (innerTextOfButton_inst_cond_first === '.rl-question-left') {
           await page.keyboard.press('ArrowLeft');
-        } else if(innerTextOfButton_inst_cond_first === '.vvr-question-right') {
+        } else if(innerTextOfButton_inst_cond_first === '.rl-question-right') {
           await page.keyboard.press('ArrowRight');
         }
         await page.waitForSelector('.ui-slider-handle');
@@ -603,12 +603,12 @@ describe('VVR3', () => {
         await page.mouse.up();
         await delay(feedback_duration);
     
-        await page.waitForSelector(".vvr-question-a");
+        await page.waitForSelector(".rl-question-a");
         await delay(answer_latency);
-        const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.vvr-question-left', '.vvr-question-right']);
-        if (innerTextOfButton_inst_cond_second === '.vvr-question-left') {
+        const innerTextOfButton_inst_cond_second = await raceSelectors(page, ['.rl-question-left', '.rl-question-right']);
+        if (innerTextOfButton_inst_cond_second === '.rl-question-left') {
           await page.keyboard.press('ArrowLeft');
-        } else if(innerTextOfButton_inst_cond_second === '.vvr-question-right') {
+        } else if(innerTextOfButton_inst_cond_second === '.rl-question-right') {
           await page.keyboard.press('ArrowRight');
         }
         await page.waitForSelector('.ui-slider-handle');
@@ -620,8 +620,8 @@ describe('VVR3', () => {
         await page.mouse.up();
         await delay(feedback_duration);
 
-        is_vvr_3 = await raceSelectors(page, ['.vvr_stage', '#jspsych-html-keyboard-response-stimulus', 'video']);
-        if(is_vvr_3 === '#jspsych-html-keyboard-response-stimulus' || is_vvr_3 === 'video') {
+        is_rl_3 = await raceSelectors(page, ['.rl_stage', '#jspsych-html-keyboard-response-stimulus', 'video']);
+        if(is_rl_3 === '#jspsych-html-keyboard-response-stimulus' || is_rl_3 === 'video') {
           break;
         }
       };
@@ -630,10 +630,10 @@ describe('VVR3', () => {
   }, timeout);
 
   test('close instruction', async () => {
-      if(close_instruct_VVR3) {
+      if(close_instruct_RL3) {
         await page.waitForSelector('#jspsych-html-keyboard-response-stimulus');
-        const VVR_3_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
-        await expect(VVR_3_text_instr_close).toContain(close_instruct_text_VVR3);
+        const RL_3_text_instr_close = await page.evaluate(() => document.querySelector('#jspsych-html-keyboard-response-stimulus').innerHTML);
+        await expect(RL_3_text_instr_close).toContain(close_instruct_text_RL3);
         await delay(close_instruct_latency);
         await page.click("#jspsych-html-keyboard-response-stimulus");
       }

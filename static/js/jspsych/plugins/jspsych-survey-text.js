@@ -86,10 +86,10 @@ jsPsych.plugins["survey-feedback"] = (function () {
 
     var timestamp_onload = jsPsych.totalTime();
 
-    // used for VVR stages in correct/incorrect response
+    // used for RL stages in correct/incorrect response
     // for simulating continuous timer
-    if (trial.vvr_timer) {
-      timestamp_onload = vvr_timer;
+    if (trial.rl_timer) {
+      timestamp_onload = rl_timer;
     };
 
     var new_html = '<div id="jspsych-survey-feedback" class="jspsych-survey-feedback">' + trial.stimulus + '</div>';

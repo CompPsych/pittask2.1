@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Food reward learning games
+title = Reward tasks and questionnaires
 description = Earn all the snacks you want
 amt_keywords = reward, learning, decision-making, Psychology, experiment
 lifetime = 24

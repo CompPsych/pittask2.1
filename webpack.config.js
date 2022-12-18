@@ -4,9 +4,9 @@ module.exports = {
     mode: 'development',
     entry: [
 		// "./static/js/jspsych/plugins/jspsych-key-testing.js",
-		// "./static/js/jspsych/plugins/jspsych-learning-vvr/jspsych-learning-vvr.js",
-		// "./static/js/jspsych/plugins/jspsych-learning-vvr/jspsych-vvr-questions-left.js",
-		// "./static/js/jspsych/plugins/jspsych-learning-vvr/jspsych-vvr-questions-right.js",
+		// "./static/js/jspsych/plugins/jspsych-learning-rl/jspsych-learning-rl.js",
+		// "./static/js/jspsych/plugins/jspsych-learning-rl/jspsych-rl-questions-left.js",
+		// "./static/js/jspsych/plugins/jspsych-learning-rl/jspsych-rl-questions-right.js",
         // "./static/js/jspsych/plugins/jspsych-survey-questionnaire/jspsych-ASRM.js",
 		// "./static/js/jspsych/plugins/jspsych-survey-questionnaire/jspsych-GAD-7.js",
 		// "./static/js/jspsych/plugins/jspsych-survey-questionnaire/jspsych-ISI.js",

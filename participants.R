@@ -360,7 +360,7 @@ SDS <- data.table(
   response = character()
 )
 
-VVR <- data.table(
+RL <- data.table(
   PIN = character(),
   unique_link = character(),
   complete = character(),
@@ -1493,21 +1493,21 @@ if(isClass(query))
       }
     }
 
-    # VVR ---------------------------------------------------------------------
-    vvr_stages <- trialdata$vvr_stage
+    # RL ---------------------------------------------------------------------
+    rl_stages <- trialdata$rl_stage
 
-    if(!is.null(vvr_stages)){
+    if(!is.null(rl_stages)){
       
-      for(j in seq_along(vvr_stages)){
+      for(j in seq_along(rl_stages)){
 
         date <- format(as.IDate(dateTime[j]), "%d-%m-%Y")
         time <- as.character(as.ITime(dateTime[j]))
 
-        if(!is.na(trialdata$vvr_stage[j])) {
-          VVR <- rbindlist(list(VVR, list(
+        if(!is.na(trialdata$rl_stage[j])) {
+          RL <- rbindlist(list(RL, list(
             PIN, usedLink, complete, date, time,
             trialdata$timestamp[j], country,
-            fromJSON(trialdata$vvr_stage[j]), commit, version,
+            fromJSON(trialdata$rl_stage[j]), commit, version,
             trialdata$block_number[j],
             trialdata$item_id[j],
             trialdata$food_item[j],
@@ -1843,7 +1843,7 @@ if(isClass(query))
               as.character(as.ITime(formatDateTime(time_ms + events$timestamp[e]))),
               ifelse(is.na(events$timestamp[e]), 'NA', events$timestamp[e]),
               country, timezone, stage_name, commit, version, 
-              ifelse(stage_name != "VOR" && stage_name != "transfer1" && stage_name != "transfer2" && stage_name != "transfer3", block_number, 
+              ifelse(stage_name != "OR" && stage_name != "transfer1" && stage_name != "transfer2" && stage_name != "transfer3", block_number,
                 ifelse(!is.na(events$block_number[e]), events$block_number[e], 'NA')
               ),
               ifelse(!is.null(events$interval_number[e]), 
@@ -1906,7 +1906,7 @@ if(isClass(query))
     "ICAR" = ICAR,
     "SDS" = SDS,
     "ACI" = ACI,
-    "VVR" = VVR,
+    "RL" = RL,
     "food_ratings" = FoodRatings,
     "hunger_rating" = HungerRating,
     "consent_feedback" = ConsentFeedback,

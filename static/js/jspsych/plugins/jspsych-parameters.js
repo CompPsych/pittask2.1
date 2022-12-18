@@ -129,42 +129,42 @@ jsPsych.plugins['parameters'] = (function () {
             FHQ_VAS_right_hungry: FHQ_VAS_right_hungry,
             FHQ_VAS_instruct: FHQ_VAS_instruct,
 
-            VVR_q_text_a1: VVR_q_text_a1,
-            VVR_q_text_a2: VVR_q_text_a2,
-            VVR_q_text_b1: VVR_q_text_b1,
-            VVR_q_text_b2: VVR_q_text_b2,
-            VVR_q_text_b3: VVR_q_text_b3,
-            VVR_q_text_b4: VVR_q_text_b4,
+            RL_q_text_a1: RL_q_text_a1,
+            RL_q_text_a2: RL_q_text_a2,
+            RL_q_text_b1: RL_q_text_b1,
+            RL_q_text_b2: RL_q_text_b2,
+            RL_q_text_b3: RL_q_text_b3,
+            RL_q_text_b4: RL_q_text_b4,
 
-            open_instruct_VVR1: open_instruct_VVR1,
-            close_instruct_VVR1: close_instruct_VVR1,
-            open_instruct_text_VVR1: open_instruct_text_VVR1,
-            close_instruct_text_VVR1: close_instruct_text_VVR1,
-            degrad_pattern_VVR1: "",
-            prob_value_VVR1: "",
-            min_blocks_num_VVR1: min_blocks_num_VVR1,
-            min_num_correct_VVR1: min_num_correct_VVR1,
-            max_num_incorrect_VVR1: max_num_incorrect_VVR1,
+            open_instruct_RL1: open_instruct_RL1,
+            close_instruct_RL1: close_instruct_RL1,
+            open_instruct_text_RL1: open_instruct_text_RL1,
+            close_instruct_text_RL1: close_instruct_text_RL1,
+            degrad_pattern_RL1: "",
+            prob_value_RL1: "",
+            min_blocks_num_RL1: min_blocks_num_RL1,
+            min_num_correct_RL1: min_num_correct_RL1,
+            max_num_incorrect_RL1: max_num_incorrect_RL1,
 
-            open_instruct_VVR2: open_instruct_VVR2,
-            close_instruct_VVR2: close_instruct_VVR2,
-            open_instruct_text_VVR2: open_instruct_text_VVR2,
-            close_instruct_text_VVR2: close_instruct_text_VVR2,
-            degrad_pattern_VVR2: "",
-            prob_value_VVR2: "",
-            min_blocks_num_VVR2: min_blocks_num_VVR2,
-            min_num_correct_VVR2: min_num_correct_VVR2,
-            max_num_incorrect_VVR2: max_num_incorrect_VVR2,
+            open_instruct_RL2: open_instruct_RL2,
+            close_instruct_RL2: close_instruct_RL2,
+            open_instruct_text_RL2: open_instruct_text_RL2,
+            close_instruct_text_RL2: close_instruct_text_RL2,
+            degrad_pattern_RL2: "",
+            prob_value_RL2: "",
+            min_blocks_num_RL2: min_blocks_num_RL2,
+            min_num_correct_RL2: min_num_correct_RL2,
+            max_num_incorrect_RL2: max_num_incorrect_RL2,
 
-            open_instruct_VVR3: open_instruct_VVR3,
-            close_instruct_VVR3: close_instruct_VVR3,
-            open_instruct_text_VVR3: open_instruct_text_VVR3,
-            close_instruct_text_VVR3: close_instruct_text_VVR3,
-            degrad_pattern_VVR3: "",
-            prob_value_VVR3: "",
-            min_blocks_num_VVR3: min_blocks_num_VVR3,
-            min_num_correct_VVR3: min_num_correct_VVR3,
-            max_num_incorrect_VVR3: max_num_incorrect_VVR3,
+            open_instruct_RL3: open_instruct_RL3,
+            close_instruct_RL3: close_instruct_RL3,
+            open_instruct_text_RL3: open_instruct_text_RL3,
+            close_instruct_text_RL3: close_instruct_text_RL3,
+            degrad_pattern_RL3: "",
+            prob_value_RL3: "",
+            min_blocks_num_RL3: min_blocks_num_RL3,
+            min_num_correct_RL3: min_num_correct_RL3,
+            max_num_incorrect_RL3: max_num_incorrect_RL3,
 
             open_instruct_pav: open_instruct_pav,
             close_instruct_pav: close_instruct_pav,
@@ -199,17 +199,17 @@ jsPsych.plugins['parameters'] = (function () {
             participant_feedback_popup_text: participant_feedback_popup_text,
             participant_feedback_text_limit: participant_feedback_text_limit,
 
-            popup_machine_VVR1: popup_machine_VVR1,
-            popup_duration_machine_VVR1: popup_duration_machine_VVR1,
-            popup_text_machine_VVR1: popup_text_machine_VVR1,
+            popup_machine_RL1: popup_machine_RL1,
+            popup_duration_machine_RL1: popup_duration_machine_RL1,
+            popup_text_machine_RL1: popup_text_machine_RL1,
 
-            popup_machine_VVR2: popup_machine_VVR2,
-            popup_duration_machine_VVR2: popup_duration_machine_VVR2,
-            popup_text_machine_VVR2: popup_text_machine_VVR2,
+            popup_machine_RL2: popup_machine_RL2,
+            popup_duration_machine_RL2: popup_duration_machine_RL2,
+            popup_text_machine_RL2: popup_text_machine_RL2,
 
-            popup_machine_VVR3: popup_machine_VVR3,
-            popup_duration_machine_VVR3: popup_duration_machine_VVR3,
-            popup_text_machine_VVR3: popup_text_machine_VVR3,
+            popup_machine_RL3: popup_machine_RL3,
+            popup_duration_machine_RL3: popup_duration_machine_RL3,
+            popup_text_machine_RL3: popup_text_machine_RL3,
 
             popup_machine_transfer1: popup_machine_transfer1,
             popup_duration_machine_transfer1: popup_duration_machine_transfer1,
@@ -250,16 +250,16 @@ jsPsych.plugins['parameters'] = (function () {
             transfer_q_text_limit: transfer_q_text_limit,
             transfer_popup_text: transfer_popup_text,
 
-            VOR_block_num: VOR_block_num,
+            OR_block_num: OR_block_num,
             extinct_duration: extinct_duration,
             OI_duration_A: OI_duration_A,
             OI_duration_B: OI_duration_B,
             OI_threshold: OI_threshold,
-            VOR_duration: VOR_duration,
-            open_instruct_VOR: open_instruct_VOR,
-            close_instruct_VOR: close_instruct_VOR,
-            open_instruct_text_VOR: open_instruct_text_VOR,
-            close_instruct_text_VOR: close_instruct_text_VOR,
+            OR_duration: OR_duration,
+            open_instruct_OR: open_instruct_OR,
+            close_instruct_OR: close_instruct_OR,
+            open_instruct_text_OR: open_instruct_text_OR,
+            close_instruct_text_OR: close_instruct_text_OR,
 
             answer_latency_text_floor: answer_latency_text_floor,
             answer_latency_text_ceiling: answer_latency_text_ceiling,
@@ -292,13 +292,13 @@ jsPsych.plugins['parameters'] = (function () {
             });
         };
 
-        array_extraction(degrad_pattern_VVR1, 'degrad_pattern_VVR1');
-        array_extraction(degrad_pattern_VVR2, 'degrad_pattern_VVR2');
-        array_extraction(degrad_pattern_VVR3, 'degrad_pattern_VVR3');
+        array_extraction(degrad_pattern_RL1, 'degrad_pattern_RL1');
+        array_extraction(degrad_pattern_RL2, 'degrad_pattern_RL2');
+        array_extraction(degrad_pattern_RL3, 'degrad_pattern_RL3');
 
-        array_extraction(prob_value_VVR1, 'prob_value_VVR1');
-        array_extraction(prob_value_VVR2, 'prob_value_VVR2');
-        array_extraction(prob_value_VVR3, 'prob_value_VVR3');
+        array_extraction(prob_value_RL1, 'prob_value_RL1');
+        array_extraction(prob_value_RL2, 'prob_value_RL2');
+        array_extraction(prob_value_RL3, 'prob_value_RL3');
 
         // browser version, screen size, platform, OS version info for specs.csv 
         var version = platform.os.version === null ? '' : ' (' + platform.os.version + ')';
